@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+	
+	<key>AllowFullAccess</key>
+	<true/>
+	
+	<key>AllowNetworkAccess</key>
+	<false/>
+	
+	<key>AllowMultipleInstances</key>
+	<true/>
+	
+	<key>CFBundleIdentifier</key>
+	<string>com.springwidgets.widget.marilynmonroequotes</string>
+	
+	<key>CFBundleName</key>
+	<string>Marilyn Monroe Quotes</string>
+	
+	<key>CFBundleShortVersionString</key>
+	<string>Marilyn Monroe Quotes</string>
+
+	<key>CFBundleVersion</key>
+	<string>1.0.0</string>
+	
+	<key>CloseBoxInsetX</key>
+	<integer>6</integer>
+	
+	<key>CloseBoxInsetY</key>
+	<integer>6</integer>
+	
+	<key>DefaultImage</key>
+	<string></string>
+	
+	<key>Height</key>
+	<integer>434</integer>
+
+	<key>Width</key>
+	<integer>406</integer>
+	
+	<key>MainHTML</key>
+	<string>Marilyn-Monroe-Quotes.html</string>
+	
+	<key>Plugin</key>
+	<string>ToDoPlugin.widgetplugin</string>
+	
+</dict>
+</plist>
+	

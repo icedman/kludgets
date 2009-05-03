@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<preferences>
+	<preference>
+		<type>label</type>
+		<description>This widget requires the access permission to some resources.</description>
+		<category>Package</category>
+	</preference>
+	<preference name="kludget/access/local">
+		<type>checkbox</type>
+		<category>Package</category>
+		<default>0</default>
+		<title>Allow this widget to access local files on your system.</title>
+	</preference>
+	<preference name="kludget/access/network">
+		<type>checkbox</type>
+		<category>Package</category>
+		<default>0</default>
+		<title>Allow this widget to connect to the internet.</title>
+	</preference>
+	<preference name="kludget/access/plugins">
+		<type>checkbox</type>
+		<category>Package</category>
+		<default>0</default>
+		<title>Enable internet plugins.</title>
+	</preference>
+	<preference name="kludget/access/system">
+		<type>checkbox</type>
+		<category>Package</category>
+		<default>0</default>
+		<title>Enable system commands.</title>
+	</preference>
+</preferences>
