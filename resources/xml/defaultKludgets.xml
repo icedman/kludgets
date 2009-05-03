@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kludgets>
+	<kludget>
+		<name>Calendar</name>
+		<path>/widgets/com.kludgets.calendar/</path>
+	</kludget>
+	<kludget>
+		<name>Weather</name>
+		<path>/widgets/com.kludgets.weather/</path>
+	</kludget>
+	<kludget>
+		<name>Clock</name>
+		<path>/widgets/com.kludgets.clock/</path>
+	</kludget>
+</kludgets>

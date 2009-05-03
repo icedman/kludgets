@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<preferences>
+	<preference name="windowLevel">
+		<type>select</type>
+		<options>
+			<option value="1">Keep widget on top of other windows</option>
+			<option value="0">Normal</option>
+			<option value="2">Keep widget below of other windows</option>
+		</options>
+		<default>0</default>
+		<title>Window Level</title>
+		<category>Windows</category>
+		<description>You can set the widget to always on top or below.</description>
+	</preference>
+	<preference name="snapToScreen">
+		<type>checkbox</type>
+		<title>Snap to screen</title>
+		<category>Windows</category>
+		<default>0</default>
+		<description>Check this option to make the widget snap to screen edges.</description>
+	</preference>
+	<!--
+	<preference name="ignoreMouse">
+		<type>checkbox</type>
+		<title>Ignore mouse</title>
+		<category>Windows</category>
+		<description>Check this option to ignore mouse inputs for this widget.</description>
+	</preference>
+	-->
+	<preference name="ignoreDrag">
+		<type>checkbox</type>
+		<title>Prevent dragging</title>
+		<category>Windows</category>
+		<default>0</default>
+		<description>Check this option to prevent the widget from being moved by dragging.</description>
+	</preference>
+	<preference name="opacity" max="255" min="5" interval="25">
+		<type>slider</type>
+		<title>Opacity</title>
+		<category>Windows</category>
+		<default>220</default>
+	<description>Set the opacity level of the widget. Set the level to zero to use the global default opacity level.</description>
+	</preference>
+	<preference name="grayScaled">
+		<type>checkbox</type>
+		<title>Grayscale</title>
+		<category>Windows</category>
+		<default>0</default>
+		<description>Check this option to make the widget grayscaled.</description>
+	</preference>
+	<!--
+	<preference name="tinted">
+		<type>checkbox</type>
+		<title>Tint</title>
+		<category>tint</category>
+		<default>0</default>
+		<description>Check this option to apply a color tint to the widget.</description>
+	</preference>
+	<preference name="tintColor">
+		<type>color</type>
+		<title>Tint Color</title>
+		<category>tint</category>
+		<default>#c0c0c0</default>
+		<description>Select a tint color.</description>
+	</preference>
+	<preference name="tintMode">
+		<type>select</type>
+		<title>Tint Mode</title>
+		<category>tint</category>
+		<option value="13">Multiply</option>
+		<option value="14">Screen</option>
+		<option value="15">Overlay</option>
+		<option value="16">Darken</option>
+		<option value="17">Lighten</option>
+		<option value="18">Color dodge</option>
+		<option value="19">Color burn</option>
+		<option value="20">Hard light</option>
+		<option value="21">Soft light</option>
+		<default>14</default>
+		<description>Select tint mode.</description>
+	</preference>
+	-->
+</preferences>

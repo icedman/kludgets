@@ -1,0 +1,38 @@
+* {
+	cursor:default;
+	-webkit-nbsp-mode: space;
+}
+
+::-moz-selection{
+	background:transparent;
+}
+
+::selection {
+	background:transparent;
+}
+
+code::-moz-selection {
+	background:transparent;
+}
+
+code::selection {
+	background:transparent;
+}
+
+button, input, select, textarea {
+	-webkit-dashboard-region:dashboard-region(control rectangle);
+}
+
+select {
+	font-size:8pt;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="search"],
+textarea {
+	border: 1px solid #ddd;
+	padding: 3px;
+	background: #fff;
+	-webkit-border-radius: 4px;
+}

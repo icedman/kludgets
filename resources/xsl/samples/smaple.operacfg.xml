@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget network="public">
+  <widgetname>Reference.com</widgetname>
+  <description>
+    Search Reference.com for dictionary, thesaurus, encyclopedia and web stuff.
+  </description>
+  <width>700</width>
+  <height>500</height>
+  <icon>favicon.ico</icon>
+  <author>
+    <name>Kyle Baker</name>
+    <link>http://www.kyleabaker.com/</link>
+    <organization>kyleabaker.com</organization>
+  </author>
+  <id>
+    <host>kyleabaker.com</host>
+    <name>kyleabaker</name>
+    <revised>2007-01-29</revised>
+  </id>
+  <access>
+  <network>true</network>
+  </access>
+</widget>
