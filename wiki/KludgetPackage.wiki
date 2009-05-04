@@ -3,3 +3,11 @@
 = Kludget Package =
 
 The most basic Kludget package contains just two files. An HTML file and a configuration file ({{{kludget.xml}}}).
+
+=== The HTML file ===
+
+It is simply just an HTML file. How it is rendered on the web browser is display the same way be the Engine.
+
+=== The Configuration File ===
+
+{{{kludget.xml}}}
