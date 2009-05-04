@@ -52,6 +52,12 @@ This contains the event handler to be called when a widget is closed or removed.
 
 The Kludget engine will remove all preference settings for the removed widget instance. You may still save some persistent information in the [http://dev.w3.org/html5/webstorage/#databases database storage] which is shared by all widget instances and won't be deleted until the package is uninstalled.
 
+=== onsettingschanged ===
+
+{{{ widget.onsettingschanged }}}
+
+This contains the event handler to be called when a user changes the widget instance settings or the kludget engine preferences.
+
 === onshow ===
 
 {{{ widget.onshow }}}
@@ -62,4 +68,14 @@ This contains the event handler to be called when a widget becomes visible.
 
 {{{ widget.onurlreceived }}}
 
-This contains the event handler to be called when a widget receives a url from a drag-and-drop action.
+This contains the event handler to be called when a widget receives a url through a drag-and-drop action.
+
+{{{
+
+widget.onurlreceived = function(url)
+{
+}
+
+}}}
+
+== methods ==
