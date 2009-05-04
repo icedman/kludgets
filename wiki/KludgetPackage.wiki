@@ -122,3 +122,15 @@ This declares custom context menu items. See information about {{{menu.xml}}} be
 }}}
 
 This declares preference settings for the widget. See information about {{{preferences.xml}}} below for details.
+
+== Menu File ==
+
+{{{menu.xml}}}
+
+_Todo_
+
+== Preferences File ==
+
+{{{preferences.xml}}}
+
+_Todo_
