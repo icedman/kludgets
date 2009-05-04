@@ -53,4 +53,4 @@ The {{{content}}} element will tell the engine the location of the start-up page
 || *Attribute* || *Required* || *Description* ||
 ||src||yes||The file path of the start-up page.||
 
-Although it is recommended that the startup file is an HTML file. It is possible to use an image, a Flash document, SVG document, or any type of document that a WebKit browser supports.
+Although it is recommended that the startup file is an HTML file. It is possible to use an image, a Flash document, SVG document, or any type of document that a webkit-based browser supports.
