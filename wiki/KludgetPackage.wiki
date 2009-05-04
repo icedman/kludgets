@@ -4,7 +4,11 @@
 
 = Kludget Package =
 
-The most basic Kludget package contains just two files. An HTML file and a configuration file ({{{kludget.xml}}}).
+The most basic Kludget package is a ZIP archive that contains just two files. An HTML file and a configuration file ({{{kludget.xml}}}). 
+
+A widget package may also contain a {{{menu.xml}}} file that defines its context menu. And a {{{preference.xml}}} file that defines options for the preference window.
+
+That package may also of course, contain widget resources such as images, css, javascript, xml.
 
 == The HTML file ==
 
