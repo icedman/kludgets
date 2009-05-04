@@ -16,7 +16,7 @@ This is the very first file the Engine will look for. It is an XML file containi
 
 == widget ==
 
-{{{<widget>}}}
+{{{<widget/>}}}
 
 The {{{widget}}} is the root element that must be present. Its attributes are:
 
@@ -27,3 +27,16 @@ The {{{widget}}} is the root element that must be present. Its attributes are:
 ||width||no||The width in pixels which the widget would be displayed.||
 ||height||no||The heightin int pixels which the widget would be displayed.||
 ||debug||no||Value is 1 or 0. 1 means the widget will run in debug mode.||
+
+== content ==
+
+{{{
+<widget>
+   <content/>
+</widget>
+}}}
+
+The {{{content}}} element will tell the engine the location of the start-up page of the widget. This element is also required. Its attributes:
+
+||*Attribute*||*Required*||*Description*||
+||src||yes||The file path of the start-up page.||
