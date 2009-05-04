@@ -148,7 +148,7 @@ Performs transition animation.
 
 This takes a snapshot of the widget and saves it to the passed layer. Available layers are {{{background}}} and {{{foreground}}}. Once rendered, the elements may be hidden or unloaded to reduce resource usage.
 
-The {{{clock}}} widget makes use of the feature. It pre-renders the clock face, minute and hour hands to the background. Thus it only has to render the second hand every time it moves. This reduces SVG rendering load.
+The {{{clock}}} widget makes use of the feature. It pre-renders the clock face, minute and hour hands to the background whenever they change. It then renders the second hand separately as it moves. This reduces SVG rendering load.
 
 === resize ===
 
