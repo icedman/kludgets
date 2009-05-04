@@ -8,19 +8,31 @@ The most basic Kludget package contains just two files. An HTML file and a confi
 
 It is simply just an HTML file. How it is rendered on the web browser is display the same way be the Engine.
 
+Read about {{{<content/>}}} below.
+
 === The Configuration File ===
 
 {{{kludget.xml}}}
 
 This is the very first file the Engine will look for. It is an XML file containing all the configurations of the widget.
 
+A minimum configuration file would look like:
+
+{{{
+<widget id="com.kludgets.minimum">
+   <content src="index.html"/>
+</widget>
+}}}
+
 == widget ==
 
-{{{<widget/>}}}
+{{{
+<widget/>
+}}}
 
 The {{{widget}}} is the root element that must be present. Its attributes are:
 
-||*Attribute*||*Required*||*Description*||
+|| *Attribute* || *Required* || *Description* ||
 ||id||yes||This uniquely identifies the widget. This comes in the form of a reverse domain identifier. Example. {{{com.kludgets.clock}}}. This attribute is required because without a unique identifier widgets may clash and overwrite each other.||
 ||name||no||This is a human readable name or title for the widget||
 ||version||no||The version of widget. Optional, but recommended as it will facilitate automatic updates||
@@ -38,5 +50,7 @@ The {{{widget}}} is the root element that must be present. Its attributes are:
 
 The {{{content}}} element will tell the engine the location of the start-up page of the widget. This element is also required. Its attributes:
 
-||*Attribute*||*Required*||*Description*||
+|| *Attribute* || *Required* || *Description* ||
 ||src||yes||The file path of the start-up page.||
+
+Although it is recommended that the startup file is an HTML file. It is possible to use an image, a Flash document, SVG document, or any type of document that a WebKit browser supports.
