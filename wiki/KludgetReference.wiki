@@ -22,13 +22,44 @@ This instance identifier uniquely identifies each widget instance.
 
 {{{ widget.ondragstart }}}
 
-This is the event handler when a widget begins to be dragged.
+This contains the event handler to be called when a widget begins to be dragged.
 
 {{{
 
 widget.ondragstart = function()
 {
-   alert("dragged!");
 }
 
 }}}
+
+=== ondragend ===
+
+{{{ widget.ondragend }}}
+
+This contains the event handler to be called when a widget is dropped or stops being dragged.
+
+=== onhide ===
+
+{{{ widget.onhide }}}
+
+This contains the event handler to be called when a widget is hidden from the desktop or no longer visible. Put your widget in sleep mode to conserve resources.
+
+=== onremove ===
+
+{{{ widget.onremove }}}
+
+This contains the event handler to be called when a widget is closed or removed.
+
+The Kludget engine will remove all preference settings for the removed widget instance. You may still save some persistent information in the [http://dev.w3.org/html5/webstorage/#databases database storage] which is shared by all widget instances and won't be deleted until the package is uninstalled.
+
+=== onshow ===
+
+{{{ widget.onshow }}}
+
+This contains the event handler to be called when a widget becomes visible.
+
+=== onurlreceived ===
+
+{{{ widget.onurlreceived }}}
+
+This contains the event handler to be called when a widget receives a url from a drag-and-drop action.
