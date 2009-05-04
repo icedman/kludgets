@@ -1,5 +1,10 @@
 #summary The Kludget developer rerefence.
 
+#sidebar TableOfContents
+
+* [Properties Properties]
+  * [identifier] 
+
 = Widget Object =
 
 Every instance of a widget is provided a javascript object for which to control it. It is called "widget".
