@@ -1,6 +1,6 @@
 #summary The Kludget developer rerefence.
 
-<wiki:toc max_depth="4" />
+<wiki:toc max_depth="3" />
 
 = Widget Object =
 
