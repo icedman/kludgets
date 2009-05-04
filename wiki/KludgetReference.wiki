@@ -167,7 +167,7 @@ The function returns a command object with the following properties.
 || *Property* || *Description* ||
 || outputString || The output of the command. ({{{stdout}}}) ||
 || errorString || The error of the command, if any. ({{{stderr}}}) ||
-|| status || The exit status of the command ||
+|| status || The exit status of the command. ||
 
 If a {{{handler}}} is provided. The command is executed asynchronously. And {{{handler}}} function will be called when execution is done. The command object will be passed as a paramater.
 
@@ -179,6 +179,19 @@ function onSystemExecDone(obj)
 
 }}}
 
+The for asynchronous calls, the system object will have the following properties and methods available.
+
+|| *Property* || *Description* ||
+|| outputString || The output of the command. ({{{stdout}}}) ||
+|| errorString || The error of the command, if any. ({{{stderr}}}) ||
+|| status || The exit status of the command. ||
+|| onreadoutput || Contains an event handler to be called whenever an {{{outputString}}} is available. The output string will be passed to the handler. ||
+|| onreaderror|| Contains an event handler to be called whenever an {{{errorString}}} is available. The error string will be passed to the handler. ||
+
+|| *Method* || *Description* ||
+|| cancel() || Cancels the execution of the command. ||
+|| write(string) || Write to {{{stdin}}}. ||
+|| close() || Closes {{{stdin}}} and {{{stdout}}} ||
 
 In Windows, the system command may be run inside a shell such as {{{bash}}} or {{{sh}}}. Provided Cygwin or a similar environment is available, most system commands may now be run in Windows.
 
