@@ -1,6 +1,6 @@
 #summary The Kludget developer rerefence.
 
-<wiki:toc max_depth="2" />
+<wiki:toc max_depth="4" />
 
 = Widget Object =
 
@@ -80,4 +80,4 @@ widget.onurlreceived = function(url)
 
 }}}
 
-== methods ==
+== Methods ==
