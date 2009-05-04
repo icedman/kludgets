@@ -1,0 +1,3 @@
+#summary The Kludget Package reference.
+
+= Kludget Package =
