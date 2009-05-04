@@ -81,3 +81,93 @@ widget.onurlreceived = function(url)
 }}}
 
 == Methods ==
+
+=== about ===
+
+{{{ widget.about() }}}
+
+Displays the widget information window. The "about" window also contains the security settings of the widget.
+
+=== close ===
+
+{{{ widget.close() }}}
+
+Removes the widget instance. This also clears all preference settings.
+
+{{{ widget.configure([category]) }}}
+
+Shows the widget preference window. You may optionally pass a category name to set the initial category page to be displayed.
+
+=== createInstance ===
+
+{{{ widget.createInstance([id]) }}}
+
+Creates a new instance of the widget. You may optionally pass a widget instance ID to be used by the widget. If the ID is already used, no new instance is created.
+
+=== hide ===
+
+{{{ widget.hide() }}}
+
+Hides the widget from the desktop view.
+
+=== inspect ===
+
+{{{ wigdget.inspect() }}}
+
+Displays the WebKit Inspector window. This is useful for debugging errors, tracing all "alerts", and viewing the actual DOM hierarchy.
+
+=== move ===
+
+{{{ widget.move(x, y) }}}
+
+Move the widget window. Move can also be done by manipulating the javascript window object.
+
+=== openURL ===
+
+{{{ widget.openURL(url) }}}
+
+Opens the url with the system's default url handler.
+
+=== prepareForTransition ===
+
+{{{ widget.prepareForTransition(transition) }}}
+
+Informs the Kludget engine that transition animation is about to be performed.
+
+This freezes all rendering and interaction of the widget. And a snapshot of the widget is taken. This snapshot image will be used when {{{performTransition}}} is called.
+
+=== performTransition ===
+
+{{{ widget.performTransition() }}}
+
+Performs transition animation.
+
+=== resize ===
+
+{{{ widget.resize(w, h) }}}
+
+Resize the widget window. Resizing can also be done by manipulating the javascript window object.
+
+=== show ===
+
+{{{ widget.show() }}}
+
+Put back to view a hidden widget. This also raises the widget's window level to the top.
+
+=== system ===
+
+{{{ widget.system(command, handler) }}}
+
+Executes a system command-line utility or an application. The commands must contain absolute paths.
+
+In Windows, the system command may be run inside a shell such as {{{bash}}} or {{{sh}}}. Provided Cygwin or a similar environment is available, most system commands may now be run in Windows.
+
+If a {{{handler}}} is provided. The command is executed synchronously. And {{{handler}}} function will be called when execution is done. The command object will be passed as a paramater.
+
+{{{{
+
+function onSystemExecDone(obj)
+{
+}
+
+}}}}
