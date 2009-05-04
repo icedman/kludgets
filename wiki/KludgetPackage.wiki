@@ -16,6 +16,14 @@ This is the very first file the Engine will look for. It is an XML file containi
 
 == widget ==
 
-{{{<widget>}}}}
+{{{<widget>}}}
 
-The {{{widget}}} is the root element that must be present.
+The {{{widget}}} is the root element that must be present. Its attributes are:
+
+||*Attribute*||*Required*||*Description*||
+||id||yes||This uniquely identifies the widget. This comes in the form of a reverse domain identifier. Example. {{{com.kludgets.clock}}}. This attribute is required because without a unique identifier widgets may clash and overwrite each other.||
+||name||no||This is a human readable name or title for the widget||
+||version||no||The version of widget. Optional, but recommended as it will facilitate automatic updates||
+||width||no||The width in pixels which the widget would be displayed.||
+||height||no||The heightin int pixels which the widget would be displayed.||
+||debug||no||Value is 1 or 0. 1 means the widget will run in debug mode.||
