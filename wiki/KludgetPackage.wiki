@@ -11,3 +11,11 @@ It is simply just an HTML file. How it is rendered on the web browser is display
 === The Configuration File ===
 
 {{{kludget.xml}}}
+
+This is the very first file the Engine will look for. It is an XML file containing all the configurations of the widget.
+
+== widget ==
+
+{{{<widget>}}}}
+
+The {{{widget}}} is the root element that must be present.
