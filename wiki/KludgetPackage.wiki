@@ -1,16 +1,18 @@
 #summary The Kludget package reference.
 
+<wiki:toc max_depth="2" />
+
 = Kludget Package =
 
 The most basic Kludget package contains just two files. An HTML file and a configuration file ({{{kludget.xml}}}).
 
-=== The HTML file ===
+== The HTML file ==
 
 It is simply just an HTML file. How it is rendered on the web browser is display the same way be the Engine.
 
 Read about {{{<content/>}}} below.
 
-=== The Configuration File ===
+== The Configuration File ==
 
 {{{kludget.xml}}}
 
@@ -24,7 +26,7 @@ A minimum configuration file would look like:
 </widget>
 }}}
 
-== widget ==
+=== widget ===
 
 {{{
 <widget/>
@@ -40,7 +42,7 @@ The {{{widget}}} is the root element that must be present. Its attributes are:
 ||height||no||The heightin int pixels which the widget would be displayed.||
 ||debug||no||Value is 1 or 0. 1 means the widget will run in debug mode.||
 
-== content ==
+=== content ===
 
 {{{
 <widget>
@@ -55,7 +57,7 @@ The {{{content}}} element will tell the engine the location of the start-up page
 
 Although it is recommended that the startup file is an HTML file. It is possible to use an image, a Flash document, SVG document, or any type of document that a webkit-based browser supports.
 
-== access ==
+=== access ===
 
 {{{
 <widget>
@@ -73,7 +75,7 @@ Attribute values may be "true" or "false".
 || plugin || Enable internet plugins such as Flash. ||
 || system || Enable system commands or the {{{widget.system()}}} method. ||
 
-== description ==
+=== description ===
 
 {{{
 <widget>
@@ -83,7 +85,7 @@ Attribute values may be "true" or "false".
 
 Describe the function of the widget here.
 
-== author ==
+=== author ===
 
 {{{
 <widget>
@@ -97,7 +99,7 @@ This contains information about the widget creator. The value of the {{{author}}
 || email || Email address of the author ||
 || href || Url of the author's website ||
 
-== menu ==
+=== menu ===
 
 {{{
 <widget>
@@ -107,7 +109,7 @@ This contains information about the widget creator. The value of the {{{author}}
 
 This declares custom context menu items. See information about {{{menu.xml}}} below for details.
 
-== preferences==
+=== preferences ===
 
 {{{
 <widget>
