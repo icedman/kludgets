@@ -4,16 +4,16 @@
 
 Every instance of a widget is provided a javascript object for which to control it. It is called "widget".
 
-= Properties =
+== Properties ==
 
-== identifier ==
+=== identifier ===
  
-{{ widget.identifier }}
+{{{ widget.identifier }}}
 
 This is the identifier of the widget. This identifier is the same as the CFBundleIdentifier.
 
-== instance ==
+=== instance ===
 
-{{ widget.instance }}
+{{{ widget.instance }}}
 
 This instance identifier uniquely identifies each widget instance.
