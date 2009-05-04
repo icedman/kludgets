@@ -160,14 +160,14 @@ Put back to view a hidden widget. This also raises the widget's window level to 
 
 Executes a system command-line utility or an application. The commands must contain absolute paths.
 
-The function returns a command object with the following properties an methos.
+If no {{{handler}}} is provided. The command is executed synchronously. Execution will only be limited to 60 seconds, otherwise the engine will forcibly terminated the execution.
 
-|| Property || Description ||
+The function returns a command object with the following properties.
+
+|| *Property* || *Description* ||
 || outputString || The output of the command. ({{{stdout}}}) ||
 || errorString || The error of the command, if any. ({{{stderr}}}) ||
 || status || The exit status of the command ||
-
-In Windows, the system command may be run inside a shell such as {{{bash}}} or {{{sh}}}. Provided Cygwin or a similar environment is available, most system commands may now be run in Windows.
 
 If a {{{handler}}} is provided. The command is executed asynchronously. And {{{handler}}} function will be called when execution is done. The command object will be passed as a paramater.
 
@@ -180,6 +180,6 @@ function onSystemExecDone(obj)
 }}}
 
 
-If no {{{handler}}} is provided. The command is executed synchronously.
+In Windows, the system command may be run inside a shell such as {{{bash}}} or {{{sh}}}. Provided Cygwin or a similar environment is available, most system commands may now be run in Windows.
 
 <wiki:toc max_depth="2" />
