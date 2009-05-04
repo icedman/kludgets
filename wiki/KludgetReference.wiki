@@ -194,5 +194,3 @@ The for asynchronous calls, the system object will have the following properties
 || close() || Closes {{{stdin}}} and {{{stdout}}}. ||
 
 In Windows, the system command may be run inside a shell such as {{{bash}}} or {{{sh}}}. Provided Cygwin or a similar environment is available, most system commands may now be run in Windows.
-
-<wiki:toc max_depth="2" />
