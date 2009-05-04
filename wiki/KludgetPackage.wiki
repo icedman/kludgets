@@ -54,3 +54,65 @@ The {{{content}}} element will tell the engine the location of the start-up page
 ||src||yes||The file path of the start-up page.||
 
 Although it is recommended that the startup file is an HTML file. It is possible to use an image, a Flash document, SVG document, or any type of document that a webkit-based browser supports.
+
+== access ==
+
+{{{
+<widget>
+   <access/>
+</widget>
+}}}
+
+This element specifies the security settings of the widget. This is optional but leaving this out will disable access to all resources other than that contained in the package.
+
+Attribute values may be "true" or "false".
+
+|| *Attribute* || *Description* ||
+|| local || Access local files outside of the package. ||
+|| network || Access the internet. ||
+|| plugin || Enable internet plugins such as Flash. ||
+|| system || Enable system commands or the {{{widget.system()}}} method. ||
+
+== description ==
+
+{{{
+<widget>
+   <description/>
+</widget>
+}}}
+
+Describe the function of the widget here.
+
+== author ==
+
+{{{
+<widget>
+   <author/>
+</widget>
+}}}
+
+This contains information about the widget creator. The value of the {{{author}}} element is the name of the author. Email, website information may be added through specifying author attributes.
+
+|| *Attribute* || *Description* ||
+|| email || Email address of the author ||
+|| href || Url of the author's website ||
+
+== menu ==
+
+{{{
+<widget>
+   <menu/>
+</widget>
+}}}
+
+This declares custom context menu items. See information about {{{menu.xml}}} below for details.
+
+== preferences==
+
+{{{
+<widget>
+   <preferences/>
+</widget>
+}}}
+
+This declares preference settings for the widget. See information about {{{preferences.xml}}} below for details.
