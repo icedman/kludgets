@@ -1,3 +1,5 @@
-#summary The Kludget Package reference.
+#summary The Kludget package reference.
 
 = Kludget Package =
+
+The most basic Kludget package contains just two files. An HTML file and a configuration file ({{{kludget.xml}}}).
