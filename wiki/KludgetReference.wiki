@@ -10,10 +10,25 @@ Every instance of a widget is provided a javascript object for which to control 
  
 {{{ widget.identifier }}}
 
-This is the identifier of the widget. This identifier is the same as the CFBundleIdentifier.
+This is the identifier of the widget. This identifier is the same as the CFBundleIdentifier in the Info.plist file. Or the <widget id="identifier"> in the Kludget.xml file.
 
 === instance ===
 
 {{{ widget.instance }}}
 
 This instance identifier uniquely identifies each widget instance.
+
+=== ondragstart ===
+
+{{{ widget.ondragstart }}}
+
+This is the event handler when a widget begins to be dragged.
+
+{{{
+
+widget.ondragstart = function()
+{
+   alert("dragged!");
+}
+
+}}}
