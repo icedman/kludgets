@@ -2,7 +2,6 @@
 #define KLUDGETSAPPLICATION_H
 
 #include <QApplication>
-#include <windows.h>
 
 class KApp : public QApplication
 {

@@ -86,6 +86,30 @@ KSettings::~KSettings()
     }
 }
 
+bool KSettings::loadPreferences(const QString &path)
+{
+    KDocument doc;
+    if (!doc.openDocument(path))
+        return false;
+
+    QDomNodeList prefs = doc.elementsByTagName("preference");
+    if (!prefs.length())
+        return false;
+
+    for (int i = 0; i < prefs.length(); i++)
+    {
+        QDomNode n = prefs.at(i);
+        QString name = n.attributes().namedItem("name").nodeValue();
+        QString defaultValue = n.namedItem("default").firstChild().nodeValue();
+        if (!contains(name))
+        {
+            write(name, defaultValue);
+        }
+    }
+
+    return true;
+}
+
 QVariant KSettings::read(const QString &key, QVariant defaultValue)
 {
     if (!settings)
@@ -128,6 +152,12 @@ QString KSettings::path()
 
 void KSettings::setPath(const QString &p)
 {
+    if (p == "" && settings)
+    {
+        delete settings;
+        settings = 0;
+    }
+
     if (!settings)
     {
         QFileInfo fileInfo(p);

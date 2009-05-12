@@ -19,6 +19,8 @@ public:
 
     KView *view();
 
+    void closeEvent(QCloseEvent *);
+
     bool isDragging();
     void startDrag();
     void endDrag();

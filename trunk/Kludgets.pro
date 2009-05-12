@@ -18,6 +18,7 @@ win32* {
 }
 
 HEADERS += config.h \
+           klog.h \
            kdocument.h \
            kapp.h \
            kserver.h \
@@ -38,6 +39,7 @@ HEADERS += config.h \
            util.h
            
 SOURCES += kdocument.cpp \
+           klog.cpp \
            kapp.cpp \
            kserver.cpp \
            kludget.cpp \

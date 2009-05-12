@@ -4,6 +4,8 @@
 #include "prefwindow.h"
 #include "kludgetinfo.h"
 
+class QWebView;
+
 class InstallWindow : public PreferenceWindow
 {
     Q_OBJECT
@@ -13,8 +15,15 @@ public:
     void createHeader();
     void createDialogControls();
 
+    private
+Q_SLOTS:
+    void onUpdate();
+
 private:
     KludgetInfo info;
+    QWebView *view;
+    QSize contentsSize;
+    QTimer updateTimer;
 };
 
 class AboutWindow : public InstallWindow

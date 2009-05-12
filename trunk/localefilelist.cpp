@@ -34,7 +34,7 @@ const QString LocaleFileList::language()
 
 bool LocaleFileList::localized(const QString &file, QString &localized)
 {
-	//qDebug("check: %s", qPrintable(file));
+    //qDebug("check: %s", qPrintable(file));
     if (!map.contains(file))
         return false;
     localized = map.value(file);
@@ -44,7 +44,6 @@ bool LocaleFileList::localized(const QString &file, QString &localized)
 void LocaleFileList::addDirectory(const QString &path)
 {
     //qDebug("add locale dir: %s", qPrintable(path));
-
     QDir directory(path);
     QStringList dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
     QStringList::iterator dit = dirs.begin();

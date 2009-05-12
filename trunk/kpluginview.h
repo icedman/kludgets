@@ -14,7 +14,7 @@ class KPluginView : public QWidget
 public:
 
     KPluginView(KWindow *window, KView *webview);
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *ev);
 
     static bool findAndHostPlugins(KWindow *window, KView *webview);
 

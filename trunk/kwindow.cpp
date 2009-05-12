@@ -32,6 +32,14 @@ KView* KWindow::view()
     return webView;
 }
 
+void KWindow::closeEvent(QCloseEvent *ev)
+{
+    /*
+       if (isVisible())
+           ev->ignore();
+    */
+}
+
 bool KWindow::isDragging()
 {
     return dragging;

@@ -19,7 +19,7 @@ code::selection {
 	background:transparent;
 }
 
-button, input, select, textarea {
+button, input, select, textarea, {
 	-webkit-dashboard-region:dashboard-region(control rectangle);
 }
 

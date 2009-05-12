@@ -7,6 +7,8 @@
 #include "kview.h"
 #include "ksystem.h"
 #include "knetwork.h"
+#include "klog.h"
+
 #include "prefwindow.h"
 #include "installwindow.h"
 
@@ -45,12 +47,15 @@ Kludget::Kludget(KClient *parent) :
 
     connect(this, SIGNAL(evaluate(const QString &)), this, SLOT(onEvaluate(const QString &)));
     connect(&customMenuMapper, SIGNAL(mapped(const QString &)), this, SIGNAL(evaluate(const QString &)));
+
+    KLog::instance()->write("Kludget::created");
 }
 
 Kludget::~Kludget()
 {
     if (prefWindow)
         delete prefWindow;
+    KLog::instance()->write("Kludget::destroyed");
 }
 
 Kludget* Kludget::create(KClient *client, const KludgetInfo &i)
@@ -86,10 +91,9 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
 
     // instance settings
     settings->setPath(info.instancePreferenceFile);
-
-    loadPreferences(":resources/xml/widgetPreferences.xml");
-    loadPreferences(info.configFile);
-    loadPreferences(info.path + "/" + PREFERENCE_FILE);
+    settings->loadPreferences(":resources/xml/widgetPreferences.xml");
+    settings->loadPreferences(info.configFile);
+    settings->loadPreferences(info.path + "/" + PREFERENCE_FILE);
 
     // position
     int x = settings->read("kludget/x", window->x()).toInt();
@@ -155,9 +159,17 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
             return false;
         }
         window->view()->load(QUrl(QString("file:///") + info.contentSrc));
+        KLog::instance()->write(QString("Kludget::load ") + info.id);
+
+        QString defaultPng = info.path + "/Default.png";
+        if (QFile::exists(defaultPng))
+        {
+            KLog::instance()->write("default.png exists");
+            //window->view()->setTransitionLayer(QPixmap(defaultPng));
+        }
     }
 
-#if 1
+#if 0
 
     qDebug("path: %s", qPrintable(info.path));
     qDebug("name: %s", qPrintable(info.name));
@@ -167,35 +179,6 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     qDebug("contentSrc: %s", qPrintable(info.contentSrc));
     qDebug("kludget created %s!" , qPrintable(info.instance));
 #endif
-
-    return true;
-}
-
-bool Kludget::loadPreferences(const QString &path)
-{
-    QFile file(path);
-    QDomDocument dom;
-    if (!file.exists())
-        return false;
-
-    file.open(QIODevice::ReadOnly);
-    dom.setContent(file.readAll());
-    file.close();
-
-    QDomNodeList prefs = dom.elementsByTagName("preference");
-    if (!prefs.length())
-        return false;
-
-    for (int i = 0; i < prefs.length(); i++)
-    {
-        QDomNode n = prefs.at(i);
-        QString name = n.attributes().namedItem("name").nodeValue();
-        QString defaultValue = n.namedItem("default").firstChild().nodeValue();
-        if (!settings->contains(name))
-        {
-            settings->write(name, defaultValue);
-        }
-    }
 
     return true;
 }
@@ -352,7 +335,7 @@ void Kludget::onFrameCreated(QWebFrame *frame)
 
 void Kludget::onUrlReceived(const QUrl *url)
 {
-    // qDebug("onUrlReceived: %s", qPrintable(url->toString()));
+    qDebug("onUrlReceived: %s", qPrintable(url->toString()));
     onEvaluate(QString("Kludget.onUrlReceived(") + url->toString() + ")");
 }
 
@@ -368,6 +351,13 @@ void Kludget::onSystemExecFinish(long id)
     QString obj = QString("_syscmd_") + QString::number(id);
     //qDebug("onSystemExecFinish: %s", qPrintable(obj));
     onEvaluate(obj + ".onfinish()");
+}
+
+void Kludget::screenshot(QString path)
+{
+    if (path == "")
+        path = info.storagePath + "/screenshot.png";
+    window->view()->screenshot(path);
 }
 
 void Kludget::show()
@@ -391,10 +381,17 @@ void Kludget::hide()
 
 void Kludget::close()
 {
+    window->hide();
     window->close();
 
-    QFile::remove
-        (info.instancePreferenceFile);
+    if (1)
+    {
+        // forcefully remove preference file
+        settings->clear();
+        settings->setPath("");
+        QFile::remove
+            (info.instancePreferenceFile);
+    }
 
     onRemove();
 }
@@ -453,9 +450,9 @@ void Kludget::configure(QString cat)
     connect(prefWindow, SIGNAL(destroyed()), this, SLOT(onPreferencesClosed()));
 }
 
-void Kludget::createInstance()
+void Kludget::createInstance(QString instance)
 {
-    client->createInstance();
+    client->createInstance(instance);
 }
 
 void Kludget::move(int x, int y)

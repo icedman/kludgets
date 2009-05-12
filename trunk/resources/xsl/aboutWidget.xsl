@@ -5,30 +5,49 @@
 <html>
 <head>
 <style>
-	body
-	{
-	font-family: "arnold 2.1"; font-size: 10pt; color: #fff;
-	background-image:url(bg.jpg);
-	}
+	* { font-family: "verdana"; font-size: 10pt; color: #000; }
+	body { background-image:url(bg.png); }
 	.title
 	{
-	display: inline-block; font-size: 24pt; letter-spacing: 2px;
+		font-family: "arnold 2.1"; 
+		width:400px;
+		height:40px;
+		overflow:hidden;
+		font-size: 24pt; color: #fff;
+	}
+	.titleGradient{
+		position:absolute;
+		top:0px;
+		left:0px;
+		height:50px;
+		width:400px;
+		background:url(titlegradient.png) repeat-x;
+	}
+	.info
+	{
+		position: absolute;
+		top: 50px;
+		left: 10px;
 	}
 	.version { display: inline-block; font-size: 8pt; }
-	.author div { font-family: "verdana"; display: inline-block; }
-	.url { font-family: "verdana"; }
-	.icon { position: absolute; left: 300px; top: 60px }
+	.author div { display: inline-block; }
+	.icon { position: absolute; left: 300px; top: 10px }
 </style>
 </head>
 <body>
-<div>
-	<xsl:apply-templates select="widget/icon"/>
-	<div class="title">
-		<xsl:value-of select="widget/name"/>
-	</div>
-	<div class="version"><xsl:apply-templates select="widget/@version"/></div>
+
+<div class="title">
+	<xsl:value-of select="widget/name"/>
 </div>
-	
+<div class="titleGradient"></div>
+
+<div class="info">
+
+<xsl:apply-templates select="widget/icon"/>
+
+<div class="version">
+<xsl:apply-templates select="widget/@version"/>
+</div>
 <xsl:apply-templates select="widget/description"/>
 <div class="url">
 <xsl:apply-templates select="widget/author/@href"/>
@@ -38,6 +57,9 @@
 <xsl:apply-templates select="widget/author"/>
 <xsl:apply-templates select="widget/author/@email"/>
 </div>
+
+</div>
+	
 </body>
 </html>
 </xsl:template>

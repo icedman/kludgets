@@ -29,12 +29,12 @@ Command.prototype.update = function()
 	if (System.hasError(this.pid))
 	{
 		this.errorString = System.error(this.pid);
-		this.onreaderror();
+		this.onreaderror(this.errorString);
 	}
 	if (System.hasOutput(this.pid))
 	{
 		this.outputString = System.output(this.pid);
-		this.onreadoutput();
+		this.onreadoutput(this.outputString);
 	}
 	this.status = System.status(this.pid);
 	
@@ -55,7 +55,7 @@ Command.prototype.execute = function(cmd, handler)
 	
 	if (this.handler == 0)
 	{
-		System.cancel(this.pid, 5000);
+		System.cancel(this.pid, 60000);
 		this.update();
 	}
 }

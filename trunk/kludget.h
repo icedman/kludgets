@@ -32,7 +32,6 @@ public:
 
 private:
     bool loadSettings(const KludgetInfo &info, bool loadPage = false);
-    bool loadPreferences(const QString &path);
     void saveSettings();
     void addJavaScriptWindowObjects(QWebFrame* frame);
     void runJavaScriptFile(QWebFrame* frame, const QString &);
@@ -83,6 +82,7 @@ public:
 
     public
 Q_SLOTS:
+    void screenshot(QString path = "");
     void show();
     void hide();
     void close();
@@ -90,18 +90,20 @@ Q_SLOTS:
     void reload();
     void about();
     void configure(QString cat = "");
-    void createInstance();
+    void createInstance(QString instance = "");
     void move(int x, int y);
     void resize(int w, int h);
+    void renderLayer(QString layer);
+    void prepareForTransition(QString transition);
+    void performTransition();
+
+public:
     int opacity();
     int windowLevel();
     int x();
     int y();
     int width();
     int height();
-    void renderLayer(QString layer);
-    void prepareForTransition(QString transition);
-    void performTransition();
 
 Q_SIGNALS:
     void evaluate(const QString &);

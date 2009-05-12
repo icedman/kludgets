@@ -31,7 +31,7 @@ void KludgetInfo::read()
         {
             KDocument plist;
             plist.openDocument(infoPlistFile);
-            plist.transform(":resources/xsl/plist.xsl");
+            plist.transform(":resources/xsl/infoPlist.xsl");
             plist.setValue("widget/engine", "dashboard");
             plist.saveDocument(configFile);
         }
@@ -39,7 +39,7 @@ void KludgetInfo::read()
         {
             KDocument cfg;
             cfg.openDocument(configXmlFile);
-            cfg.transform(":resources/xsl/operacfg.xsl");
+            cfg.transform(":resources/xsl/operaConfig.xsl");
             cfg.setValue("widget/engine", "opera");
             cfg.saveDocument(configFile);
         }

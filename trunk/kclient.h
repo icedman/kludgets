@@ -18,6 +18,7 @@ class KClient : public QObject
 public:
 
     static KClient* instance();
+    static bool installPackage(const QString& path);
 
     bool initialize(const QString& path);
     void shutdown();
@@ -25,9 +26,9 @@ public:
     Kludget* createInstance(const QString &instance = "");
 
 private:
-    bool installWidget(const QString& path);
-    bool installFromArchive(const QString& path);
-    bool installFromDirectory(const QString& path);
+    bool installWidget(const QString& path, bool prompt = true);
+    bool installFromArchive(const QString& path, bool prompt = true);
+    bool installFromDirectory(const QString& path, bool prompt = true);
     void loadCustomFonts(const QString& path);
     void loadPlugins(const QString& path);
 

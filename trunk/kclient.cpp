@@ -6,6 +6,7 @@
 #include "kdocument.h"
 #include "installwindow.h"
 #include "util.h"
+#include "klog.h"
 
 #include <QWebSettings>
 #include <QApplication>
@@ -39,19 +40,19 @@ bool KClient::initialize(const QString& path)
     if (!QFile::exists(appPath))
         return false;
 
-    // install
-    if (1)
+    if (!fileInfo.isDir())
     {
-        if (!fileInfo.isDir())
+        QString suffix = fileInfo.suffix();
+        if (suffix == "zip" || suffix == "kludget")
         {
-            QString suffix = fileInfo.suffix();
-            if (suffix == "zip" || suffix == "kludget")
-            {
-                return installFromArchive(appPath);
-            }
-            return false;
+            return installFromArchive(appPath);
         }
-        else
+        return false;
+    }
+    else
+    {
+        // run directly from directory (todo. debug mode check)
+        if (0)
         {
             if (appPath.indexOf(QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).absolutePath() + "/widgets") != 0)
                 return installFromDirectory(appPath);
@@ -109,7 +110,17 @@ bool KClient::run()
 void KClient::shutdown()
 {}
 
-bool KClient::installFromArchive(const QString& path)
+bool KClient::installPackage(const QString& path)
+{
+    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
+    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets")).mkdir("installed");
+
+    KClient client;
+    client.installFromArchive(path, false);
+    return true;
+}
+
+bool KClient::installFromArchive(const QString& path, bool prompt)
 {
     QFileInfo fileInfo(path);
     QString suffix = fileInfo.suffix();
@@ -133,25 +144,31 @@ bool KClient::installFromArchive(const QString& path)
         }
     }
 
-    return installWidget(tmp.path);
+    return installWidget(tmp.path, prompt);
 }
 
-bool KClient::installFromDirectory(const QString& path)
+bool KClient::installFromDirectory(const QString& path, bool prompt)
 {
     QString dest = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets/installed/") + QDir(path).dirName();
     if (Util::copyDir(path, dest, true))
     {
-        return installWidget(QDir(dest).absolutePath());
+        return installWidget(QDir(dest).absolutePath(), prompt);
     }
     return false;
 }
 
-bool KClient::installWidget(const QString& path)
+bool KClient::installWidget(const QString& path, bool prompt)
 {
     info = KludgetInfo(path, "");
 
     // setup storage dir
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets").mkpath(QDir(info.storagePath).dirName());
+
+    KDocument pid;
+    pid.setValue("kludget/name", info.name);
+    pid.setValue("kludget/id", info.id);
+    pid.setValue("kludget/path", info.path);
+    pid.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
     KDocument config;
     if (!config.openDocument(info.configFile))
@@ -174,6 +191,9 @@ bool KClient::installWidget(const QString& path)
         access.setValue("kludget/access/system", "1");
     access.saveDocument(info.storagePath + "/access.xml");
 
+    if (!prompt)
+        return true;
+
     InstallWindow *installWindow = new InstallWindow(info);
     installWindow->setAttribute(Qt::WA_DeleteOnClose);
     installWindow->setWindowTitle("Installation - " + info.name);
@@ -190,7 +210,6 @@ bool KClient::installWidget(const QString& path)
     connect(installWindow, SIGNAL(cancelled()), this, SLOT(exit()));
 
     QApplication::setQuitOnLastWindowClosed(true);
-
     return true;
 }
 
