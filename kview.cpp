@@ -3,6 +3,7 @@
 #include "kwindow.h"
 #include "kview.h"
 #include "kpage.h"
+#include "klog.h"
 #include "kpluginview.h"
 #include "util.h"
 
@@ -16,6 +17,7 @@ KView::KView(KWindow *p) :
         grayed(false),
         tinted(false),
         frozen(false),
+        dragStart(false),
         transitionTL(0)
 {
     setPage(new KPage(this));
@@ -77,6 +79,15 @@ void KView::mouseMoveEvent(QMouseEvent* ev)
         ev->accept();
         return ;
     }
+    else
+    {
+        if (dragStart)
+        {
+            QPoint p = dragStartPos - ev->pos();
+            if (p.manhattanLength() > 4)
+                parent->startDrag();
+        }
+    }
 
     QWebView::mouseMoveEvent(ev);
 }
@@ -91,12 +102,15 @@ void KView::mousePressEvent(QMouseEvent *ev)
     if (ev->button() == Qt::LeftButton)
     {
 #ifndef _DEBUG
+
         if (!page()->dashboardRegionContains(ev->pos()))
         {
-            parent->startDrag();
+            dragStart = true;
+            dragStartPos = ev->pos();
         }
 #else
-        parent->startDrag();
+        dragStart = true;
+        dragStartPos = ev->pos();
 #endif
 
     }
@@ -104,6 +118,8 @@ void KView::mousePressEvent(QMouseEvent *ev)
 
 void KView::mouseReleaseEvent(QMouseEvent *ev)
 {
+    dragStart = false;
+
     if (parent->isDragging())
     {
         parent->endDrag();
@@ -231,6 +247,15 @@ QColor KView::tintColor()
     return tint;
 }
 
+void KView::screenshot(const QString &path)
+{
+    if (isBuffered())
+    {
+        KLog::instance()->write(QString("screenshot:") + path);
+        buffer.save(path);
+    }
+}
+
 void KView::paintToBuffer(QPixmap *buf)
 {
     QWebFrame *frame = page()->mainFrame();
@@ -299,6 +324,11 @@ void KView::renderLayer(int z)
     }
 
     paintToBuffer(&layers[z]);
+}
+
+void KView::setTransitionLayer(const QPixmap pix)
+{
+    layers[Transition] = pix;
 }
 
 QPixmap& KView::bufferImage()

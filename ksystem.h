@@ -22,6 +22,7 @@ public:
 
     public
 Q_SLOTS:
+    void log(QString message);
     void openURL(QString url);
     int execute(QString cmd);
     void close(long pid = 0);

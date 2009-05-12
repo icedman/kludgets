@@ -28,6 +28,7 @@ public:
         FirstShow
     };
 
+    void screenshot(const QString &path);
     void paintEvent(QPaintEvent *ev);
     void resizeEvent(QResizeEvent *e);
     void contextMenuEvent(QContextMenuEvent*);
@@ -45,6 +46,7 @@ public:
     void setBuffered(bool);
     void setupBuffer();
     void renderLayer(int z);
+    void setTransitionLayer(const QPixmap pix);
 
     void setFrozen(bool);
     bool isFrozen();
@@ -85,6 +87,9 @@ private:
     bool dirtyBuffer;
     QTimer updateTimer;
     QPixmap layers[3];
+
+    QPoint dragStartPos;
+    bool dragStart;
 
 private Q_SLOTS:
     void onUpdate();

@@ -10,7 +10,8 @@
 
 InstallWindow::InstallWindow(const KludgetInfo& i) :
         PreferenceWindow(0),
-        info(i)
+        info(i),
+        view(0)
 {
     settings = new KSettings(this);
     settings->setPath(info.storagePath + "/access.xml");
@@ -18,9 +19,9 @@ InstallWindow::InstallWindow(const KludgetInfo& i) :
 
 void InstallWindow::createHeader()
 {
-    QWebView *view = new QWebView;
-    view->setFixedHeight(140);
+    view = new QWebView;
     view->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    view->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
     KDocument about;
     about.openDocument(info.configFile);
@@ -32,6 +33,23 @@ void InstallWindow::createHeader()
     about.transform(":resources/xsl/aboutWidget.xsl");
     view->setHtml(about.toString(), QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/Resources/"));
     layout->addWidget(view);
+
+    /*
+       connect(&updateTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
+       updateTimer.start(50);
+    */
+
+    view->setFixedHeight(140);
+}
+
+void InstallWindow::onUpdate()
+{
+    QSize newSize = view->page()->mainFrame()->contentsSize();
+    if (contentsSize != newSize)
+    {
+        contentsSize = newSize;
+        //resize(newSize);
+    }
 }
 
 void InstallWindow::createDialogControls()

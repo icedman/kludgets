@@ -1,10 +1,12 @@
 #include "config.h"
 #include "version.h"
 #include "kserver.h"
+#include "kclient.h"
 #include "ksettings.h"
 #include "prefwindow.h"
 #include "kdocument.h"
 #include "util.h"
+#include "klog.h"
 
 #include <QDirIterator>
 #include <QApplication>
@@ -30,6 +32,12 @@ bool KServer::initialize()
     if (!processLock->create(1))
         return false;
 
+    QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    if (!QFile::exists(enginePreferencesFile))
+    {
+        loadDefaultWidgets();
+    }
+
     updateWidgetList();
 
     QList<Widget>::iterator it = widgetList.begin();
@@ -48,8 +56,13 @@ bool KServer::initialize()
     connect(&runningWidgetsMapper, SIGNAL(mapped(int)), this, SIGNAL(selectWidget(int)));
     connect(this, SIGNAL(selectInstalledWidget(QString)), this, SLOT(runWidget(QString)));
     connect(&installedWidgetsMapper, SIGNAL(mapped(QString)), this, SIGNAL(selectInstalledWidget(QString)));
+    connect(&trayIcon, SIGNAL(messageClicked()), this, SLOT(openPackage()));
 
-    settings->setPath(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    settings->setPath(enginePreferencesFile);
+    settings->loadPreferences(":resources/xml/enginePreferences.xml");
+
+    KLog::instance()->clear();
+    KLog::instance()->write("KServer::initialize");
 
     processWidgetQueue();
     return true;
@@ -57,29 +70,13 @@ bool KServer::initialize()
 
 void KServer::shutdown()
 {
-    // remove unused directories
-    QDir directory(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets/");
-    QStringList dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    QStringList::iterator dit = dirs.begin();
-    while (dit != dirs.end())
-    {
-        QString filePath = *dit;
-        dit++;
-
-        if (filePath == "installed")
-            continue;
-
-        QString configPath = directory.absolutePath() + "/" + filePath;
-        QString configFile = configPath + QString("/") + CONFIG_FILE;
-
-        if (!QFile::exists(configFile))
-        {
-            Util::deleteDir(configPath);
-        }
-    }
+    QDir directory;
+    QStringList dirs;
+    QStringList::iterator dit;
 
     QList<Widget>::iterator it;
 
+    // definitely remove these directories of uninstalled widgets
     directory.setPath(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets/installed/");
     dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
     dit = dirs.begin();
@@ -115,6 +112,28 @@ void KServer::shutdown()
             closeProcess(pid);
         it++;
     }
+
+    KLog::instance()->write("KServer::shutdown");
+}
+
+void KServer::loadDefaultWidgets()
+{
+    QDir directory(QApplication::applicationDirPath() + "/widgets/");
+    QStringList files = directory.entryList(QDir::Files);
+    QStringList::iterator fit = files.begin();
+
+    while (fit != files.end())
+    {
+        QString filePath = directory.absolutePath() + "/" + *fit;
+        QFileInfo fileInfo(filePath);
+        if (fileInfo.suffix() == "zip")
+        {
+            KClient::installPackage(filePath);
+        }
+        fit++;
+    }
+
+    // run widget manager
 }
 
 void KServer::setupMenu()
@@ -201,7 +220,7 @@ void KServer::openPackage()
     QString path = QFileDialog::getOpenFileName(0,
                    "Open widget package",
                    QApplication::applicationDirPath() + "/widgets",
-                   "Kludget Package(*.kludget);;Zipped Package(*.zip)");
+                   "Zipped Package(*.zip);;Kludget Package(*.kludget)");
     if (path != "")
         runWidget(path);
 }
@@ -211,7 +230,7 @@ void KServer::showMenu()
     updateWidgetList();
 
     trayMenu.clear();
-    connect(trayMenu.addAction(QString(KLUDGET_APPLICATION) + " v" + KLUDGET_MAJOR_VERSION), SIGNAL(triggered()), this, SLOT(goToWidgetsSite()));
+    connect(trayMenu.addAction(QString(KLUDGET_APPLICATION) + " v" + KLUDGET_MAJOR_VERSION), SIGNAL(triggered()), this, SLOT(goToEngineSite()));
     connect(trayMenu.addAction(QString("Preferences")), SIGNAL(triggered()), this, SLOT(configure()));
     trayMenu.insertSeparator(0);
 
@@ -323,7 +342,7 @@ void KServer::goToWidgetsSite()
 
 void KServer::goToEngineSite()
 {
-    QDesktopServices::openUrl(QUrl("http://www.kludgets.com/engine"));
+    QDesktopServices::openUrl(QUrl("http://www.kludgets.com"));
 }
 
 void KServer::onSettingsChanged()

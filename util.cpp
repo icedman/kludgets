@@ -115,10 +115,11 @@ bool Util::extract(const QString &source, const QString &destination)
     args.push_back("-d");
     args.push_back(destination);
 
-    QFileInfo tool("tools/unzip.exe");
+    QFileInfo tool("unzip");
     QString unzip = tool.absoluteFilePath();
 
-    QProcess::execute(unzip, args);
+    int ret = QProcess::execute(unzip, args);
+
     return true;
 }
 

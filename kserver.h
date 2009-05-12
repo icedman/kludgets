@@ -41,6 +41,7 @@ private:
         bool active;
     };
 
+    void loadDefaultWidgets();
     void setupMenu();
     void updateWidgetList();
     void sendMessageToAll(long msg);

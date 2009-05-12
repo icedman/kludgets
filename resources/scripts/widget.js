@@ -48,18 +48,26 @@ Kludget.openApplication = function(path)
 	alert("app: " + path);
 }
 
+Kludget.onshow = function() {}
+Kludget.onhide = function() {}
+Kludget.onstartdrag = function() {}
+Kludget.onenddrag = function() {}
+Kludget.onremove = function() {}
+Kludget.onsettingschanged = function() {}
+Kludget.onurlreceived = function(url) {}
+
 window.kludget = Kludget;
 window.widget = Kludget;
 window.Widget = Kludget;
 
-alert = function(m) {
+DEBUG = function(m) {
 	try {
 		console.log(m);
 	} catch (e) {
-		return m;
 	}
+	System.log(kludget.identifier + "::DEBUG " + m);
+}
+alert = function(m) {
+	DEBUG(m);
 }
 
-DEBUG = function(m) {
-	alert(m);
-}

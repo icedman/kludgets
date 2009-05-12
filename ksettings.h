@@ -14,6 +14,8 @@ public:
     KSettings(QObject* parent = 0, const QString &path = "");
     ~KSettings();
 
+    bool loadPreferences(const QString &);
+
     QString path();
     void setPath(const QString &);
     void setRootKey(const QString &);

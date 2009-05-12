@@ -1,6 +1,7 @@
 #include "config.h"
 #include "ksystem.h"
 #include "kludget.h"
+#include "klog.h"
 
 #include <QDesktopServices>
 #include <QUrl>
@@ -32,7 +33,12 @@ void KSystem::setShellPath(const QString path)
 
 void KSystem::setEnableCommands(bool enable)
 {
-	runSystemCommands = enable;
+    runSystemCommands = enable;
+}
+
+void KSystem::log(QString message)
+{
+    KLog::instance()->write(message);
 }
 
 void KSystem::openURL(QString url)
