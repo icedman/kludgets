@@ -40,6 +40,8 @@ Command.prototype.update = function()
 	
 	if (this.handler == 0)
 	{
+		this.outputString = this.outputString.replace(prevOutput, "");
+		this.errorString = this.errorString.replace(prevError, "");
 		this.outputString = prevOutput + this.outputString;
 		this.errorString = prevError + this.errorString;
 	}

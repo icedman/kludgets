@@ -1,5 +1,6 @@
 #include "kwindow.h"
 #include "kview.h"
+#include "klog.h"
 #include "kserver.h"
 
 #include <windows.h>
@@ -31,6 +32,11 @@ bool KWindow::winEvent(MSG *message, long *result)
                 lower();
             else
                 raise();
+            return true;
+        }
+    case KServer::HideWindow:
+        {
+            hide();
             return true;
         }
     case KServer::SettingsChanged:

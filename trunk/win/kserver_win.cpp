@@ -2,6 +2,7 @@
 #include "ksettings.h"
 #include "config_win.h"
 #include "windowsregistry.h"
+#include "hotkey.h"
 
 #include <QApplication>
 
@@ -83,6 +84,7 @@ bool KServer::checkProcess(int pid)
 
 void KServer::updateSystemSettings()
 {
+    // run at start up
     WindowsRegistry reg;
     reg.Open(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"), 1);
     if (settings->read("general/runAtStartup", 0).toInt() != 0)
@@ -97,4 +99,10 @@ void KServer::updateSystemSettings()
         reg.DeleteValue(_T("KludgetEngine"));
     }
     reg.Close();
+
+    // hotkey
+    QString hotkey = settings->read("general/hotKey", "").toString() + ":0";
+    int hotKey = hotkey.split(":")[0].toInt();
+    int hotKeyModifier = hotkey.split(":")[1].toInt();
+    hotKeyListener->registerHotKey((Qt::Key)hotKey, (Qt::KeyboardModifier)hotKeyModifier);
 }

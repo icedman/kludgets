@@ -37,6 +37,7 @@ public:
     void mouseReleaseEvent(QMouseEvent *);
     void mouseDoubleClickEvent(QMouseEvent *);
     void focusInEvent(QFocusEvent *);
+    void focusOutEvent(QFocusEvent *);
 
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
@@ -88,6 +89,7 @@ private:
     QTimer updateTimer;
     QPixmap layers[3];
 
+    QPoint lastPos;
     QPoint dragStartPos;
     bool dragStart;
 

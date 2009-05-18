@@ -10,6 +10,7 @@
 
 class KSettings;
 class PreferenceWindow;
+class HotKey;
 
 class KServer : public QObject
 {
@@ -19,6 +20,7 @@ public:
 
     enum WidgetIPC {
         ShowWindow = 0x8000,
+        HideWindow = 0x8001,
         SettingsChanged
     };
 
@@ -52,6 +54,7 @@ private:
 
     private
 Q_SLOTS:
+    void hotKeyPressed(Qt::Key, Qt::KeyboardModifier);
     void processWidgetQueue();
     void runWidget(const QString &path);
     void openPackage();
@@ -84,6 +87,9 @@ private:
     KSettings *settings;
 
     QSharedMemory *processLock;
+
+    HotKey *hotKeyListener;
+    bool hotKeyShow;
 };
 
 #endif // KLUDGETSERVER_H

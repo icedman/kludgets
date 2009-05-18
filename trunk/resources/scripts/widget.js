@@ -56,6 +56,16 @@ Kludget.onremove = function() {}
 Kludget.onsettingschanged = function() {}
 Kludget.onurlreceived = function(url) {}
 
+Kludget.dispatchMouseLeave = function()
+{
+	var evt = document.createEvent("MouseEvent");
+	evt.initMouseEvent("mouseout", true, true, window, 
+			0, 0, 0, -1, -1, 
+			false, false, false, false, 
+			false, false);
+	document.body.dispatchEvent(evt);
+}
+
 window.kludget = Kludget;
 window.widget = Kludget;
 window.Widget = Kludget;
@@ -67,7 +77,7 @@ DEBUG = function(m) {
 	}
 	System.log(kludget.identifier + "::DEBUG " + m);
 }
+
 alert = function(m) {
 	DEBUG(m);
 }
-

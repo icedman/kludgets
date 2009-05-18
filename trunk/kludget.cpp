@@ -78,6 +78,10 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     if (!QFile::exists(info.configFile))
         return false;
 
+    // config
+    KDocument config;
+    config.openDocument(info.configFile);
+
     // access
     KDocument access;
     access.openDocument(info.storagePath + "/access.xml");
@@ -86,6 +90,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     bool accessPlugins = access.getValue("kludget/access/plugins", "0").toInt();
     bool accessSystem = access.getValue("kludget/access/system", "0").toInt();
 
+    // engine
     KDocument engine;
     engine.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
 
@@ -145,6 +150,37 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         system->setShellPath(engine.getValue("kludget/general/shellPath", ""));
     }
 
+    // plugin
+    if (!plugin.isLoaded() && accessPlugins)
+    {
+        QString pluginName = config.getValue("widget/plugins/plugin", "");
+        QString pluginPath;
+
+#ifdef Q_WS_MAC
+
+        pluginPath = info.path + "/" + pluginName + "/Contents/MacOS";
+#else
+#ifdef Q_WS_WIN
+
+        pluginPath = info.path + "/" + pluginName + "/Contents/Windows";
+#endif
+#endif
+
+        // todo: read info.plist as check CFBundleExecutable
+        pluginName.replace(".bundle", "");
+        plugin.setFileName(pluginPath + "/" + pluginName);
+
+        if (plugin.load())
+        {
+            typedef void (*initWithWebView)(QWebView*);
+            initWithWebView init = (initWithWebView)plugin.resolve("initWithWebView");
+            if (init)
+            {
+                init((QWebView*)window->view());
+            }
+        }
+    }
+
     // drop
     window->view()->setAcceptDrops(true);
 
@@ -164,7 +200,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         QString defaultPng = info.path + "/Default.png";
         if (QFile::exists(defaultPng))
         {
-            KLog::instance()->write("default.png exists");
+            //KLog::instance()->write("default.png exists");
             //window->view()->setTransitionLayer(QPixmap(defaultPng));
         }
     }
@@ -192,14 +228,24 @@ void Kludget::saveSettings()
 
 void Kludget::addJavaScriptWindowObjects(QWebFrame* frame)
 {
-    // add plugin here
-
     frame->addToJavaScriptWindowObject("Kludget", this);
     frame->addToJavaScriptWindowObject("System", system);
 
     runJavaScriptFile(frame, ":resources/scripts/json2.js");
     runJavaScriptFile(frame, ":resources/scripts/system.js");
     runJavaScriptFile(frame, ":resources/scripts/widget.js");
+
+    // add plugin here
+    if (plugin.isLoaded())
+    {
+        typedef void (*windowScriptObjectAvailable)(QWebFrame*);
+        windowScriptObjectAvailable wsoAvailable = (windowScriptObjectAvailable)plugin.resolve("windowScriptObjectAvailable");
+        if (wsoAvailable)
+        {
+            // KLog::instance()->write("plugin::windowScriptObjectAvailable");
+            wsoAvailable(frame);
+        }
+    }
 }
 
 void Kludget::runJavaScriptFile(QWebFrame* frame, const QString &p)
@@ -362,13 +408,15 @@ void Kludget::screenshot(QString path)
 
 void Kludget::show()
 {
-    if (firstShow)
-    {
-        window->view()->setTransition(KView::FirstShow);
-        window->view()->setFrozen(true);
-        performTransition();
-        firstShow = false;
-    }
+    /*
+       if (firstShow)
+       {
+           window->view()->setTransition(KView::FirstShow);
+           window->view()->setFrozen(true);
+           performTransition();
+           firstShow = false;
+       }
+    */
 
     window->raise();
     window->show();
@@ -512,7 +560,7 @@ void Kludget::renderLayer(QString layer)
 
 void Kludget::prepareForTransition(QString transition)
 {
-    qDebug("prepareForTransition: %s", qPrintable(transition));
+    //qDebug("prepareForTransition: %s", qPrintable(transition));
 
     int t = KView::Transition;
     if (transition.indexOf("Back") != -1)
@@ -527,6 +575,7 @@ void Kludget::prepareForTransition(QString transition)
 
 void Kludget::performTransition()
 {
-    qDebug("perfromTransition");
+    //qDebug("perfromTransition");
+
     window->view()->beginTransition();
 }

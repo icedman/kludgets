@@ -13,7 +13,8 @@ win32* {
     SOURCES += win\kwindow_win.cpp \
                win\kserver_win.cpp \
                win\kpluginview_win.cpp \
-               win\windowsregistry.cpp
+               win\windowsregistry.cpp \
+               win\hotkey_win.cpp
     DESTDIR = ./
 }
 
@@ -36,7 +37,8 @@ HEADERS += config.h \
            installwindow.h \
            version.h \
            localefilelist.h \
-           util.h
+           util.h \
+           hotkey.h
            
 SOURCES += kdocument.cpp \
            klog.cpp \
@@ -56,6 +58,7 @@ SOURCES += kdocument.cpp \
            installwindow.cpp \
            localefilelist.cpp \
            util.cpp \
+           hotkey.cpp \
            main.cpp
 
 RESOURCES += resources.qrc

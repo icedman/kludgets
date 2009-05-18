@@ -7,6 +7,7 @@
 #include "kdocument.h"
 #include "util.h"
 #include "klog.h"
+#include "hotkey.h"
 
 #include <QDirIterator>
 #include <QApplication>
@@ -22,6 +23,7 @@ KServer* KServer::instance()
 KServer::KServer() :
         processLock(new QSharedMemory("kludget::server", this)),
         prefWindow(0),
+        hotKeyListener(0),
         settings(new KSettings(this))
 {
     settings->setRootKey("kludget");
@@ -58,11 +60,17 @@ bool KServer::initialize()
     connect(&installedWidgetsMapper, SIGNAL(mapped(QString)), this, SIGNAL(selectInstalledWidget(QString)));
     connect(&trayIcon, SIGNAL(messageClicked()), this, SLOT(openPackage()));
 
+    hotKeyListener = new HotKey();
+    hotKeyShow = false;
+    connect(hotKeyListener, SIGNAL(hotKeyPressed(Qt::Key, Qt::KeyboardModifier)), this, SLOT(hotKeyPressed(Qt::Key, Qt::KeyboardModifier)));
+
     settings->setPath(enginePreferencesFile);
     settings->loadPreferences(":resources/xml/enginePreferences.xml");
 
     KLog::instance()->clear();
     KLog::instance()->write("KServer::initialize");
+
+    updateSystemSettings();
 
     processWidgetQueue();
     return true;
@@ -143,6 +151,16 @@ void KServer::setupMenu()
     trayIcon.setIcon(QIcon(":resources/images/kludget.png"));
     trayIcon.setContextMenu(&trayMenu);
     trayIcon.show();
+}
+
+void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
+{
+    updateWidgetList();
+    if (hotKeyShow)
+        sendMessageToAll(ShowWindow);
+    else
+        sendMessageToAll(HideWindow);
+    hotKeyShow = !hotKeyShow;
 }
 
 void KServer::processWidgetQueue()
