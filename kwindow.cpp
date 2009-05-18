@@ -85,14 +85,17 @@ void KWindow::onUpdate()
         return ;
     }
 
-    if (windowLevel() == 2)
-        lower();
+    if (isVisible())
+    {
+        if (windowLevel() == 2)
+            lower();
 
-    if (isSnapToScreen())
-        snapToScreen();
+        if (isSnapToScreen())
+            snapToScreen();
 
-    if (isAutoSize())
-        autoSize();
+        if (isAutoSize())
+            autoSize();
+    }
 
     if (prevVisibility != isVisible())
     {

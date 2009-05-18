@@ -121,7 +121,7 @@ void KSystem::finished(int code, QProcess::ExitStatus status)
 
 QString KSystem::error(long pid)
 {
-    qDebug("error");
+    // qDebug("error");
     KSystem *k = getProcess(pid);
     if (k->errorList.size() == 0)
         return "";
@@ -132,7 +132,7 @@ QString KSystem::error(long pid)
 
 QString KSystem::output(long pid)
 {
-    qDebug("output");
+    // qDebug("output");
     KSystem *k = getProcess(pid);
     if (k->outputList.size() == 0)
         return "";
@@ -143,21 +143,21 @@ QString KSystem::output(long pid)
 
 bool KSystem::hasError(long pid)
 {
-    qDebug("hasError");
+    // qDebug("hasError");
     KSystem *k = getProcess(pid);
     return k->errorList.size() > 0;
 }
 
 bool KSystem::hasOutput(long pid)
 {
-    qDebug("hasOutput");
+    // qDebug("hasOutput");
     KSystem *k = getProcess(pid);
     return k->outputList.size() > 0;
 }
 
 int KSystem::status(long pid)
 {
-    qDebug("status");
+    // qDebug("status");
     KSystem *k = getProcess(pid);
     return k->exitStatus;
 }
@@ -166,9 +166,9 @@ KSystem *KSystem::getProcess(long pid)
 {
     if (!processes.contains(pid))
     {
-        qDebug("not found %d!", pid);
+        // qDebug("not found %d!", pid);
         return this;
     }
-    qDebug("found %d!", pid);
+    // qDebug("found %d!", pid);
     return processes.value(pid);
 }

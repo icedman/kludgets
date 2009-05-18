@@ -2,6 +2,7 @@
 #include "ksystem.h"
 #include "ksettings.h"
 #include "util.h"
+#include "hotkey.h"
 
 #include <QDomDocument>
 
@@ -13,6 +14,11 @@ public:
     {
         setValue(pref.value);
         addWidget(data);
+
+        if (pref.width > 0)
+        {
+            data->setMaximumWidth(pref.width);
+        }
     }
 
     QString getValue()
@@ -28,6 +34,107 @@ public:
 protected:
 
     QLineEdit *data;
+};
+
+class QHotKey : public QLineEdit
+{
+public:
+    void keyPressEvent(QKeyEvent *ev)
+    {
+        key = ev->key();
+        modifier = 0;
+
+        if (ev->modifiers() & Qt::ShiftModifier)
+            modifier = Qt::ShiftModifier;
+        if (ev->modifiers() & Qt::ControlModifier)
+            modifier = Qt::ControlModifier;
+        if (ev->modifiers() & Qt::AltModifier)
+            modifier = Qt::AltModifier;
+
+        ev->ignore();
+
+        if (modifier == 0)
+        {
+            if (key < Qt::Key_F1 || key > Qt::Key_F35)
+                modifier = Qt::ControlModifier;
+#ifdef Q_WS_WIN
+            // F12 is reserved for debugger
+            if (key == Qt::Key_F12)
+                modifier = Qt::ControlModifier;
+#endif
+
+        }
+
+        if (HotKey::keyName((Qt::Key)key) == "")
+        {
+            key = 0;
+            modifier = 0;
+        }
+
+        update();
+    }
+
+    void keyReleaseEvent(QKeyEvent *ev)
+    {
+        ev->ignore();
+    }
+
+    void update()
+    {
+        if (key == 0)
+        {
+            setText("");
+            return ;
+        }
+
+        QString text = "";
+        if (modifier == Qt::ShiftModifier)
+            text = "Shift + ";
+        if (modifier == Qt::ControlModifier)
+            text = "Ctrl + ";
+        if (modifier == Qt::AltModifier)
+            text = "Alt + ";
+
+        text += HotKey::keyName((Qt::Key)key);
+        setText(text);
+    }
+
+    int modifier;
+    int key;
+}
+;
+
+class PrefHotKey : public PreferenceWidget
+{
+public:
+    PrefHotKey(const Preference &pref)
+            : data(new QHotKey())
+    {
+        addWidget(data);
+        if (pref.width > 0)
+        {
+            data->setMaximumWidth(pref.width);
+        }
+
+        setValue(pref.value);
+    }
+
+    QString getValue()
+    {
+        return QString::number(data->key) + ":" + QString::number(data->modifier);
+    }
+
+    void setValue(const QString &q)
+    {
+        QString t = q + ":0";
+        data->key = t.split(":")[0].toInt();
+        data->modifier = t.split(":")[1].toInt();
+        data->update();
+    }
+
+private:
+
+    QHotKey *data;
 };
 
 class PrefPassword : public PrefText
@@ -344,6 +451,9 @@ PreferenceWidget* PreferenceWidget::create(const Preference &pref)
 {
     if (pref.type == "text")
         return new PrefText(pref);
+
+    if (pref.type == "hotkey")
+        return new PrefHotKey(pref);
 
     if (pref.type == "password")
         return new PrefPassword(pref);

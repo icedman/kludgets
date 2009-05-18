@@ -36,6 +36,12 @@ void KView::resizeEvent(QResizeEvent *e)
 
 void KView::paintEvent(QPaintEvent *ev)
 {
+    if (!parent->isVisible())
+    {
+        ev->accept();
+        return ;
+    }
+
     if (isBuffered())
     {
         if (isTransitioning())
@@ -145,6 +151,15 @@ void KView::focusInEvent(QFocusEvent *ev)
 
     if (parent->windowLevel() == 2)
         parent->lower();
+
+    dragStart = false;
+}
+
+void KView::focusOutEvent(QFocusEvent *ev)
+{
+    QWebView::focusOutEvent(ev);
+
+    dragStart = false;
 }
 
 void KView::dragEnterEvent(QDragEnterEvent *ev)
@@ -338,7 +353,16 @@ QPixmap& KView::bufferImage()
 
 void KView::onUpdate()
 {
-    // emit bufferUpdated();
+    if (!parent->isVisible())
+        return ;
+
+    QPoint cursorPos = QCursor::pos();
+    QRect frameGeometry = parent->frameGeometry();
+    if (frameGeometry.contains(lastPos) && !frameGeometry.contains(cursorPos))
+    {
+        page()->mainFrame()->evaluateJavaScript("Kludget.dispatchMouseLeave()");
+    }
+    lastPos = cursorPos;
 }
 
 void KView::setTransition(int t)
@@ -348,8 +372,7 @@ void KView::setTransition(int t)
 
 bool KView::beginTransition()
 {
-    ;
-    qDebug("beginTransition");
+    // qDebug("beginTransition");
 
     int duration = 1000;
 
@@ -376,7 +399,8 @@ bool KView::beginTransition()
 
 void KView::endTransition()
 {
-    qDebug("endTransition");
+    //qDebug("endTransition");
+
     if (transitionTL)
     {
         delete transitionTL;

@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QMenu>
 #include <QSignalMapper>
+#include <QLibrary>
 
 #include "kludgetinfo.h"
 #include "version.h"
@@ -64,8 +65,6 @@ private:
 
     KClient *client;
     KWindow *window;
-    KView *view;
-    KPage *page;
     KSystem *system;
 
     bool firstShow;
@@ -75,6 +74,8 @@ private:
 
     QSignalMapper customMenuMapper;
     QMenu contextMenu;
+
+    QLibrary plugin;
 
 public:
 

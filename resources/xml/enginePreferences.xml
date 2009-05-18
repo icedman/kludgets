@@ -23,6 +23,13 @@
 		<title>Password</title>
 		<category>Network</category>
 	</preference>
+	<preference name="general/hotKey" width="100">
+		<type>hotkey</type>
+		<title>Hot Key</title>
+		<category>General</category>
+		<default>0</default>
+		<description>Show or hide all widgets with a press of this hotkey.</description>
+	</preference>
 	<preference name="general/runAtStartup">
 		<type>checkbox</type>
 		<title>Run Kludgets Engine at startup.</title>

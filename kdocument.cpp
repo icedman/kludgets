@@ -65,7 +65,7 @@ bool KDocument::transform(const QString &xslPath)
 
     setContent(content);
 
-    qDebug("%s", qPrintable(content));
+    // qDebug("%s", qPrintable(content));
     return true;
 
 }
