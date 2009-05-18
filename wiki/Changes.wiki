@@ -1,0 +1,14 @@
+#summary Updates and feature additions in Kludget Engine releases.
+
+= Changes =
+
+== Beta Version 0.9 2009-05-18 ==
+
+  * added hotkey feature
+  * added password encryption feature for preferences
+  * added plugin support
+  * added check for updates
+
+== Beta Version 0.9 2009-05-04 ==
+
+  * first beta release
