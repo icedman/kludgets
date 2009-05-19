@@ -22,7 +22,7 @@ These engines are the inspiration for this project.
 
 = Hosts =
 
-  * MindHyve.com
+  * mindhyve.com
   * code.google.com
   * qt-apps.org
 
