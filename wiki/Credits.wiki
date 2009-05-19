@@ -1,0 +1,32 @@
+#summary Credits
+
+= Engines =
+
+These engines are the inspiration for this project.
+ 
+  * Yahoo! Widget Engine
+  * Apple Dashboard
+  * Google Desktop
+  * Microsoft Gadgets
+  * Opera Widgets
+
+= Widgets =
+
+  * screenlets.org
+  * islayer.com
+
+= Engine =
+
+  * webkit.org
+  * qtsoftware.com
+
+= Hosts =
+
+  * MindHyve.com
+  * code.google.com
+  * qt-apps.org
+
+= Contributors =
+
+  * Kludget Engine needs your name here
+  
