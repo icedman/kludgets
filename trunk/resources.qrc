@@ -12,6 +12,7 @@
      <file>resources/scripts/system.js</file>
      <file>resources/scripts/widget.js</file>
      <file>resources/scripts/json2.js</file>
+     <file>resources/scripts/debug.js</file>
      <file>resources/style/widget.css</file>
      <file>resources/xml/engine.xml</file>
      <file>resources/xml/widgetPreferences.xml</file>
@@ -21,5 +22,6 @@
      <file>resources/xsl/infoPlist.xsl</file>
      <file>resources/xsl/operaConfig.xsl</file>
      <file>resources/xsl/aboutWidget.xsl</file>
+     <file>resources/xsl/aboutKludget.xsl</file>
  </qresource>
  </RCC>

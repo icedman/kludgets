@@ -6,6 +6,24 @@
 
 #include <QDomDocument>
 
+class PrefSeparator : public PreferenceWidget
+{
+public:
+    PrefSeparator(const Preference &pref)
+    {
+        if (pref.title != "")
+        {
+            addWidget(new QLabel(pref.title));
+        }
+        QLabel *separator = new QLabel;
+        separator->setFrameShape(QFrame::HLine);
+        separator->setFrameShadow(QFrame::Sunken);
+        separator->setLineWidth(0);
+        separator->setMidLineWidth(1);
+        addWidget(separator, 3);
+    }
+};
+
 class PrefText : public PreferenceWidget
 {
 public:
@@ -145,8 +163,7 @@ public:
     {
         data->setEchoMode(QLineEdit::PasswordEchoOnEdit);
     }
-}
-;
+};
 
 class PrefSlider : public PreferenceWidget
 {
@@ -452,6 +469,9 @@ PreferenceWidget* PreferenceWidget::create(const Preference &pref)
     if (pref.type == "text")
         return new PrefText(pref);
 
+    if (pref.type == "separator")
+        return new PrefSeparator(pref);
+
     if (pref.type == "hotkey")
         return new PrefHotKey(pref);
 
@@ -521,6 +541,7 @@ void PreferenceWindow::buildPreferenceMap(const QString &path, bool checkSetting
     if (!prefs.length())
         return ;
 
+    QString cat = "general";
     for (int i = 0; i < prefs.length(); i++)
     {
         QDomNode n = prefs.at(i);
@@ -535,10 +556,20 @@ void PreferenceWindow::buildPreferenceMap(const QString &path, bool checkSetting
         pref.width = n.attributes().namedItem("width").nodeValue().toInt();
         pref.height = n.attributes().namedItem("height").nodeValue().toInt();
 
+        if (pref.category.isEmpty())
+            pref.category = cat;
+
+        cat = pref.category;
+
         for (int j = 0; j < n.attributes().length(); j++)
         {
             QDomNode attrib = n.attributes().item(j);
             pref.attributes.insert(attrib.nodeName(), attrib.nodeValue());
+        }
+
+        if (pref.type == "password" && !pref.attributes.contains("encrypt"))
+        {
+            pref.attributes.insert("encrypt", "1");
         }
 
         if (pref.name != "" && checkSettings)
@@ -550,14 +581,14 @@ void PreferenceWindow::buildPreferenceMap(const QString &path, bool checkSetting
         if (pref.type == "")
             continue;
 
-        if (pref.category.isEmpty())
-            pref.category = "general";
-
         pref.value =
             settings->read(
                 pref.name,
                 pref.defaultValue
             ).toString();
+
+        if (pref.attributes.value("encrypt") == "1")
+            pref.value = Util::encrypt(pref.value);
 
         pref.widget = 0;
 
@@ -569,7 +600,6 @@ void PreferenceWindow::buildPreferenceMap(const QString &path, bool checkSetting
             pref.options.push_back(PreferenceOption(n.attributes().namedItem("value").nodeValue(), n.firstChild().nodeValue()));
         }
 
-        //prefList.insert(pref.name, pref);
         prefList.push_back(pref);
     }
 }
@@ -641,7 +671,7 @@ void PreferenceWindow::createToolbar()
     toolbar = new QToolBar(tr("Preference"));
     toolbar->setMovable(false);
     toolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    toolbar->setIconSize(QSize(32, 32));
+    toolbar->setIconSize(QSize(48, 48));
     connect(toolbar, SIGNAL(actionTriggered(QAction*)), this, SLOT(onTriggeredAction(QAction*)));
 
     layout->addWidget(toolbar);
@@ -706,11 +736,11 @@ bool PreferenceWindow::addPreference(Preference &pref)
     QGridLayout *g = tab->layout;
     int r = g->rowCount();
 
-    if (!pref.title.isEmpty() && pref.type != "checkbox")
+    if (!pref.title.isEmpty() && pref.type != "checkbox" && pref.type != "separator")
     {
-        QWidget *l = new QLabel(pref.title);
-        l->setContentsMargins(4, 4, 10, 4);
-        g->addWidget(l, r, 0, Qt::AlignTop | Qt::AlignLeft);
+        QLabel *label = new QLabel(pref.title);
+        label->setContentsMargins(0, 4, 10, 0);
+        g->addWidget(label, r, 0, Qt::AlignTop | Qt::AlignLeft);
     }
 
     PreferenceWidget *item = PreferenceWidget::create(pref);
@@ -730,7 +760,10 @@ bool PreferenceWindow::addPreference(Preference &pref)
             it++;
         }
 
-        g->addLayout(item, r++, 1);
+        if (pref.type == "separator")
+            g->addLayout(item, r++, 0, 1, 2);
+        else
+            g->addLayout(item, r++, 1);
         item->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     }
 
@@ -781,7 +814,10 @@ void PreferenceWindow::onSave()
         Preference &pref = (*it);
         if (pref.widget && pref.name != "")
         {
-            settings->write(pref.name, pref.widget->getValue());
+            QString value = pref.widget->getValue();
+            if (pref.attributes.value("encrypt") == "1")
+                value = Util::encrypt(value);
+            settings->write(pref.name, value);
         }
         it++;
     }
@@ -803,8 +839,10 @@ void PreferenceWindow::onCancel()
             QString v = pref.widget->getValue();
             if (v != pref.value)
             {
-                settings->write(pref.name, pref.value);
-                // qDebug("cancel: %s = %s (%s)", qPrintable(pref.name), qPrintable(v), qPrintable(pref.value));
+                QString value = pref.value;
+                if (pref.attributes.value("encrypt") == "1")
+                    value = Util::encrypt(value);
+                settings->write(pref.name, value);
                 revereted = true;
             }
         }

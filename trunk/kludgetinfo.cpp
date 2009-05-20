@@ -68,6 +68,26 @@ void KludgetInfo::read()
 
     storagePath = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets/") + id;
     instancePreferenceFile = storagePath + "/" + instance + "/" + QString(PREFERENCE_FILE);
+
+    QString pluginName = doc.getValue("widget/plugins/plugin", "");
+
+    if (pluginName != "")
+    {
+#ifdef Q_WS_MAC
+
+        pluginPath = path + "/" + pluginName + "/Contents/MacOS";
+#else
+#ifdef Q_WS_WIN
+
+        pluginPath = path + "/" + pluginName + "/Contents/Windows";
+#endif
+#endif
+
+        // todo: read info.plist to check CFBundleExecutable
+        pluginName.replace(".bundle", "");
+        pluginExecutable = pluginName;
+        pluginScript = pluginName + ".js";
+    }
 }
 
 bool KludgetInfo::isValid()

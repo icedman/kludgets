@@ -19,6 +19,9 @@ iStatNano.cpuUsage = function()
 	if (idle < 0)
 		idle = 0;
 		
+	if (load > 100)
+		load = 100;
+		
 	var mainData = new Array(
 		cpu.system, 
 		cpu.user,
@@ -95,7 +98,7 @@ iStatNano.diskUsage = function()
 			disk.total,
 			disk.free,
 			disk.path,
-			disk.icon,
+			null, // icon
 			0);
 	}
 	
@@ -279,15 +282,13 @@ iStatNano.wasIntelModuleInstalled = function()
 	return false;
 }
 
-var ll;
 Kludget.system = function(cmd, handler)
 {	
 	var cmdObject = new Command;
 	
 	if (cmd.indexOf("ps") == 0)
 	{
-		alert(cmd);
-		return cmdObject;
+		alert("overwide this command");
 	}
 	cmdObject.execute(cmd, handler);
 	return cmdObject;

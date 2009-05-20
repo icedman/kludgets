@@ -34,10 +34,10 @@ KView* KWindow::view()
 
 void KWindow::closeEvent(QCloseEvent *ev)
 {
-    /*
-       if (isVisible())
-           ev->ignore();
-    */
+#if 0
+    if (isVisible())
+        ev->ignore();
+#endif
 }
 
 bool KWindow::isDragging()

@@ -22,8 +22,6 @@ Q_SLOTS:
 private:
     KludgetInfo info;
     QWebView *view;
-    QSize contentsSize;
-    QTimer updateTimer;
 };
 
 class AboutWindow : public InstallWindow
@@ -37,6 +35,27 @@ public:
 Q_SLOTS:
     void onSecurity();
 
+};
+
+class AboutKludgetWindow : public PreferenceWindow
+{
+    Q_OBJECT
+public:
+
+    AboutKludgetWindow();
+
+    void createHeader();
+    void createToolbar() {}
+    void createPages() {}
+    void createDialogControls();
+
+    private
+Q_SLOTS:
+    void onWebSite();
+    void onCredits();
+
+private:
+    QWebView *view;
 };
 
 #endif

@@ -27,11 +27,11 @@
 	{
 		position: absolute;
 		top: 50px;
-		left: 10px;
+		margin: 10px;
 	}
 	.version { display: inline-block; font-size: 8pt; }
 	.author div { display: inline-block; }
-	.icon { position: absolute; left: 300px; top: 10px }
+	.icon { padding-right: 20px; }
 </style>
 </head>
 <body>
@@ -45,19 +45,30 @@
 
 <xsl:apply-templates select="widget/icon"/>
 
+<!--
 <div class="version">
 <xsl:apply-templates select="widget/@version"/>
 </div>
-<xsl:apply-templates select="widget/description"/>
-<div class="url">
-<xsl:apply-templates select="widget/author/@href"/>
-</div>
+-->
 	
+<xsl:apply-templates select="widget/description"/>
+
+<!--
+<div class="url">
+	<a href="http://www.google.com" target="new">
+		<xsl:attribute name="src">
+		<xsl:value-of select="widget/author/@href"/>
+		</xsl:attribute>
+		Website
+	</a>
+</div>
+
 <div class="author">
 <xsl:apply-templates select="widget/author"/>
 <xsl:apply-templates select="widget/author/@email"/>
 </div>
-
+-->
+	
 </div>
 	
 </body>
@@ -65,7 +76,7 @@
 </xsl:template>
 
 <xsl:template match="widget/icon">
-<img class="icon" width="75px" height="75px">
+<img class="icon" width="64px" height="64px" align="left">
 <xsl:attribute name="src">
 <xsl:value-of select="."/>
 </xsl:attribute>
@@ -89,7 +100,7 @@
 </xsl:template>
 
 <xsl:template match="widget/description">
-<p><xsl:value-of select="."/></p>
+<span><xsl:value-of select="."/></span>
 </xsl:template>
 
 </xsl:stylesheet>

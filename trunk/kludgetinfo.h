@@ -19,6 +19,9 @@ public:
     QString configFile;
     QString preferenceFile;
     QString instancePreferenceFile;
+    QString pluginPath;
+    QString pluginExecutable;
+    QString pluginScript;
 
     QString id;
     QString instance;

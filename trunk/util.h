@@ -4,12 +4,15 @@
 #include <QtGui>
 #include <QDomDocument>
 
+
 class Util
 {
 public:
     static bool copyDir(const QString &source, const QString &destination, const bool overwrite);
     static bool deleteDir(const QString &source);
     static bool extract(const QString &source, const QString &destination);
+    static QString encrypt(const QString &source);
+    static QString decrypt(const QString &source);
 };
 
 class ImageUtil
