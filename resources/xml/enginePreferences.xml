@@ -11,14 +11,14 @@
 		<type>text</type>
 		<title>Http Proxy</title>
 		<category>Network</category>
-		<description>Enter your proxy credentials below.</description>
+		<default>192.168.1.1:8080</default>
 	</preference>
-	<preference name="network/proxyUser" width="250">
+	<preference name="network/proxyUser" width="200">
 		<type>text</type>
 		<title>Username</title>
 		<category>Network</category>
 	</preference>
-	<preference name="network/proxyPassword" width="250">
+	<preference name="network/proxyPassword" width="200">
 		<type>password</type>
 		<title>Password</title>
 		<category>Network</category>
@@ -40,7 +40,11 @@
 		<type>checkbox</type>
 		<title>Automatically check for updates.</title>
 		<category>General</category>
-		<default>0</default>
+		<default>1</default>
+	</preference>
+	<preference>
+		<type>separator</type>
+		<title>System Commands</title>
 	</preference>
 	<preference name="general/runInShell">
 		<type>checkbox</type>
@@ -50,7 +54,7 @@
 	</preference>
 	<preference name="general/shellPath">
 		<type>text</type>
-		<title>Shell Path</title>
+		<title>Path</title>
 		<category>General</category>
 		<description>Absolute file path to the shell.</description>
 		<default>c:/Cygwin/bin/sh</default>

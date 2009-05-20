@@ -1,6 +1,7 @@
 #include "config.h"
 #include "ksystem.h"
 #include "kludget.h"
+#include "version.h"
 #include "klog.h"
 
 #include <QDesktopServices>
@@ -34,6 +35,11 @@ void KSystem::setShellPath(const QString path)
 void KSystem::setEnableCommands(bool enable)
 {
     runSystemCommands = enable;
+}
+
+QString KSystem::version()
+{
+    return QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION;
 }
 
 void KSystem::log(QString message)

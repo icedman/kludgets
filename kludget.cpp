@@ -78,10 +78,6 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     if (!QFile::exists(info.configFile))
         return false;
 
-    // config
-    KDocument config;
-    config.openDocument(info.configFile);
-
     // access
     KDocument access;
     access.openDocument(info.storagePath + "/access.xml");
@@ -151,25 +147,9 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     }
 
     // plugin
-    if (!plugin.isLoaded() && accessPlugins)
+    if (!plugin.isLoaded() && accessPlugins && info.pluginPath != "")
     {
-        QString pluginName = config.getValue("widget/plugins/plugin", "");
-        QString pluginPath;
-
-#ifdef Q_WS_MAC
-
-        pluginPath = info.path + "/" + pluginName + "/Contents/MacOS";
-#else
-#ifdef Q_WS_WIN
-
-        pluginPath = info.path + "/" + pluginName + "/Contents/Windows";
-#endif
-#endif
-
-        // todo: read info.plist as check CFBundleExecutable
-        pluginName.replace(".bundle", "");
-        plugin.setFileName(pluginPath + "/" + pluginName);
-
+        plugin.setFileName(info.pluginPath + "/" + info.pluginExecutable);
         if (plugin.load())
         {
             typedef void (*initWithWebView)(QWebView*);
@@ -234,6 +214,7 @@ void Kludget::addJavaScriptWindowObjects(QWebFrame* frame)
     runJavaScriptFile(frame, ":resources/scripts/json2.js");
     runJavaScriptFile(frame, ":resources/scripts/system.js");
     runJavaScriptFile(frame, ":resources/scripts/widget.js");
+    runJavaScriptFile(frame, ":resources/scripts/debug.js");
 
     // add plugin here
     if (plugin.isLoaded())
@@ -286,14 +267,24 @@ void Kludget::loadMenuFile(const QString &path)
             for (int i = 0; i < menuItemList.length(); i++)
             {
                 QDomElement menuItem = menuItemList.item(i).toElement();
+                QString name = menuItem.firstChild().nodeValue();
+                QString script = menuItem.attributes().namedItem("action").nodeValue();
+                QString filter = menuItem.attributes().namedItem("filter").nodeValue();
+
+#if 0
+
+                if (filter.indexOf("debug") != -1 && !info.debug)
+                    continue;
+
+                if (filter.indexOf("instance") != -1 && 0)
+                    continue;
+#endif
+
                 if (menuItem.nodeName().toLower() == "separator")
                 {
                     contextMenu.insertSeparator(0);
                     continue;
                 }
-
-                QString name = menuItem.firstChild().nodeValue();
-                QString script = menuItem.attributes().namedItem("action").nodeValue();
 
                 QAction *action = contextMenu.addAction(name);
                 connect(action, SIGNAL(triggered()), &customMenuMapper, SLOT(map()));

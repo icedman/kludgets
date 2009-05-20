@@ -10,7 +10,9 @@
 
 class KSettings;
 class PreferenceWindow;
+class AboutKludgetWindow;
 class HotKey;
+class QNetworkReply;
 
 class KServer : public QObject
 {
@@ -54,6 +56,7 @@ private:
 
     private
 Q_SLOTS:
+    void checkUpdate();
     void hotKeyPressed(Qt::Key, Qt::KeyboardModifier);
     void processWidgetQueue();
     void runWidget(const QString &path);
@@ -63,10 +66,12 @@ Q_SLOTS:
     void showAllWidgets();
     void uninstallWidgets();
     void configure();
+    void aboutKludget();
     void goToWidgetsSite();
-    void goToEngineSite();
     void onSettingsChanged();
+    void onAboutClosed();
     void onPreferencesClosed();
+    void onCheckDone(QNetworkReply *reply);
     void exit();
 
 Q_SIGNALS:
@@ -84,12 +89,15 @@ private:
     QSignalMapper installedWidgetsMapper;
 
     PreferenceWindow *prefWindow;
+    AboutKludgetWindow *aboutWindow;
     KSettings *settings;
 
     QSharedMemory *processLock;
 
     HotKey *hotKeyListener;
     bool hotKeyShow;
+
+    QTimer updateTimer;
 };
 
 #endif // KLUDGETSERVER_H

@@ -34,6 +34,8 @@ Q_SLOTS:
     bool hasError(long pid = 0);
     bool hasOutput(long pid = 0);
 
+    QString version();
+
 Q_SIGNALS:
     void execUpdate(long);
     void execFinish(long);

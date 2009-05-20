@@ -3,7 +3,9 @@
 #include "kserver.h"
 #include "kclient.h"
 #include "ksettings.h"
+#include "knetwork.h"
 #include "prefwindow.h"
+#include "installwindow.h"
 #include "kdocument.h"
 #include "util.h"
 #include "klog.h"
@@ -22,8 +24,10 @@ KServer* KServer::instance()
 
 KServer::KServer() :
         processLock(new QSharedMemory("kludget::server", this)),
+        aboutWindow(0),
         prefWindow(0),
         hotKeyListener(0),
+        updateTimer(this),
         settings(new KSettings(this))
 {
     settings->setRootKey("kludget");
@@ -59,6 +63,12 @@ bool KServer::initialize()
     connect(this, SIGNAL(selectInstalledWidget(QString)), this, SLOT(runWidget(QString)));
     connect(&installedWidgetsMapper, SIGNAL(mapped(QString)), this, SIGNAL(selectInstalledWidget(QString)));
     connect(&trayIcon, SIGNAL(messageClicked()), this, SLOT(openPackage()));
+
+    KNetwork *net = KNetwork::instance();
+    connect(net, SIGNAL(finished(QNetworkReply*)), this, SLOT(onCheckDone(QNetworkReply*)));
+
+    connect(&updateTimer, SIGNAL(timeout()), this, SLOT(checkUpdate()));
+    updateTimer.setInterval(1000 * 60 * 60 * 24);
 
     hotKeyListener = new HotKey();
     hotKeyShow = false;
@@ -153,6 +163,36 @@ void KServer::setupMenu()
     trayIcon.show();
 }
 
+void KServer::checkUpdate()
+{
+    if (settings->read("general/checkForUpdates", 0).toInt() == 0)
+        return ;
+
+    QString lastCheckString = settings->read("general/lastCheck", "").toString();
+    if (lastCheckString != "")
+    {
+        QDate lastCheck = QDate::fromString(lastCheckString, Qt::TextDate);
+        lastCheck = lastCheck.addDays(1);
+        if (lastCheck >= QDate::currentDate())
+        {
+            return ;
+        }
+    }
+
+    KNetwork *net = KNetwork::instance();
+    net->loadSettings();
+    net->setAccess(true, false, QUrl());
+
+    QString versionString = QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION;
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(QString("http://kludgets.com/checkUpdate.php?version=") + versionString));
+    request.setRawHeader("User-Agent", QString(QString(KLUDGET_APPLICATION) + " " + versionString).toUtf8());
+
+    net->get
+    (request);
+}
+
 void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
 {
     updateWidgetList();
@@ -171,6 +211,10 @@ void KServer::processWidgetQueue()
         runWidget((*it));
         widgetQueue.erase(it);
         QTimer::singleShot(800, this, SLOT(processWidgetQueue()));
+    }
+    else
+    {
+        checkUpdate();
     }
 }
 
@@ -248,7 +292,7 @@ void KServer::showMenu()
     updateWidgetList();
 
     trayMenu.clear();
-    connect(trayMenu.addAction(QString(KLUDGET_APPLICATION) + " v" + KLUDGET_MAJOR_VERSION), SIGNAL(triggered()), this, SLOT(goToEngineSite()));
+    connect(trayMenu.addAction(QString(KLUDGET_APPLICATION) + " v" + KLUDGET_MAJOR_VERSION), SIGNAL(triggered()), this, SLOT(aboutKludget()));
     connect(trayMenu.addAction(QString("Preferences")), SIGNAL(triggered()), this, SLOT(configure()));
     trayMenu.insertSeparator(0);
 
@@ -353,14 +397,27 @@ void KServer::configure()
     connect(prefWindow, SIGNAL(destroyed()), this, SLOT(onPreferencesClosed()));
 }
 
+void KServer::aboutKludget()
+{
+    if (aboutWindow)
+    {
+        aboutWindow->show();
+        aboutWindow->raise();
+        return ;
+    }
+
+    aboutWindow = new AboutKludgetWindow();
+    aboutWindow->setAttribute(Qt::WA_DeleteOnClose);
+    aboutWindow->setWindowTitle("Kludget Engine");
+    aboutWindow->setupUI();
+    aboutWindow->show();
+
+    connect(aboutWindow, SIGNAL(destroyed()), this, SLOT(onAboutClosed()));
+}
+
 void KServer::goToWidgetsSite()
 {
     QDesktopServices::openUrl(QUrl("http://www.kludgets.com/widgets"));
-}
-
-void KServer::goToEngineSite()
-{
-    QDesktopServices::openUrl(QUrl("http://www.kludgets.com"));
 }
 
 void KServer::onSettingsChanged()
@@ -369,9 +426,41 @@ void KServer::onSettingsChanged()
     sendMessageToAll(SettingsChanged);
 }
 
+void KServer::onAboutClosed()
+{
+    aboutWindow = 0;
+}
+
 void KServer::onPreferencesClosed()
 {
     prefWindow = 0;
+}
+
+void KServer::onCheckDone(QNetworkReply *reply)
+{
+    int result = QString(reply->readAll()).toInt();
+    if (result == 1)
+    {
+        QMessageBox msg;
+        msg.setText("A new version of Kludget Engine is available.");
+        msg.setInformativeText("Do you want to update now?");
+        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        int ret = msg.exec();
+
+        QDate lastCheck = QDate::currentDate();
+        settings->write("general/lastCheck", QDate::currentDate().toString(Qt::TextDate));
+
+        switch (ret)
+        {
+        case QMessageBox::Yes:
+            QDesktopServices::openUrl(QUrl("http://www.kludgets.com/download"));
+            break;
+        case QMessageBox::No:
+            break;
+        }
+
+        return ;
+    }
 }
 
 void KServer::exit()

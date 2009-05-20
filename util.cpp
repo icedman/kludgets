@@ -123,6 +123,33 @@ bool Util::extract(const QString &source, const QString &destination)
     return true;
 }
 
+
+#define XOR_HASH1 "b94a54d87ab421a1d3d5631d1fc04e6c"
+#define XOR_HASH2 "66b5e6e290e308e77517d4a1f9871e57"
+
+QString xor(const QString &source, const QString &hash)
+{
+    QString res;
+    const ushort *cs = source.utf16();
+    const ushort *ch = hash.utf16();
+    for (int i = 0; i < source.length(); i++)
+    {
+        int j = i % 32;
+        res.append(cs[i] ^ ch[j]);
+    }
+    return res;
+}
+
+QString Util::encrypt(const QString &source)
+{
+    return xor(xor(source, XOR_HASH1), XOR_HASH2);
+}
+
+QString Util::decrypt(const QString &source)
+{
+    return xor(xor(source, XOR_HASH2), XOR_HASH1);
+}
+
 QImage ImageUtil::blendImages(const QImage &image1, double alpha1, const QImage &image2, double alpha2)
 {
     QImage resultImage(image1.size(), QImage::Format_ARGB32_Premultiplied);

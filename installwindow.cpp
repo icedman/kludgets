@@ -1,6 +1,7 @@
 #include "installwindow.h"
 #include "ksettings.h"
 #include "kdocument.h"
+#include "version.h"
 #include "util.h"
 
 #include <QWebView>
@@ -11,7 +12,7 @@
 InstallWindow::InstallWindow(const KludgetInfo& i) :
         PreferenceWindow(0),
         info(i),
-        view(0)
+        view(new QWebView)
 {
     settings = new KSettings(this);
     settings->setPath(info.storagePath + "/access.xml");
@@ -19,7 +20,6 @@ InstallWindow::InstallWindow(const KludgetInfo& i) :
 
 void InstallWindow::createHeader()
 {
-    view = new QWebView;
     view->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     view->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 
@@ -29,28 +29,22 @@ void InstallWindow::createHeader()
     QString iconPath = info.path + "/icon.png";
     if (QFile::exists(iconPath))
         about.setValue("widget/icon", iconPath);
+    else
+        about.setValue("widget/icon", "package.png");
 
     about.transform(":resources/xsl/aboutWidget.xsl");
     view->setHtml(about.toString(), QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/Resources/"));
     layout->addWidget(view);
 
-    /*
-       connect(&updateTimer, SIGNAL(timeout()), this, SLOT(onUpdate()));
-       updateTimer.start(50);
-    */
+    QPalette pal = palette();
+    pal.setBrush(QPalette::Background, Qt::white);
+    setPalette(pal);
 
-    view->setFixedHeight(140);
+    view->setFixedHeight(150);
 }
 
 void InstallWindow::onUpdate()
-{
-    QSize newSize = view->page()->mainFrame()->contentsSize();
-    if (contentsSize != newSize)
-    {
-        contentsSize = newSize;
-        //resize(newSize);
-    }
-}
+{}
 
 void InstallWindow::createDialogControls()
 {
@@ -143,4 +137,61 @@ void AboutWindow::onSecurity()
         btn->show();
 
     adjustSize();
+}
+
+AboutKludgetWindow::AboutKludgetWindow()
+        : PreferenceWindow(0),
+        view(new QWebView)
+{}
+
+void AboutKludgetWindow::createHeader()
+{
+	setWindowIcon(QIcon(":resources/images/kludget.png"));
+
+    view->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+    view->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
+
+    KDocument about;
+    about.setValue("widget/name", "Kludget Engine");
+    about.setValue("widget/version", QString("beta version ") + QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION);
+    about.setValue("widget/logo", "kludget.png");
+    about.setValue("widget/icon", "engine.png");
+
+    about.transform(":resources/xsl/aboutKludget.xsl");
+    view->setHtml(about.toString(), QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/Resources/"));
+    layout->addWidget(view);
+
+    QPalette pal = palette();
+    pal.setBrush(QPalette::Background, Qt::white);
+    setPalette(pal);
+
+    view->setFixedHeight(240);
+}
+
+void AboutKludgetWindow::createDialogControls()
+{
+    QHBoxLayout *h = new QHBoxLayout();
+    QPushButton *credits, *site, *close;
+
+    layout->addLayout(h);
+    h->setContentsMargins(16, 16, 16, 8);
+    h->addWidget(site = new QPushButton("Visit Website"));
+    h->addWidget(credits = new QPushButton("Credits"));
+    h->addSpacing(300);
+    h->addWidget(close = new QPushButton("Ok"));
+
+    // save
+    connect(site, SIGNAL(clicked()), this, SLOT(onWebSite()));
+    connect(credits, SIGNAL(clicked()), this, SLOT(onCredits()));
+    connect(close, SIGNAL(clicked()), this, SLOT(close()));
+}
+
+void AboutKludgetWindow::onWebSite()
+{
+    QDesktopServices::openUrl(QUrl("http://www.kludgets.com/download"));
+}
+
+void AboutKludgetWindow::onCredits()
+{
+    QDesktopServices::openUrl(QUrl("http://code.google.com/p/kludgets/wiki/Credits"));
 }

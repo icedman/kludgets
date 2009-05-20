@@ -16,6 +16,7 @@ win32* {
                win\windowsregistry.cpp \
                win\hotkey_win.cpp
     DESTDIR = ./
+    RC_FILE = app.rc
 }
 
 HEADERS += config.h \

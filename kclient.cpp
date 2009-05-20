@@ -51,7 +51,7 @@ bool KClient::initialize(const QString& path)
     }
     else
     {
-        // run directly from directory (todo. debug mode check)
+        // run directly from directory (todo. all on debug mode only?)
         if (0)
         {
             if (appPath.indexOf(QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).absolutePath() + "/widgets") != 0)
@@ -237,6 +237,16 @@ Kludget* KClient::createInstance(const QString &instance)
             if (!QFile(info.storagePath + "/" + inst + "/" + PREFERENCE_FILE).exists())
                 break;
         }
+    }
+
+    // check if this instance is already running
+    KludgetList::iterator it = kludgets.begin();
+    while (it != kludgets.end())
+    {
+        Kludget *ik = (*it);
+        if (ik->property("instance") == inst)
+            return 0;
+        it++;
     }
 
     Kludget *k = Kludget::create(this, KludgetInfo(info.path, inst));
