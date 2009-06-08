@@ -1,12 +1,14 @@
 #include "config.h"
 #include "kwindow.h"
 #include "kview.h"
+#include "util.h"
 
 KWindow::KWindow() :
         webView(new KView(this)),
         updateTimer(this),
         contentsSize(0, 0),
         dragging(false),
+        noMouse(false),
         noDrag(false),
         windowZ(0),
         alpha(255),
@@ -58,6 +60,17 @@ void KWindow::endDrag()
     dragging = false;
 
     emit onEndDrag();
+}
+
+bool KWindow::isIgnoreMouse()
+{
+    return noMouse;
+}
+
+void KWindow::setIgnoreMouse(bool mouse)
+{
+    noMouse = mouse;
+    updateMouseIgnore(mouse);
 }
 
 bool KWindow::isIgnoreDrag()
@@ -146,6 +159,12 @@ int KWindow::opacity()
     return alpha;
 }
 
+void KWindow::setWindowLevel(int l)
+{
+    windowZ = l;
+    updateWindowLevel(l);
+}
+
 int KWindow::windowLevel()
 {
     return windowZ;
@@ -210,6 +229,12 @@ void KWindow::setZoomFactor(double f)
 
 void KWindow::setupWindowProperties()
 {
+    static int openOffset = 0;
+    WindowUtil::center(this, openOffset, openOffset);
+    openOffset += 40;
+    if (openOffset > 200)
+        openOffset = 0;
+
     setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
 
     QPalette pal = palette();
@@ -220,6 +245,7 @@ void KWindow::setupWindowProperties()
     {
         setAttribute(Qt::WA_TranslucentBackground, true);
     }
+
 
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);

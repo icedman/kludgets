@@ -39,7 +39,7 @@ bool KDocument::saveDocument(const QString &path)
         return false;
     }
 
-    file.write(QString(XML_DECL).toUtf8());
+    // file.write(QString(XML_DECL).toUtf8());
     file.write(toString().toUtf8());
     file.close();
     return true;
@@ -123,7 +123,10 @@ QString KDocument::getValue(const QString &nodePath, const QString &defaultValue
 void KDocument::setValue(const QString &path, const QString &value)
 {
     QDomNode n = KDocument::buildNode(*this, *this, path);
-    n.appendChild(createTextNode(value));
+    if (n.hasChildNodes())
+        n.firstChild().setNodeValue(value);
+    else
+        n.appendChild(createTextNode(value));
 }
 
 QString KDocument::buildNodePath(QDomNode &node)

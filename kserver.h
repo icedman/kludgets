@@ -14,6 +14,8 @@ class AboutKludgetWindow;
 class HotKey;
 class QNetworkReply;
 
+void BringWindowToTop(int winId);
+
 class KServer : public QObject
 {
     Q_OBJECT
@@ -23,6 +25,8 @@ public:
     enum WidgetIPC {
         ShowWindow = 0x8000,
         HideWindow = 0x8001,
+        ShowHUD = 0x8002,
+        HideHUD = 0x8003,
         SettingsChanged
     };
 
@@ -32,6 +36,13 @@ public:
 
     bool initialize();
     void shutdown();
+
+    void showHUD();
+    void hideHUD();
+
+    void updateWidgetList();
+    void updateWidgetListPID();
+    void updateWidgetPID(const QString id, int pid);
 
 private:
 
@@ -43,11 +54,11 @@ private:
         QString path;
         int pid;
         bool active;
+        bool enabled;
     };
 
     void loadDefaultWidgets();
     void setupMenu();
-    void updateWidgetList();
     void sendMessageToAll(long msg);
     void sendProcessMessage(int pid, long msg);
     void closeProcess(int pid);
@@ -79,6 +90,7 @@ Q_SIGNALS:
     void selectInstalledWidget(QString);
 
 private:
+    QList<QWidget*> hudScreens;
     QList<Widget> widgetList;
     QStringList widgetQueue;
 
@@ -95,7 +107,6 @@ private:
     QSharedMemory *processLock;
 
     HotKey *hotKeyListener;
-    bool hotKeyShow;
 
     QTimer updateTimer;
 };

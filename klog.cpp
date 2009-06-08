@@ -1,5 +1,9 @@
 #include "klog.h"
+#include "version.h"
+#include "config.h"
+#include "kdocument.h"
 
+#include <QDesktopServices>
 #include <QApplication>
 #include <QFile>
 
@@ -9,7 +13,7 @@ KLog* KLog::instance()
     return &log;
 }
 
-KLog::KLog()
+KLog::KLog() : _enabled(true)
 {
     setPath(QApplication::applicationDirPath() + "/kludgets.log");
 }
@@ -23,11 +27,15 @@ void KLog::clear()
 {
     write("--------------", true);
     write("Kludget Engine");
+    write(QString(KLUDGET_MAJOR_VERSION) + " " + KLUDGET_MINOR_VERSION);
     write("--------------");
 }
 
 void KLog::write(const QString &message, bool clear)
 {
+    if (!enabled())
+        return ;
+
     QFile file;
     file.setFileName(path);
     if (!clear)
@@ -37,4 +45,31 @@ void KLog::write(const QString &message, bool clear)
     file.write(message.toUtf8());
     file.write("\r\n", 2);
     file.close();
+}
+
+void KLog::setEnabled(bool e)
+{
+    _enabled = e;
+}
+
+bool KLog::enabled()
+{
+    return _enabled;
+}
+
+void KLog::loadSettings()
+{
+    KDocument doc;
+    if (doc.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE))
+    {
+        if (doc.getValue("kludget/general/enableLog", "0").toInt() != 1)
+        {
+            setEnabled(false);
+        }
+    }
+}
+
+void KLog::log(const QString &message, bool clear)
+{
+    instance()->write(message, clear);
 }

@@ -19,14 +19,12 @@
 		<default>0</default>
 		<description>Check this option to make the widget snap to screen edges.</description>
 	</preference>
-	<!--
 	<preference name="ignoreMouse">
 		<type>checkbox</type>
 		<title>Ignore mouse</title>
 		<category>Windows</category>
 		<description>Check this option to ignore mouse inputs for this widget.</description>
 	</preference>
-	-->
 	<preference name="ignoreDrag">
 		<type>checkbox</type>
 		<title>Prevent dragging</title>

@@ -632,7 +632,7 @@ void PreferenceWindow::setupUI()
     icons.insert("colors", ":resources/images/colors.png");
     icons.insert("windows", ":resources/images/windows.png");
     icons.insert("network", ":resources/images/internet.png");
-    icons.insert("package", ":resources/images/package.png");
+    icons.insert("packages", ":resources/images/package.png");
 
     QMap<QString, QString> titles;
     titles.insert("general", "General");
@@ -640,7 +640,7 @@ void PreferenceWindow::setupUI()
     titles.insert("colors", "Colors");
     titles.insert("windows", "Windows");
     titles.insert("network", "Network");
-    titles.insert("package", "Package");
+    titles.insert("packages", "Packages");
 
     QAction *defaultAction = 0;
 
