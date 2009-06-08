@@ -15,10 +15,18 @@ public:
     void clear();
     void write(const QString &message, bool clear = false);
 
+    void loadSettings();
+    void setEnabled(bool);
+    bool enabled();
+
+public:
+
+    static void log(const QString &message, bool clear = false);
+
 private:
 
     QString path;
-
+    bool _enabled;
 };
 
 #endif // KLOG_H

@@ -48,14 +48,14 @@ Kludget::Kludget(KClient *parent) :
     connect(this, SIGNAL(evaluate(const QString &)), this, SLOT(onEvaluate(const QString &)));
     connect(&customMenuMapper, SIGNAL(mapped(const QString &)), this, SIGNAL(evaluate(const QString &)));
 
-    KLog::instance()->write("Kludget::created");
+    KLog::log("Kludget::created");
 }
 
 Kludget::~Kludget()
 {
     if (prefWindow)
         delete prefWindow;
-    KLog::instance()->write("Kludget::destroyed");
+    KLog::log("Kludget::destroyed");
 }
 
 Kludget* Kludget::create(KClient *client, const KludgetInfo &i)
@@ -76,7 +76,13 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     info = i;
 
     if (!QFile::exists(info.configFile))
+    {
+        KLog::log("Kludget::load fail");
+        KLog::log("config file not found");
         return false;
+    }
+
+    window->setWindowTitle(info.id + ":" + QString::number(QApplication::applicationPid()));
 
     // access
     KDocument access;
@@ -104,10 +110,12 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     resize(settings->read("kludget/width", info.width).toInt(), settings->read("kludget/height", info.height).toInt());
 
     window->setOpacity(settings->read("kludget/opacity", 200).toInt());
-    window->setWindowLevel(settings->read("kludget/windowLevel", "0").toInt());
     window->setIgnoreDrag(settings->read("kludget/ignoreDrag", "0").toInt());
+    window->setIgnoreMouse(settings->read("kludget/ignoreMouse", "0").toInt());
+    window->setWindowLevel(settings->read("kludget/windowLevel", "0").toInt());
     window->setSnapToScreen(settings->read("kludget/snapToScreen", "0").toInt());
     window->view()->setGrayed(settings->read("kludget/grayScaled", "0").toInt());
+
 #if 0
 
     window->view()->setTinted(settings->read("kludget/tinted", "0").toInt());
@@ -172,15 +180,18 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         window->hide();
         if (!QFile::exists(info.contentSrc))
         {
+
+            KLog::log("Kludget::load fail");
+            KLog::log(QString("content source not found. ") + info.contentSrc);
             return false;
         }
         window->view()->load(QUrl(QString("file:///") + info.contentSrc));
-        KLog::instance()->write(QString("Kludget::load ") + info.id);
+        KLog::log(QString("Kludget::load ") + info.id);
 
         QString defaultPng = info.path + "/Default.png";
         if (QFile::exists(defaultPng))
         {
-            //KLog::instance()->write("default.png exists");
+            //KLog::log("default.png exists");
             //window->view()->setTransitionLayer(QPixmap(defaultPng));
         }
     }
@@ -223,7 +234,7 @@ void Kludget::addJavaScriptWindowObjects(QWebFrame* frame)
         windowScriptObjectAvailable wsoAvailable = (windowScriptObjectAvailable)plugin.resolve("windowScriptObjectAvailable");
         if (wsoAvailable)
         {
-            // KLog::instance()->write("plugin::windowScriptObjectAvailable");
+            // KLog::log("plugin::windowScriptObjectAvailable");
             wsoAvailable(frame);
         }
     }
@@ -333,6 +344,7 @@ void Kludget::onRemove()
 
 void Kludget::onSettingsChanged()
 {
+    KLog::instance()->loadSettings();
     loadSettings(info);
     onEvaluate("Kludget.onSettingsChanged()");
 }

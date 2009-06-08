@@ -13,11 +13,12 @@ typedef struct _sendMsgParam
 }
 sendMsgParam;
 
-BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+BOOL CALLBACK EnumWindowProc_SendMessage(HWND hWnd, LPARAM lParam)
 {
     sendMsgParam *p = (sendMsgParam*)lParam;
     DWORD pid = 0;
     GetWindowThreadProcessId(hWnd, &pid);
+
     if (pid == p->pid)
     {
         if (GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_LAYERED)
@@ -40,6 +41,44 @@ BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
     return TRUE;
 }
 
+BOOL CALLBACK EnumWindowProc_FindPID(HWND hWnd, LPARAM lParam)
+{
+    TCHAR c[255] = _T("");
+    int cl = GetClassName(hWnd, c, 255);
+
+    TCHAR t[255] = _T("");
+    int tl = GetWindowText(hWnd, t, 255);
+
+    QString cls = QString::fromWCharArray(c, cl);
+    QString title = QString::fromWCharArray(t, tl);
+
+    if (cls != "QWidget")
+        return TRUE;
+
+    QStringList tt = title.split(":");
+    if (tt.size() != 2)
+        return TRUE;
+
+    QString id = tt[0];
+    QString pid = tt[1];
+
+    KServer::instance()->updateWidgetPID(id, pid.toInt());
+
+    return TRUE;
+}
+
+void KServer::updateWidgetListPID()
+{
+    QList<Widget>::iterator it = widgetList.begin();
+    while (it != widgetList.end())
+    {
+        (*it).pid = 0;
+        it++;
+    }
+
+    EnumWindows(EnumWindowProc_FindPID, 0);
+}
+
 void KServer::sendMessageToAll(long msg)
 {
     QList<Widget>::iterator it = widgetList.begin();
@@ -57,7 +96,7 @@ void KServer::sendProcessMessage(int pid, long msg)
     sendMsgParam p;
     p.pid = pid;
     p.msg = msg;
-    EnumWindows(EnumWindowsProc, (LPARAM)&p);
+    EnumWindows(EnumWindowProc_SendMessage, (LPARAM)&p);
 }
 
 void KServer::closeProcess(int pid)
@@ -106,3 +145,4 @@ void KServer::updateSystemSettings()
     int hotKeyModifier = hotkey.split(":")[1].toInt();
     hotKeyListener->registerHotKey((Qt::Key)hotKey, (Qt::KeyboardModifier)hotKeyModifier);
 }
+

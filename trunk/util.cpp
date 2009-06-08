@@ -1,5 +1,6 @@
 #include "config.h"
 #include "util.h"
+#include "klog.h"
 
 bool Util::copyDir(const QString &source, const QString &destination, const bool overwrite)
 {
@@ -118,7 +119,21 @@ bool Util::extract(const QString &source, const QString &destination)
     QFileInfo tool("unzip");
     QString unzip = tool.absoluteFilePath();
 
-    int ret = QProcess::execute(unzip, args);
+    //int ret = QProcess::execute(unzip, args);
+    QProcess proc;
+    proc.start(unzip, args);
+    proc.waitForFinished();
+
+    QString out = proc.readAllStandardOutput();
+    QString err = proc.readAllStandardError();
+
+    KLog::log("Extracting...");
+    /*
+       if (out != "")
+           KLog::log(out);
+    */
+    if (err != "")
+        KLog::log(out);
 
     return true;
 }

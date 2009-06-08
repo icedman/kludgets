@@ -26,6 +26,8 @@ public:
     void endDrag();
     bool isIgnoreDrag();
     void setIgnoreDrag(bool);
+    bool isIgnoreMouse();
+    void setIgnoreMouse(bool);
 
     void setAutoSize(bool);
     bool isAutoSize();
@@ -65,6 +67,7 @@ private:
 
     bool prevVisibility;
     bool dragging;
+    bool noMouse;
     bool noDrag;
     QPoint dragPos;
     QSize contentsSize;
@@ -74,6 +77,9 @@ private:
     bool autoSized;
     double zoom;
 
+private:
+    void updateWindowLevel(int);
+    void updateMouseIgnore(bool);
     bool winEvent(MSG *message, long *result);
 };
 

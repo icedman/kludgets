@@ -44,7 +44,7 @@ QString KSystem::version()
 
 void KSystem::log(QString message)
 {
-    KLog::instance()->write(message);
+    KLog::log(message);
 }
 
 void KSystem::openURL(QString url)

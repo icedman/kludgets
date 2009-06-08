@@ -63,7 +63,7 @@ bool writeXmlFile(QIODevice &device, const QSettings::SettingsMap &map)
         }
         it++;
     }
-    device.write(QString(XML_DECL).toUtf8());
+    // device.write(QString(XML_DECL).toUtf8());
     device.write(dom.toString().toUtf8());
     return true;
 }

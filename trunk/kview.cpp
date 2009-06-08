@@ -266,7 +266,7 @@ void KView::screenshot(const QString &path)
 {
     if (isBuffered())
     {
-        KLog::instance()->write(QString("screenshot:") + path);
+        KLog::log(QString("screenshot:") + path);
         buffer.save(path);
     }
 }

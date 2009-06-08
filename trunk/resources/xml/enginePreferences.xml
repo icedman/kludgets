@@ -27,7 +27,7 @@
 		<type>hotkey</type>
 		<title>Hot Key</title>
 		<category>General</category>
-		<default>0</default>
+		<default>16777274:0</default>
 		<description>Show or hide all widgets with a press of this hotkey.</description>
 	</preference>
 	<preference name="general/runAtStartup">
@@ -42,9 +42,15 @@
 		<category>General</category>
 		<default>1</default>
 	</preference>
+	<preference name="general/enableLog">
+		<type>checkbox</type>
+		<title>Enable system logging.</title>
+		<category>General</category>
+		<default>0</default>
+	</preference>
 	<preference>
 		<type>separator</type>
-		<title>System Commands</title>
+		<!--title>System Commands</title-->
 	</preference>
 	<preference name="general/runInShell">
 		<type>checkbox</type>
@@ -58,5 +64,12 @@
 		<category>General</category>
 		<description>Absolute file path to the shell.</description>
 		<default>c:/Cygwin/bin/sh</default>
+	</preference>
+	<preference name="general/shellPath">
+		<type>text</type>
+		<title>Path</title>
+		<category>Packages</category>
+		<description>Widget Package Manager.</description>
+		<default></default>
 	</preference>
 </preferences>

@@ -25,6 +25,8 @@ KClient* KClient::instance()
 
 bool KClient::initialize(const QString& path)
 {
+    KLog::instance()->loadSettings();
+
     // QApplication::setAttribute(Qt::AA_MSWindowsUseDirect3DByDefault, true);
 
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
@@ -38,7 +40,11 @@ bool KClient::initialize(const QString& path)
     QString appPath = fileInfo.absoluteFilePath();
 
     if (!QFile::exists(appPath))
+    {
+        KLog::log("KClient::initialize failure");
+        KLog::log(QString("path not found: ") + appPath);
         return false;
+    }
 
     if (!fileInfo.isDir())
     {
@@ -87,20 +93,19 @@ bool KClient::run()
     if (!created)
         instanceQueue.push_back("0");
 
-    // save pid file
-    KDocument doc;
-    doc.setValue("kludget/name", info.name);
-    doc.setValue("kludget/id", info.id);
-    doc.setValue("kludget/path", info.path);
-    doc.setValue("kludget/pid", QString::number(QApplication::applicationPid()));
-    doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
-
     // localization
     localefiles.initialize(info.path, "en");
     KNetwork::instance()->setLocaleFiles(&localefiles);
 
+    // fonts and plugins
     loadCustomFonts(info.path + "/fonts");
     loadPlugins(info.path + "/plugins");
+
+    // enable
+    KDocument doc;
+    doc.openDocument(info.storagePath + "/" + CONFIG_FILE);
+    doc.setValue("kludget/enabled", QString("1"));
+    doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
     QApplication::setQuitOnLastWindowClosed(false);
 
@@ -164,15 +169,20 @@ bool KClient::installWidget(const QString& path, bool prompt)
     // setup storage dir
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets").mkpath(QDir(info.storagePath).dirName());
 
-    KDocument pid;
-    pid.setValue("kludget/name", info.name);
-    pid.setValue("kludget/id", info.id);
-    pid.setValue("kludget/path", info.path);
-    pid.saveDocument(info.storagePath + "/" + CONFIG_FILE);
+    KDocument doc;
+    doc.setValue("kludget/name", info.name);
+    doc.setValue("kludget/id", info.id);
+    doc.setValue("kludget/path", info.path);
+    doc.setValue("kludget/enabled", "1");
+    doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
     KDocument config;
     if (!config.openDocument(info.configFile))
+    {
+        KLog::log("KClient::installWidget failure");
+        KLog::log("config file not found");
         return false;
+    }
 
     QString defaultAccess = config.getValue("widget/access/full", "false");
     bool local = config.getValue("widget/access/local", defaultAccess) == "true";
@@ -269,6 +279,7 @@ bool KClient::processInstanceQueue()
         QTimer::singleShot(800, this, SLOT(processInstanceQueue()));
         return true;
     }
+
     // no successfully running widgets
     if (kludgets.length() == 0)
         QApplication::instance()->quit();

@@ -36,6 +36,7 @@ HEADERS += config.h \
            ksystem.h \
            prefwindow.h \
            installwindow.h \
+           hudwindow.h \
            version.h \
            localefilelist.h \
            util.h \
@@ -57,6 +58,7 @@ SOURCES += kdocument.cpp \
            ksystem.cpp \
            prefwindow.cpp \
            installwindow.cpp \
+           hudwindow.cpp \
            localefilelist.cpp \
            util.cpp \
            hotkey.cpp \

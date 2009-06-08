@@ -5,10 +5,9 @@
 
 #include <windows.h>
 
-// todo. use windowFlags
-void KWindow::setWindowLevel(int l)
+void KWindow::updateWindowLevel(int l)
 {
-    windowZ = l;
+    // todo. use windowFlags
     if (l == 1)
         SetWindowPos(winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     else
@@ -19,11 +18,33 @@ void KWindow::setWindowLevel(int l)
         raise();
 }
 
+void KWindow::updateMouseIgnore(bool ignore)
+{
+    DWORD exStyle = GetWindowLong(winId(), GWL_EXSTYLE);
+    if (!ignore)
+        exStyle = exStyle & ~WS_EX_TRANSPARENT;
+    else
+        exStyle = exStyle | WS_EX_TRANSPARENT;
+    SetWindowLong(winId(), GWL_EXSTYLE, exStyle);
+}
+
 bool KWindow::winEvent(MSG *message, long *result)
 {
     result = 0;
     switch (message->message)
     {
+    case KServer::ShowHUD:
+        {
+            updateWindowLevel(1);
+            updateMouseIgnore(false);
+            return true;
+        }
+    case KServer::HideHUD:
+        {
+            updateWindowLevel(windowZ);
+            updateMouseIgnore(noMouse);
+            return true;
+        }
     case KServer::ShowWindow:
         {
             SetForegroundWindow(winId());

@@ -2,6 +2,7 @@
 #include "knetwork.h"
 #include "kdocument.h"
 #include "localefilelist.h"
+#include "klog.h"
 
 #include <QAuthenticator>
 #include <QDesktopServices>
@@ -149,6 +150,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& req,
         QString path = ":resources/" + url.toString(QUrl::RemoveScheme);
         path.replace("//", "");
         qDebug("resource: %s", qPrintable(path));
+        // KLog::log(QString("resource:") + path);
         return new KNetworkReply(req, path, this);
     }
 
@@ -156,10 +158,8 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& req,
     if (url.path().indexOf("AppleClasses") != -1 || url.path().indexOf("WidgetResources") != -1)
     {
         QString path = url.toLocalFile();
-
         //todo replace path for AppleClasses
         path.replace("/System/Library/WidgetResources", QApplication::applicationDirPath() + "/widgets/Resources");
-
         qDebug("appleClasses: %s", qPrintable(path));
         return new KNetworkReply(req, path, this);
     }

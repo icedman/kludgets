@@ -1,22 +1,27 @@
 * {
 	cursor:default;
 	-webkit-nbsp-mode: space;
+	/*-webkit-user-select: ignore;*/
 }
 
 ::-moz-selection{
 	background:transparent;
+	cursor:default;
 }
 
 ::selection {
 	background:transparent;
+	cursor:default;
 }
 
 code::-moz-selection {
 	background:transparent;
+	cursor:default;
 }
 
 code::selection {
 	background:transparent;
+	cursor:default;
 }
 
 button, input, select, textarea, {
@@ -29,7 +34,7 @@ select {
 
 input[type="text"],
 input[type="password"],
-input[type="search"],
+input[type="searchfield"],
 textarea {
 	border: 1px solid #ddd;
 	padding: 3px;
