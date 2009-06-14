@@ -22,6 +22,17 @@ class KServer : public QObject
 
 public:
 
+    class Widget
+    {
+    public:
+        QString id;
+        QString name;
+        QString path;
+        int pid;
+        bool active;
+        bool enabled;
+    };
+
     enum WidgetIPC {
         ShowWindow = 0x8000,
         HideWindow = 0x8001,
@@ -37,25 +48,13 @@ public:
     bool initialize();
     void shutdown();
 
+    QList<Widget>* widgets() { updateWidgetList(); return &widgetList; }
+    void updateWidgetPID(const QString id, int pid);
+
     void showHUD();
     void hideHUD();
 
-    void updateWidgetList();
-    void updateWidgetListPID();
-    void updateWidgetPID(const QString id, int pid);
-
 private:
-
-    class Widget
-    {
-    public:
-        QString id;
-        QString name;
-        QString path;
-        int pid;
-        bool active;
-        bool enabled;
-    };
 
     void loadDefaultWidgets();
     void setupMenu();
@@ -64,6 +63,9 @@ private:
     void closeProcess(int pid);
     bool checkProcess(int pid);
     void updateSystemSettings();
+
+    void updateWidgetList();
+    void updateWidgetListPID();
 
     private
 Q_SLOTS:

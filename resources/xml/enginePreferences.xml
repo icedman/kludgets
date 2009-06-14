@@ -65,11 +65,4 @@
 		<description>Absolute file path to the shell.</description>
 		<default>c:/Cygwin/bin/sh</default>
 	</preference>
-	<preference name="general/shellPath">
-		<type>text</type>
-		<title>Path</title>
-		<category>Packages</category>
-		<description>Widget Package Manager.</description>
-		<default></default>
-	</preference>
 </preferences>

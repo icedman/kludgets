@@ -10,7 +10,7 @@
 #include "util.h"
 #include "klog.h"
 #include "hotkey.h"
-#include "hudwindow.h"s
+#include "hudwindow.h"
 
 #include <QDirIterator>
 #include <QApplication>
