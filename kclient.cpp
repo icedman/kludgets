@@ -32,7 +32,7 @@ bool KClient::initialize(const QString& path)
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets")).mkdir("installed");
 
-    loadCustomFonts(QApplication::applicationDirPath() + "/widgets/Resources/Fonts");
+    loadCustomFonts(QApplication::applicationDirPath() + "/widgets/resources/fonts");
 
     KNetwork::instance();
 
@@ -71,9 +71,11 @@ bool KClient::initialize(const QString& path)
 
 bool KClient::run()
 {
+    /*
     processLock = new QSharedMemory(QString("kludget::" + info.id), this);
     if (!processLock->create(1))
         return false;
+    */
 
     bool created = false;
 

@@ -33,6 +33,9 @@ void KLog::clear()
 
 void KLog::write(const QString &message, bool clear)
 {
+    qDebug("%s", qPrintable(message));
+    return;
+
     if (!enabled())
         return ;
 

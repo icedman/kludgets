@@ -36,8 +36,10 @@ KServer::KServer() :
 
 bool KServer::initialize()
 {
+    /*
     if (!processLock->create(1))
         return false;
+        */
 
     QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     if (!QFile::exists(enginePreferencesFile))

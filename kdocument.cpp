@@ -15,18 +15,15 @@ bool KDocument::openDocument(const QString &path)
     setContent(QString(""));
 
     QFile file(path);
-    if (file.open(QIODevice::ReadOnly))
+    if (!file.open(QIODevice::ReadOnly))
     {
-        setContent(file.readAll().trimmed());
-        file.close();
-        return true;
-    }
-    else
-    {
-        //qDebug("unable to open document");
+        qDebug("unable to open! %s", qPrintable(path));
+        return false;
     }
 
-    return false;
+    setContent(file.readAll().trimmed());
+    file.close();
+    return true;
 }
 
 bool KDocument::saveDocument(const QString &path)
@@ -35,7 +32,7 @@ bool KDocument::saveDocument(const QString &path)
     file.setFileName(path);
     if (!file.open(QIODevice::ReadWrite))
     {
-        qDebug("unable to open!");
+        qDebug("unable to save! %s", qPrintable(path));
         return false;
     }
 

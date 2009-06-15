@@ -80,7 +80,9 @@ private:
 private:
     void updateWindowLevel(int);
     void updateMouseIgnore(bool);
+#if defined(QT_OS_WIN)
     bool winEvent(MSG *message, long *result);
+#endif
 };
 
 #endif // KLUDGETWINDOW_H

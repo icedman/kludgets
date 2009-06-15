@@ -7,7 +7,7 @@
 #include <QApplication>
 
 int main(int argc, char *argv[])
-{
+{    
     KApp *app = new KApp(argc, argv);
 
     if (argc == 2)

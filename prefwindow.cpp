@@ -3,7 +3,6 @@
 #include "ksettings.h"
 #include "util.h"
 #include "hotkey.h"
-#include "packagemanager.h"
 
 #include <QDomDocument>
 

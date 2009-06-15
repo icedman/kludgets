@@ -48,7 +48,7 @@ private slots:
 private:
     QFile m_buf;
 
-    friend KNetwork;
+    friend class KNetwork;
 };
 
 
