@@ -174,8 +174,11 @@ QString Util::decrypt(const QString &source)
 QImage ImageUtil::blendImages(const QImage &image1, double alpha1, const QImage &image2, double alpha2)
 {
     QImage resultImage(image1.size(), QImage::Format_ARGB32_Premultiplied);
+
     QPainter p;
     p.begin(&resultImage);
+    //p.fillRect(QRect(0, 0, image1.size().width(), image1.size().height()), Qt::red);
+
     //p.setCompositionMode(QPainter::CompositionMode_SourceOver);
     if (alpha2 > 0)
     {

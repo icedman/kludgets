@@ -235,7 +235,7 @@ void KWindow::setupWindowProperties()
     if (openOffset > 200)
         openOffset = 0;
 
-    setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
 
     QPalette pal = palette();
     pal.setBrush(QPalette::Base, Qt::transparent);

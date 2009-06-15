@@ -336,6 +336,7 @@ void KView::renderLayer(int z)
     if (layers[z].width() != width() && layers[z].height() != height())
     {
         layers[z] = QPixmap(width(), height());
+        layers[z].fill(Qt::transparent);
     }
 
     paintToBuffer(&layers[z]);
