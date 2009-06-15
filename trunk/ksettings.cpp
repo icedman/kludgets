@@ -4,13 +4,14 @@
 
 #include <QSettings>
 #include <QtXml>
+#include <QDomNode>
 
-bool readXmlNode(QDomNode &node, QSettings::SettingsMap &map)
+bool readXmlNode(const QDomNode &node, QSettings::SettingsMap &map)
 {
     QDomNode n = node;
     while (!n.isNull())
     {
-        if (n.nodeType() == QDomNode::NodeType::TextNode)
+        if (n.nodeType() == QDomNode::TextNode)
         {
             QString path = KDocument::buildNodePath(n);
             if (!path.isEmpty())
@@ -54,7 +55,8 @@ bool readXmlFile(QIODevice &device, QSettings::SettingsMap &map)
 bool writeXmlFile(QIODevice &device, const QSettings::SettingsMap &map)
 {
     KDocument dom;
-    QSettings::SettingsMap::iterator it = map.begin();
+
+    QSettings::SettingsMap::const_iterator it = map.begin();
     while (it != map.end())
     {
         if (!it.value().toString().isEmpty())
@@ -65,6 +67,7 @@ bool writeXmlFile(QIODevice &device, const QSettings::SettingsMap &map)
     }
     // device.write(QString(XML_DECL).toUtf8());
     device.write(dom.toString().toUtf8());
+
     return true;
 }
 

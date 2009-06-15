@@ -19,143 +19,142 @@ QString HotKey::keyName(Qt::Key key)
     case Qt::Key_Space:
         return "Space";
     case Qt::Key_Exclam:
-        return 0x21;
+        return QString(0x21);
     case Qt::Key_QuoteDbl:
-        return 0x22;
+        return QString(0x22);
     case Qt::Key_NumberSign:
-        return 0x23;
+        return QString(0x23);
     case Qt::Key_Dollar:
-        return 0x24;
+        return QString(0x24);
     case Qt::Key_Percent:
-        return 0x25;
+        return QString(0x25);
     case Qt::Key_Ampersand:
-        return 0x26;
+        return QString(0x26);
     case Qt::Key_Apostrophe:
-        return 0x27;
+        return QString(0x27);
     case Qt::Key_ParenLeft:
-        return 0x28;
+        return QString(0x28);
     case Qt::Key_ParenRight:
-        return 0x29;
+        return QString(0x29);
     case Qt::Key_Asterisk:
-        return 0x2a;
+        return QString(0x2a);
     case Qt::Key_Plus:
-        return 0x2b;
+        return QString(0x2b);
     case Qt::Key_Comma:
-        return 0x2c;
+        return QString(0x2c);
     case Qt::Key_Minus:
-        return 0x2d;
+        return QString(0x2d);
     case Qt::Key_Period:
-        return 0x2e;
+        return QString(0x2e);
     case Qt::Key_Slash:
-        return 0x2f;
+        return QString(0x2f);
     case Qt::Key_0:
-        return 0x30;
+        return QString(0x30);
     case Qt::Key_1:
-        return 0x31;
+        return QString(0x31);
     case Qt::Key_2:
-        return 0x32;
+        return QString(0x32);
     case Qt::Key_3:
-        return 0x33;
+        return QString(0x33);
     case Qt::Key_4:
-        return 0x34;
+        return QString(0x34);
     case Qt::Key_5:
-        return 0x35;
+        return QString(0x35);
     case Qt::Key_6:
-        return 0x36;
+        return QString(0x36);
     case Qt::Key_7:
-        return 0x37;
+        return QString(0x37);
     case Qt::Key_8:
-        return 0x38;
+        return QString(0x38);
     case Qt::Key_9:
-        return 0x39;
+        return QString(0x39);
     case Qt::Key_Colon:
-        return 0x3a;
+        return QString(0x3a);
     case Qt::Key_Semicolon:
-        return 0x3b;
+        return QString(0x3b);
     case Qt::Key_Less:
-        return 0x3c;
+        return QString(0x3c);
     case Qt::Key_Equal:
-        return 0x3d;
+        return QString(0x3d);
     case Qt::Key_Greater:
-        return 0x3e;
+        return QString(0x3e);
     case Qt::Key_Question:
-        return 0x3f;
+        return QString(0x3f);
     case Qt::Key_At:
-        return 0x40;
+        return QString(0x40);
     case Qt::Key_A:
-        return 0x41; // 0x41 == 'A', 0x61 == 'a'
+        return QString(0x41); // 0x41 == 'A', 0x61 == 'a'
     case Qt::Key_B:
-        return 0x42;
+        return QString(0x42);
     case Qt::Key_C:
-        return 0x43;
+        return QString(0x43);
     case Qt::Key_D:
-        return 0x44;
+        return QString(0x44);
     case Qt::Key_E:
-        return 0x45;
+        return QString(0x45);
     case Qt::Key_F:
-        return 0x46;
+        return QString(0x46);
     case Qt::Key_G:
-        return 0x47;
+        return QString(0x47);
     case Qt::Key_H:
-        return 0x48;
+        return QString(0x48);
     case Qt::Key_I:
-        return 0x49;
+        return QString(0x49);
     case Qt::Key_J:
-        return 0x4a;
+        return QString(0x4a);
     case Qt::Key_K:
-        return 0x4b;
+        return QString(0x4b);
     case Qt::Key_L:
-        return 0x4c;
+        return QString(0x4c);
     case Qt::Key_M:
-        return 0x4d;
+        return QString(0x4d);
     case Qt::Key_N:
-        return 0x4e;
+        return QString(0x4e);
     case Qt::Key_O:
-        return 0x4f;
+        return QString(0x4f);
     case Qt::Key_P:
-        return 0x50;
+        return QString(0x50);
     case Qt::Key_Q:
-        return 0x51;
+        return QString(0x51);
     case Qt::Key_R:
-        return 0x52;
+        return QString(0x52);
     case Qt::Key_S:
-        return 0x53;
+        return QString(0x53);
     case Qt::Key_T:
-        return 0x54;
+        return QString(0x54);
     case Qt::Key_U:
-        return 0x55;
+        return QString(0x55);
     case Qt::Key_V:
-        return 0x56;
+        return QString(0x56);
     case Qt::Key_W:
-        return 0x57;
+        return QString(0x57);
     case Qt::Key_X:
-        return 0x58;
+        return QString(0x58);
     case Qt::Key_Y:
-        return 0x59;
+        return QString(0x59);
     case Qt::Key_Z:
-        return 0x5a;
+        return QString(0x5a);
     case Qt::Key_BracketLeft:
-        return 0x5b;
+        return QString(0x5b);
     case Qt::Key_Backslash:
-        return 0x5c;
+        return QString(0x5c);
     case Qt::Key_BracketRight:
-        return 0x5d;
+        return QString(0x5d);
     case Qt::Key_AsciiCircum:
-        return 0x5e;
+        return QString(0x5e);
     case Qt::Key_Underscore:
-        return 0x5f;
+        return QString(0x5f);
     case Qt::Key_QuoteLeft:
-        return 0x60;
+        return QString(0x60);
 
     case Qt::Key_BraceLeft:
-        return 0x7b;
+        return QString(0x7b);
     case Qt::Key_Bar:
-        return 0x7c;
+        return QString(0x7c);
     case Qt::Key_BraceRight:
-        return 0x7d;
+        return QString(0x7d);
     case Qt::Key_AsciiTilde:
-        return 0x7e;
-
+        return QString(0x7e);
     case Qt::Key_Delete:
         return ""; // "Delete";
     case Qt::Key_Insert:

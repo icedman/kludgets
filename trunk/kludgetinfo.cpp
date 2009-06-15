@@ -25,7 +25,7 @@ void KludgetInfo::read()
 
     if (!QFile(configFile).exists())
     {
-        QString infoPlistFile = path + "/info.plist";
+        QString infoPlistFile = path + "/Info.plist";
         QString configXmlFile = path + "/config.xml";
         if (QFile(infoPlistFile).exists())
         {
@@ -54,7 +54,7 @@ void KludgetInfo::read()
     QString defaultId = defaultName;
 
     defaultId.replace(QRegExp("[ ]"), "_");
-    defaultName.replace(QRegExp("[/\_-]"), " ");
+    defaultName.replace(QRegExp("[/_-]"), " ");
 
     KDocument doc;
     doc.openDocument(configFile);

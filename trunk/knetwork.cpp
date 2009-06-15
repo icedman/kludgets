@@ -159,7 +159,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& req,
     {
         QString path = url.toLocalFile();
         //todo replace path for AppleClasses
-        path.replace("/System/Library/WidgetResources", QApplication::applicationDirPath() + "/widgets/Resources");
+        path.replace("/System/Library/WidgetResources", QApplication::applicationDirPath() + "/widgets/resources");
         qDebug("appleClasses: %s", qPrintable(path));
         return new KNetworkReply(req, path, this);
     }

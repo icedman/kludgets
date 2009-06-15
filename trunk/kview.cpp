@@ -7,7 +7,7 @@
 #include "kpluginview.h"
 #include "util.h"
 
-#define ENABLE_DASHBOARD_SUPPORT 1
+#define ENABLE_DASHBOARD_SUPPORT 0
 
 KView::KView(KWindow *p) :
         QWebView(p),
@@ -107,7 +107,7 @@ void KView::mousePressEvent(QMouseEvent *ev)
 
     if (ev->button() == Qt::LeftButton)
     {
-#ifndef _DEBUG
+#if !defined(_DEBUG)&& ENABLE_DASHBOARD_SUPPORT
 
         if (!page()->dashboardRegionContains(ev->pos()))
         {

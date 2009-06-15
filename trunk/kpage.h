@@ -4,7 +4,7 @@
 #include <QtWebKit/QWebView>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
-#include <Qt/QNetworkRequest.h>
+#include <QNetworkRequest>
 
 class KPage : public QWebPage
 {

@@ -19,6 +19,11 @@ win32* {
     RC_FILE = app.rc
 }
 
+SOURCES += linux\kwindow_linux.cpp \
+           linux\kserver_linux.cpp \
+           linux\kpluginview_linux.cpp \
+           linux\hotkey_linux.cpp
+
 HEADERS += config.h \
            klog.h \
            kdocument.h \

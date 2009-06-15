@@ -116,8 +116,12 @@ bool Util::extract(const QString &source, const QString &destination)
     args.push_back("-d");
     args.push_back(destination);
 
+#ifdef Q_OS_WIN
     QFileInfo tool("unzip");
     QString unzip = tool.absoluteFilePath();
+#else
+    QString unzip = "unzip";
+#endif
 
     //int ret = QProcess::execute(unzip, args);
     QProcess proc;
@@ -127,13 +131,15 @@ bool Util::extract(const QString &source, const QString &destination)
     QString out = proc.readAllStandardOutput();
     QString err = proc.readAllStandardError();
 
-    KLog::log("Extracting...");
-    /*
-       if (out != "")
-           KLog::log(out);
-    */
+    KLog::log("Extracting..." + unzip);
+
+#if 0
+    if (out != "")
+        KLog::log(out);
+
     if (err != "")
         KLog::log(out);
+#endif
 
     return true;
 }
@@ -142,7 +148,7 @@ bool Util::extract(const QString &source, const QString &destination)
 #define XOR_HASH1 "b94a54d87ab421a1d3d5631d1fc04e6c"
 #define XOR_HASH2 "66b5e6e290e308e77517d4a1f9871e57"
 
-QString xor(const QString &source, const QString &hash)
+QString xorString(const QString &source, const QString &hash)
 {
     QString res;
     const ushort *cs = source.utf16();
@@ -157,12 +163,12 @@ QString xor(const QString &source, const QString &hash)
 
 QString Util::encrypt(const QString &source)
 {
-    return xor(xor(source, XOR_HASH1), XOR_HASH2);
+    return xorString(xorString(source, XOR_HASH1), XOR_HASH2);
 }
 
 QString Util::decrypt(const QString &source)
 {
-    return xor(xor(source, XOR_HASH2), XOR_HASH1);
+    return xorString(xorString(source, XOR_HASH2), XOR_HASH1);
 }
 
 QImage ImageUtil::blendImages(const QImage &image1, double alpha1, const QImage &image2, double alpha2)
