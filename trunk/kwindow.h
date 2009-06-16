@@ -78,12 +78,13 @@ private:
 private:
     void updateWindowLevel(int);
     void updateMouseIgnore(bool);
+
 #if defined(WIN32)
 
     bool winEvent(MSG *message, long *result);
 #else
 
-    bool x11Event (XEvent * event);
+    bool x11Event(XEvent * event);
 #endif
 };
 
