@@ -4,9 +4,9 @@
 #include <QObject>
 #include <QTimer>
 #include <QTimeLine>
-#include <QtWebKit/QWebView>
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
+#include <QWebView>
+#include <QWebPage>
+#include <QWebFrame>
 
 class KWindow;
 class KView : public QWebView
@@ -91,7 +91,7 @@ private:
 
     QPoint lastPos;
     QPoint dragStartPos;
-    bool dragStart;
+    bool leftButtonPressed;
 
 private Q_SLOTS:
     void onUpdate();

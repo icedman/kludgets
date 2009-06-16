@@ -1,27 +1,6 @@
 * {
 	cursor:default;
 	-webkit-nbsp-mode: space;
-	/*-webkit-user-select: ignore;*/
-}
-
-::-moz-selection{
-	background:transparent;
-	cursor:default;
-}
-
-::selection {
-	background:transparent;
-	cursor:default;
-}
-
-code::-moz-selection {
-	background:transparent;
-	cursor:default;
-}
-
-code::selection {
-	background:transparent;
-	cursor:default;
 }
 
 button, input, select, textarea, {

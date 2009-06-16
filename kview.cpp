@@ -17,7 +17,7 @@ KView::KView(KWindow *p) :
         grayed(false),
         tinted(false),
         frozen(false),
-        dragStart(false),
+        leftButtonPressed(false),
         transitionTL(0)
 {
     setPage(new KPage(this));
@@ -87,7 +87,7 @@ void KView::mouseMoveEvent(QMouseEvent* ev)
     }
     else
     {
-        if (dragStart)
+        if (leftButtonPressed)
         {
             QPoint p = dragStartPos - ev->pos();
             if (p.manhattanLength() > 4)
@@ -103,33 +103,50 @@ void KView::mousePressEvent(QMouseEvent *ev)
     if (isFrozen())
         return ;
 
-    QWebView::mousePressEvent(ev);
+    bool allowDrag = true;
 
-    if (ev->button() == Qt::LeftButton)
-    {
-#if !defined(_DEBUG)&& ENABLE_DASHBOARD_SUPPORT
+#if ENABLE_DASHBOARD_SUPPORT
 
-        if (!page()->dashboardRegionContains(ev->pos()))
-        {
-            dragStart = true;
-            dragStartPos = ev->pos();
-        }
+    allowDrag = !page()->dashboardRegionContains(ev->pos());
 #else
-        dragStart = true;
-        dragStartPos = ev->pos();
+
+    allowDrag = (ev->modifiers() & Qt::ControlModifier);
 #endif
 
+    if (allowDrag)
+    {
+        if (ev->button() == Qt::LeftButton)
+        {
+            leftButtonPressed = true;
+            dragStartPos = ev->pos();
+        }
     }
+    else
+    {
+        QWebView::mousePressEvent(ev);
+    }
+
 }
 
 void KView::mouseReleaseEvent(QMouseEvent *ev)
 {
-    dragStart = false;
-
     if (parent->isDragging())
     {
         parent->endDrag();
     }
+    else if (leftButtonPressed)
+    {
+        // you pressed the left button, didn't drag, so i simulate a mouse press
+        QMouseEvent press(
+            QEvent::MouseButtonPress,
+            ev->pos(),
+            ev->globalPos(),
+            Qt::LeftButton,
+            0, 0);
+        QWebView::mousePressEvent(&press);
+    }
+
+    leftButtonPressed = false;
 
     if (isFrozen())
         return ;
@@ -152,14 +169,14 @@ void KView::focusInEvent(QFocusEvent *ev)
     if (parent->windowLevel() == 2)
         parent->lower();
 
-    dragStart = false;
+    leftButtonPressed = false;
 }
 
 void KView::focusOutEvent(QFocusEvent *ev)
 {
     QWebView::focusOutEvent(ev);
 
-    dragStart = false;
+    leftButtonPressed = false;
 }
 
 void KView::dragEnterEvent(QDragEnterEvent *ev)
