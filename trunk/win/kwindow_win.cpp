@@ -1,12 +1,15 @@
+#include "config_win.h"
 #include "kwindow.h"
 #include "kview.h"
 #include "klog.h"
 #include "kserver.h"
+#include "kipc.h"
 
 #include <windows.h>
 
 void KWindow::updateWindowLevel(int l)
 {
+    //setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
     // todo. use windowFlags
     if (l == 1)
         SetWindowPos(winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
@@ -33,19 +36,20 @@ bool KWindow::winEvent(MSG *message, long *result)
     result = 0;
     switch (message->message)
     {
-    case KServer::ShowHUD:
+    case KIPC::ShowHUD:
         {
             updateWindowLevel(1);
             updateMouseIgnore(false);
             return true;
         }
-    case KServer::HideHUD:
+    case KIPC::HideHUD:
         {
+            lower();
             updateWindowLevel(windowZ);
             updateMouseIgnore(noMouse);
             return true;
         }
-    case KServer::ShowWindow:
+    case KIPC::ShowWindow:
         {
             SetForegroundWindow(winId());
             show();
@@ -55,12 +59,17 @@ bool KWindow::winEvent(MSG *message, long *result)
                 raise();
             return true;
         }
-    case KServer::HideWindow:
+    case KIPC::HideWindow:
         {
             hide();
             return true;
         }
-    case KServer::SettingsChanged:
+    case KIPC::LowerWindow:
+        {
+            lower();
+            return true;
+        }
+    case KIPC::SettingsChanged:
         {
             emit onSettingsChanged();
             return true;

@@ -1,7 +1,7 @@
 
 TEMPLATE = app
 TARGET = 
-DEPENDPATH += .
+DEPENDPATH =
 INCLUDEPATH += .
 
 QT += webkit network xml svg xmlpatterns
@@ -10,7 +10,8 @@ win32* {
     LIBS += gdi32.lib user32.lib advapi32.lib
     HEADERS += win\config_win.h \
                win\windowsregistry.h
-    SOURCES += win\kwindow_win.cpp \
+    SOURCES += win\kipc_win.cpp \
+               win\kwindow_win.cpp \
                win\kserver_win.cpp \
                win\kpluginview_win.cpp \
                win\windowsregistry.cpp \
@@ -19,55 +20,59 @@ win32* {
     RC_FILE = app.rc
 }
 
+!win32* {
 SOURCES += linux\kwindow_linux.cpp \
            linux\kserver_linux.cpp \
            linux\kpluginview_linux.cpp \
            linux\hotkey_linux.cpp
-
-HEADERS += config.h \
-           klog.h \
-           kdocument.h \
-           kapp.h \
-           kserver.h \
-           kludget.h \
-           kludgetinfo.h \
-           kclient.h \
-           kwindow.h \
-           kview.h \
-           kpluginview.h \
-           kpage.h \
-           knetwork.h \
-           ksettings.h \
-           ksystem.h \
-           prefwindow.h \
-           installwindow.h \
-           hudwindow.h \
-           version.h \
-           localefilelist.h \
-           util.h \
-           hotkey.h
-           
-SOURCES += kdocument.cpp \
-           klog.cpp \
-           kapp.cpp \
-           kserver.cpp \
-           kludget.cpp \
-           kludgetinfo.cpp \
-           kclient.cpp \
-           kwindow.cpp \
-           kview.cpp \
-           kpluginview.cpp \
-           kpage.cpp \
-           knetwork.cpp \
-           ksettings.cpp \
-           ksystem.cpp \
-           prefwindow.cpp \
-           installwindow.cpp \
-           hudwindow.cpp \
-           localefilelist.cpp \
-           util.cpp \
-           hotkey.cpp \
-           main.cpp
+}
 
 RESOURCES += resources.qrc
 
+HEADERS += config.h \
+           hotkey.h \
+           hudwindow.h \
+           installwindow.h \
+           kapp.h \
+           kclient.h \
+           kdocument.h \
+           kipc.h \
+           klog.h \
+           kludget.h \
+           kludgetinfo.h \
+           knetwork.h \
+           kpage.h \
+           kpluginview.h \
+           kserver.h \
+           ksettings.h \
+           ksystem.h \
+           kview.h \
+           kwindow.h \
+           localefilelist.h \
+           prefwindow.h \
+           util.h \
+           version.h
+
+SOURCES += hotkey.cpp \
+           hudwindow.cpp \
+           installwindow.cpp \
+           kapp.cpp \
+           kclient.cpp \
+           kdocument.cpp \
+           kipc.cpp \
+           klog.cpp \
+           kludget.cpp \
+           kludgetinfo.cpp \
+           knetwork.cpp \
+           kpage.cpp \
+           kpluginview.cpp \
+           kserver.cpp \
+           ksettings.cpp \
+           ksystem.cpp \
+           kview.cpp \
+           kwindow.cpp \
+           localefilelist.cpp \
+           main.cpp \
+           prefwindow.cpp \
+           util.cpp
+           

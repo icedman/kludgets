@@ -18,7 +18,7 @@ KWindow::KWindow() :
         autoSized(true)
 {
     setAttribute(Qt::WA_DeleteOnClose);
-    setupWindowProperties();
+    setupWindow();
     setCentralWidget(webView);
 
     connect(webView, SIGNAL(bufferUpdated()), this, SLOT(update()));
@@ -32,14 +32,6 @@ KWindow::KWindow() :
 KView* KWindow::view()
 {
     return webView;
-}
-
-void KWindow::closeEvent(QCloseEvent *ev)
-{
-#if 0
-    if (isVisible())
-        ev->ignore();
-#endif
 }
 
 bool KWindow::isDragging()
@@ -227,7 +219,7 @@ void KWindow::setZoomFactor(double f)
     zoom = f;
 }
 
-void KWindow::setupWindowProperties()
+void KWindow::setupWindow()
 {
     static int openOffset = 0;
     WindowUtil::center(this, openOffset, openOffset);

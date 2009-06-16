@@ -19,8 +19,6 @@ public:
 
     KView *view();
 
-    void closeEvent(QCloseEvent *);
-
     bool isDragging();
     void startDrag();
     void endDrag();
@@ -58,7 +56,7 @@ Q_SIGNALS:
     void onSettingsChanged();
 
 private:
-    void setupWindowProperties();
+    void setupWindow();
 
 private:
 
@@ -80,8 +78,12 @@ private:
 private:
     void updateWindowLevel(int);
     void updateMouseIgnore(bool);
-#if defined(QT_OS_WIN)
+#if defined(WIN32)
+
     bool winEvent(MSG *message, long *result);
+#else
+
+    bool x11Event (XEvent * event);
 #endif
 };
 

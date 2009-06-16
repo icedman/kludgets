@@ -116,7 +116,7 @@ bool Util::extract(const QString &source, const QString &destination)
     args.push_back("-d");
     args.push_back(destination);
 
-#ifdef Q_OS_WIN
+#if defined(WIN32)
     QFileInfo tool("unzip");
     QString unzip = tool.absoluteFilePath();
 #else

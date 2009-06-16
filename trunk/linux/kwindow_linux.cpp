@@ -16,3 +16,7 @@ void KWindow::updateMouseIgnore(bool ignore)
 {
 }
 
+bool KWindow::x11Event(XEvent * event)
+{
+    return true;
+}

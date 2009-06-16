@@ -77,7 +77,7 @@ void KludgetInfo::read()
 
         pluginPath = path + "/" + pluginName + "/Contents/MacOS";
 #else
-#ifdef Q_WS_WIN
+#if defined(WIN32)
 
         pluginPath = path + "/" + pluginName + "/Contents/Windows";
 #endif
