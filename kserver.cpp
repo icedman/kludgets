@@ -131,11 +131,23 @@ void KServer::shutdown()
     {
         int pid = (*it).pid;
         if (pid > 0)
-            closeProcess(pid);
+            KIPC::closeProcess(pid);
         it++;
     }
 
     KLog::log("KServer::shutdown");
+}
+
+void KServer::sendMessageToAll(KIPC::Message msg)
+{
+    QList<Widget>::iterator it = widgetList.begin();
+    while (it != widgetList.end())
+    {
+        int pid = (*it).pid;
+        if (pid > 0)
+            ipc.sendMessage(msg, pid);
+        it++;
+    }
 }
 
 void KServer::loadDefaultWidgets()
@@ -279,16 +291,12 @@ void KServer::updateWidgetList()
     updateWidgetListPID();
 }
 
-void KServer::updateWidgetPID(const QString id, int pid)
+void KServer::updateWidgetListPID()
 {
     QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
     {
-        if ((*it).id == id)
-        {
-            (*it).pid = pid;
-            break;
-        }
+        (*it).pid = ipc.getProcessId((*it).id);
         it++;
     }
 }
@@ -364,7 +372,7 @@ void KServer::showMenu()
         QString name = (*it).name;
         int pid = (*it).pid;
 
-        if (checkProcess(pid))
+        if (KIPC::checkProcess(pid))
         {
             QAction *action = trayMenu.addAction(name);
             connect(action, SIGNAL(triggered()), &runningWidgetsMapper, SLOT(map()));
@@ -387,12 +395,12 @@ void KServer::showMenu()
 
 void KServer::showWidget(int pid)
 {
-    sendProcessMessage(pid, ShowWindow);
+    ipc.sendMessage(KIPC::ShowWindow, pid);
 }
 
 void KServer::showAllWidgets()
 {
-    sendMessageToAll(ShowWindow);
+    sendMessageToAll(KIPC::ShowWindow);
 }
 
 void KServer::uninstallWidgets()
@@ -424,7 +432,7 @@ void KServer::showHUD()
         hudScreens.push_back(w);
     }
 
-    sendMessageToAll(ShowHUD);
+    sendMessageToAll(KIPC::ShowHUD);
 }
 
 void KServer::hideHUD()
@@ -438,7 +446,7 @@ void KServer::hideHUD()
     }
     hudScreens.clear();
 
-    sendMessageToAll(HideHUD);
+    sendMessageToAll(KIPC::HideHUD);
 }
 
 void KServer::configure()
@@ -488,7 +496,7 @@ void KServer::onSettingsChanged()
 {
     KLog::instance()->loadSettings();
     updateSystemSettings();
-    sendMessageToAll(SettingsChanged);
+    sendMessageToAll(KIPC::SettingsChanged);
 }
 
 void KServer::onAboutClosed()

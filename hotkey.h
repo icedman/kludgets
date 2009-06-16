@@ -12,7 +12,7 @@ public:
 
     void registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id = 1);
     void unregisterHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id = 1);
-#if defined(QT_OS_WIN)
+#if defined(WIN32)
     bool winEvent(MSG *message, long *result);
 #endif
     static QString keyName(Qt::Key key);

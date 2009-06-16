@@ -7,6 +7,7 @@
 #include <QSignalMapper>
 
 #include "kludgetinfo.h"
+#include "kipc.h"
 
 class KSettings;
 class PreferenceWindow;
@@ -33,14 +34,6 @@ public:
         bool enabled;
     };
 
-    enum WidgetIPC {
-        ShowWindow = 0x8000,
-        HideWindow = 0x8001,
-        ShowHUD = 0x8002,
-        HideHUD = 0x8003,
-        SettingsChanged
-    };
-
     KServer();
 
     static KServer* instance();
@@ -49,19 +42,16 @@ public:
     void shutdown();
 
     QList<Widget>* widgets() { updateWidgetList(); return &widgetList; }
-    void updateWidgetPID(const QString id, int pid);
 
     void showHUD();
     void hideHUD();
 
 private:
 
+    void sendMessageToAll(KIPC::Message msg);
+
     void loadDefaultWidgets();
     void setupMenu();
-    void sendMessageToAll(long msg);
-    void sendProcessMessage(int pid, long msg);
-    void closeProcess(int pid);
-    bool checkProcess(int pid);
     void updateSystemSettings();
 
     void updateWidgetList();
@@ -111,6 +101,8 @@ private:
     HotKey *hotKeyListener;
 
     QTimer updateTimer;
+
+    KIPC ipc;
 };
 
 #endif // KLUDGETSERVER_H

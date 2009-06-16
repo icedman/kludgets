@@ -75,7 +75,7 @@ public:
         {
             if (key < Qt::Key_F1 || key > Qt::Key_F35)
                 modifier = Qt::ControlModifier;
-#ifdef Q_WS_WIN
+#if defined(WIN32)
             // F12 is reserved for debugger
             if (key == Qt::Key_F12)
                 modifier = Qt::ControlModifier;

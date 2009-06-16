@@ -29,9 +29,6 @@ bool KClient::initialize(const QString& path)
 
     // QApplication::setAttribute(Qt::AA_MSWindowsUseDirect3DByDefault, true);
 
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets")).mkdir("installed");
-
     loadCustomFonts(QApplication::applicationDirPath() + "/widgets/resources/fonts");
 
     KNetwork::instance();
@@ -109,6 +106,17 @@ bool KClient::run()
     doc.setValue("kludget/enabled", QString("1"));
     doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
+    // write pid file
+    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + info.id + ".pid";
+    QFile file;
+    file.setFileName(pidfile);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        file.write(QString::number(QApplication::applicationPid()).toUtf8());
+        file.write("\r\n", 2);
+        file.close();
+    }
+
     QApplication::setQuitOnLastWindowClosed(false);
 
     return processInstanceQueue();
@@ -119,9 +127,6 @@ void KClient::shutdown()
 
 bool KClient::installPackage(const QString& path)
 {
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets")).mkdir("installed");
-
     KClient client;
     client.installFromArchive(path, false);
     return true;
