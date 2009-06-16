@@ -7,7 +7,7 @@
 
 #include <QDesktopServices>
 #include <QDesktopWidget>
-#include <QtWebKit/QWebPage>
+#include <QWebPage>
 
 KPage::KPage(QWebView *parent) :
         QWebPage(parent)
