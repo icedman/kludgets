@@ -1,10 +1,6 @@
 #include "kipc.h"
 #include "config_win.h"
 
-#include <QFile>
-#include <QDir>
-#include <QDesktopServices>
-
 typedef struct _sendMsgParam
 {
     int pid;
@@ -43,31 +39,6 @@ void KIPC::sendAllMessage(Message msg)
     p.msg = msg;
     EnumWindows(EnumWindowProc_SendMessage, (LPARAM)&p);
 }
-
-int KIPC::getProcessId(QString kludgetId)
-{
-    int pid = 0;
-    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".pid";
-    if (QFile::exists(pidfile))
-    {
-        QFile file;
-        file.setFileName(pidfile);
-        if (file.open(QIODevice::ReadOnly))
-        {
-            QString text = file.readAll();
-            file.close();
-            pid = text.toInt();
-        }
-    }
-
-    if (!checkProcess(pid))
-    {
-        return 0;
-    }
-
-    return pid;
-}
-
 
 void KIPC::closeProcess(int pid)
 {
