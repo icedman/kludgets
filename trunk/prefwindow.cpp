@@ -747,6 +747,8 @@ bool PreferenceWindow::addPreference(Preference &pref)
     if (item)
     {
         pref.widget = item;
+        if (pref.height == 0)
+            pref.height = 24;
         item->setSize(pref.width, pref.height);
 
         // add options

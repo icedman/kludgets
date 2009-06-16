@@ -25,9 +25,6 @@ void KServer::updateSystemSettings()
     reg.Close();
 
     // hotkey
-    QString hotkey = settings->read("general/hotKey", "").toString() + ":0";
-    int hotKey = hotkey.split(":")[0].toInt();
-    int hotKeyModifier = hotkey.split(":")[1].toInt();
-    hotKeyListener->registerHotKey((Qt::Key)hotKey, (Qt::KeyboardModifier)hotKeyModifier);
+    hotKeyListener->registerHotKey(settings->read("general/hotKey", "").toString());
 }
 

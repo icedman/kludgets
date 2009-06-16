@@ -27,3 +27,4 @@ bool KApp::startServer()
     KServer *server = KServer::instance();
     return server->initialize();
 }
+
