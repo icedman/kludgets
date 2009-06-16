@@ -7,7 +7,8 @@
 #include "kpluginview.h"
 #include "util.h"
 
-#define ENABLE_DASHBOARD_SUPPORT 0
+#define ENABLE_DASHBOARD_SUPPORT 1
+#define ENABLE_TRANSITION 0
 
 KView::KView(KWindow *p) :
         QWebView(p),
@@ -136,13 +137,13 @@ void KView::mouseReleaseEvent(QMouseEvent *ev)
     }
     else if (leftButtonPressed)
     {
-        // you pressed the left button, didn't drag, so i simulate a mouse press
         QMouseEvent press(
             QEvent::MouseButtonPress,
             ev->pos(),
             ev->globalPos(),
             Qt::LeftButton,
-            0, 0);
+            0,
+            ev->modifiers());
         QWebView::mousePressEvent(&press);
     }
 
@@ -168,8 +169,6 @@ void KView::focusInEvent(QFocusEvent *ev)
 
     if (parent->windowLevel() == 2)
         parent->lower();
-
-    leftButtonPressed = false;
 }
 
 void KView::focusOutEvent(QFocusEvent *ev)
@@ -409,6 +408,12 @@ bool KView::beginTransition()
         break;
     }
 
+#if !ENABLE_TRANSITION
+
+    duration = 600;
+    hide();
+#endif
+
     transitionTL->setDuration(duration);
     transitionTL->start();
 
@@ -424,13 +429,24 @@ void KView::endTransition()
         delete transitionTL;
         transitionTL = 0;
     }
+
     setFrozen(false);
 
+#if !ENABLE_TRANSITION
+
+    show();
+#else
+
     emit bufferUpdated();
+#endif
 }
 
 void KView::updateTransition()
 {
+#if !ENABLE_TRANSITION
+    return ;
+#endif
+
     if (!transitionTL)
         return ;
 
