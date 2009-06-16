@@ -4,5 +4,6 @@
 
 void KServer::updateSystemSettings()
 {
+    hotKeyListener->registerHotKey(settings->read("general/hotKey", "").toString());
 }
 

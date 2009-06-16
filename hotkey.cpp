@@ -1,7 +1,24 @@
 #include "hotkey.h"
 
-HotKey::HotKey(QObject *parent)
+HotKey::HotKey(QObject *parent) :
+        hotkey_p(0)
 {}
+
+void HotKey::registerHotKey(const QString key, int id)
+{
+    QString hotkey = key + ":0";
+    int hotKey = hotkey.split(":")[0].toInt();
+    int hotKeyModifier = hotkey.split(":")[1].toInt();
+    registerHotKey((Qt::Key)hotKey, (Qt::KeyboardModifier)hotKeyModifier, id);
+}
+
+void HotKey::unregisterAll()
+{
+    while(registeredKeys.size())
+    {
+        unregisterHotKey(registeredKeys.keys().at(0));
+    }
+}
 
 QString HotKey::keyName(Qt::Key key)
 {

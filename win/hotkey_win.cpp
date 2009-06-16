@@ -49,7 +49,6 @@ int win32Key(Qt::Key key)
         return VK_NUMLOCK;
     case Qt::Key_ScrollLock:
         return VK_SCROLL;
-
     case Qt::Key_F1:
         return VK_F1;
     case Qt::Key_F2:
@@ -104,6 +103,12 @@ int win32Key(Qt::Key key)
 
 void HotKey::registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id)
 {
+    if (registeredKeys.contains(id))
+    {
+        unregisterHotKey(id);
+    }
+
+    registeredKeys.insert(id, key);
     if (!RegisterHotKey(
                 winId(),
                 id,
@@ -114,8 +119,12 @@ void HotKey::registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id)
     }
 }
 
-void HotKey::unregisterHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id)
+void HotKey::unregisterHotKey(int id)
 {
+    if (registeredKeys.contains(id))
+    {
+        registeredKeys.remove(id);
+    }
     UnregisterHotKey(winId(), id);
 }
 

@@ -10,6 +10,7 @@ public:
 
     bool startClient(const QString &path);
     bool startServer();
+
 };
 
 #endif // KLUDGETSAPPLICATION_H

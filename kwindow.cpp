@@ -238,7 +238,6 @@ void KWindow::setupWindow()
         setAttribute(Qt::WA_TranslucentBackground, true);
     }
 
-
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
 

@@ -20,7 +20,7 @@ int KIPC::getProcessId(QString kludgetId)
         }
     }
 
-    qDebug(">>%s %d", qPrintable(kludgetId), pid);
+    // qDebug(">>%s %d", qPrintable(kludgetId), pid);
 
     if (!checkProcess(pid))
     {
