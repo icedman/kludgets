@@ -4,6 +4,6 @@
 
 void KServer::updateSystemSettings()
 {
-    // run a QProcess Kludgets -l
+    hotKeyListener->createExternalListener();
 }
 

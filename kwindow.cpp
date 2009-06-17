@@ -39,9 +39,12 @@ bool KWindow::isDragging()
     return dragging;
 }
 
-void KWindow::startDrag()
+void KWindow::startDrag(int x, int y)
 {
-    dragPos = QCursor::pos() - pos();
+    QPoint startPos(x, y);
+    if (x == 0 && y == 0)
+        startPos = QCursor::pos();
+    dragPos = startPos - pos();
     dragging = true;
 
     emit onStartDrag();

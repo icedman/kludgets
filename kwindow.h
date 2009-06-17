@@ -20,7 +20,7 @@ public:
     KView *view();
 
     bool isDragging();
-    void startDrag();
+    void startDrag(int x = 0, int y = 0);
     void endDrag();
     bool isIgnoreDrag();
     void setIgnoreDrag(bool);

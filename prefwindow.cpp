@@ -444,7 +444,7 @@ protected:
     void setColor(QColor c)
     {
         QPalette p;
-        p.setColor(QPalette::Window, c);
+        p.setColor(QPalette::Base, c);
         box->setPalette(p);
     }
 
@@ -658,12 +658,12 @@ void PreferenceWindow::setupUI()
         pit++;
     }
 
-    if (defaultAction)
-        onTriggeredAction(defaultAction);
-
     createDialogControls();
 
     WindowUtil::center(this, -50, -100);
+
+    if (defaultAction)
+        onTriggeredAction(defaultAction);
 }
 
 void PreferenceWindow::createToolbar()
@@ -747,8 +747,6 @@ bool PreferenceWindow::addPreference(Preference &pref)
     if (item)
     {
         pref.widget = item;
-        if (pref.height == 0)
-            pref.height = 24;
         item->setSize(pref.width, pref.height);
 
         // add options

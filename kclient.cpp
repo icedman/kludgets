@@ -68,12 +68,6 @@ bool KClient::initialize(const QString& path)
 
 bool KClient::run()
 {
-    /*
-    processLock = new QSharedMemory(QString("kludget::" + info.id), this);
-    if (!processLock->create(1))
-        return false;
-    */
-
     bool created = false;
 
     QDirIterator it(info.storagePath);
@@ -123,7 +117,11 @@ bool KClient::run()
 }
 
 void KClient::shutdown()
-{}
+{
+    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + info.id + ".pid";
+    if (QFile::exists(pidfile))
+        QFile::remove(pidfile);
+}
 
 bool KClient::installPackage(const QString& path)
 {
