@@ -19,50 +19,9 @@ unsigned int x11Modifier(Qt::KeyboardModifier modifier)
     return 0;
 }
 
-class HotKeyPrivate : public QThread
-{
-public:
-
-    HotKeyPrivate() :
-            QThread(0)
-    {}
-
-    void grab()
-    {
-        start();
-    }
-
-    void ungrab()
-    {
-        //XUngrabKey(dpy, F2, 0, root);
-        quit();
-    }
-
-    void run()
-    {
-        Display *display = QX11Info::display();
-        int keycode = XKeysymToKeycode(display, XStringToKeysym("Home"));
-        XGrabKey(display, keycode, AnyModifier, DefaultRootWindow(display), True, GrabModeAsync, GrabModeAsync);
-
-        KLog::log("HotKey::registered hotkey");
-
-        XEvent e;
-        for(;;) {
-            XNextEvent(display, &e);
-            if (e.type == KeyPress){
-                if (e.xkey.keycode == keycode)
-                    qDebug("heya!");
-            }
-        }
-    }
-};
-
 void HotKey::registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id)
 {
-    if (registeredKeys.contains(id))
-    {
-        unregisterHotKey(id);
-    }
+    // not need to implement
 }
 
 void HotKey::unregisterHotKey(int id)
@@ -73,7 +32,28 @@ void HotKey::unregisterHotKey(int id)
     }
 }
 
-bool HotKey::x11Event(XEvent * ev)
+bool HotKey::run()
 {
-    return false;
+    Display *display = QX11Info::display();
+    
+    int keycode = XKeysymToKeycode(display, XStringToKeysym("F11"));
+    // grab keys
+    XGrabKey(display, keycode, ControlMask, DefaultRootWindow(display), True, GrabModeAsync, GrabModeAsync);
+
+    XEvent e;
+    for(;;)
+    {
+        XNextEvent(display, &e);
+        if (e.type == KeyPress){
+            if (e.xkey.keycode == keycode)
+                qDebug("heya!");
+        }
+    }
+    
+    // woudn't reach here, probably
+    
+    // ungrab keys
+    XUngrabKey(display, keycode, 0, DefaultRootWindow(display));
+
+    return true;
 }

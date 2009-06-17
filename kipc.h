@@ -8,7 +8,7 @@ class KIPC
 public:
 
     enum Message {
-        EngineExit = 1,
+        EngineExit = 0x8001,
         ShowWindow,
         HideWindow,
         LowerWindow,

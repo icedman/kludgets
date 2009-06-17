@@ -13,19 +13,23 @@ public:
     HotKey(QObject *parent = 0);
 
     void registerHotKey(const QString key, int id = 1);
-    void registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id = 1);
     void unregisterHotKey(int id = 1);
     void unregisterAll();
 
+    bool run();
+
 #if defined(WIN32)
     bool winEvent(MSG *message, long *result);
-#else
-    bool x11Event(XEvent * ev);
 #endif
+
     static QString keyName(Qt::Key key);
 
 Q_SIGNALS:
     void hotKeyPressed(Qt::Key, Qt::KeyboardModifier);
+
+private:
+
+    void registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id = 1);
 
 private:
     QMap<int, QString> registeredKeys;
