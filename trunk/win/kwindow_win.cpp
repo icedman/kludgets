@@ -9,8 +9,6 @@
 
 void KWindow::updateWindowLevel(int l)
 {
-    //setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
-    // todo. use windowFlags
     if (l == 1)
         SetWindowPos(winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     else
@@ -51,8 +49,8 @@ bool KWindow::winEvent(MSG *message, long *result)
         }
     case KIPC::ShowWindow:
         {
-            SetForegroundWindow(winId());
             show();
+            SetForegroundWindow(winId());
             if (windowZ == 2)
                 lower();
             else

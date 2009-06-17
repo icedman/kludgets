@@ -4,6 +4,6 @@
 
 void KServer::updateSystemSettings()
 {
-    hotKeyListener->registerHotKey(settings->read("general/hotKey", "").toString());
+    // run a QProcess Kludgets -l
 }
 

@@ -6,6 +6,13 @@ HotKey::HotKey(QObject *parent) :
 
 void HotKey::registerHotKey(const QString key, int id)
 {
+    if (registeredKeys.contains(id))
+    {
+        unregisterHotKey(id);
+    }
+
+    registeredKeys.insert(id, key);
+
     QString hotkey = key + ":0";
     int hotKey = hotkey.split(":")[0].toInt();
     int hotKeyModifier = hotkey.split(":")[1].toInt();

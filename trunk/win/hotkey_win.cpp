@@ -103,12 +103,6 @@ int win32Key(Qt::Key key)
 
 void HotKey::registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id)
 {
-    if (registeredKeys.contains(id))
-    {
-        unregisterHotKey(id);
-    }
-
-    registeredKeys.insert(id, key);
     if (!RegisterHotKey(
                 winId(),
                 id,
@@ -136,5 +130,10 @@ bool HotKey::winEvent(MSG *message, long *result)
         emit hotKeyPressed((Qt::Key)0, (Qt::KeyboardModifier)0);
         return true;
     }
+    return false;
+}
+
+bool HotKey::run()
+{
     return false;
 }
