@@ -1,4 +1,5 @@
 
+# CONFIG += debug
 TEMPLATE = app
 TARGET = 
 DEPENDPATH =
@@ -21,7 +22,7 @@ win32* {
 }
 
 !win32* {
-SOURCES += linux\kipc_linux.cpp \
+    SOURCES += linux\kipc_linux.cpp \
            linux\kwindow_linux.cpp \
            linux\kserver_linux.cpp \
            linux\kpluginview_linux.cpp \

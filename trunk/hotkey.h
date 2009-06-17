@@ -4,13 +4,14 @@
 #include <QWidget>
 #include <QMap>
 
-class HotKeyPrivate;
+class QProcess;
 class HotKey : public QWidget
 {
     Q_OBJECT
 public:
 
     HotKey(QObject *parent = 0);
+    ~HotKey();
 
     void registerHotKey(const QString key, int id = 1);
     void unregisterHotKey(int id = 1);
@@ -20,8 +21,17 @@ public:
 
 #if defined(WIN32)
     bool winEvent(MSG *message, long *result);
+#else
+    bool createExternalListener();
+    void destroyExternalListener();
+
+    private
+Q_SLOTS:
+    void externalListenerError();
+    void externalListenerOutput();
 #endif
 
+public:
     static QString keyName(Qt::Key key);
 
 Q_SIGNALS:
@@ -32,8 +42,8 @@ private:
     void registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id = 1);
 
 private:
-    QMap<int, QString> registeredKeys;
-    HotKeyPrivate *hotkey_p;
+    QMap<int, QString> registeredKeys;    
+    QProcess *externalListener;
 
 };
 

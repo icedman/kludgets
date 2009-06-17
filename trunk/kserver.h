@@ -1,7 +1,6 @@
 #ifndef KLUDGETSERVER_H
 #define KLUDGETSERVER_H
 
-#include <QProcess>
 #include <QStringList>
 #include <QtGui>
 #include <QSignalMapper>
@@ -96,12 +95,8 @@ private:
     AboutKludgetWindow *aboutWindow;
     KSettings *settings;
 
-    QSharedMemory *processLock;
-
     HotKey *hotKeyListener;
-
     QTimer updateTimer;
-
     KIPC ipc;
 };
 

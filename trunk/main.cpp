@@ -8,24 +8,26 @@
 
 int main(int argc, char *argv[])
 {    
-    KApp *app = new KApp(argc, argv);
+    KApp app(argc, argv);
 
     if (argc > 1)
     {
         if (QString(argv[1]) == "-l")
         {
-            if (!app->startHotKeyListener())
+            if (!app.startHotKeyListener())
                 return 0;
         }
         
-        if (!app->startClient(argv[argc-1]))
+        if (!app.startClient(argv[argc-1]))
             return 0;
     }
     else
     {
-        if (!app->startServer())
+        if (!app.startServer())
             return 0;
     }
 
-    return app->exec();
+    app.exec();
+
+    return 0;
 }

@@ -24,7 +24,6 @@ KServer* KServer::instance()
 }
 
 KServer::KServer() :
-        processLock(new QSharedMemory("kludget::server", this)),
         aboutWindow(0),
         prefWindow(0),
         hotKeyListener(0),
@@ -36,11 +35,6 @@ KServer::KServer() :
 
 bool KServer::initialize()
 {
-    /*
-    if (!processLock->create(1))
-        return false;
-        */
-
     QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     if (!QFile::exists(enginePreferencesFile))
     {
@@ -74,11 +68,15 @@ bool KServer::initialize()
     connect(&updateTimer, SIGNAL(timeout()), this, SLOT(checkUpdate()));
     updateTimer.setInterval(1000 * 60 * 60 * 24);
 
-    hotKeyListener = new HotKey();
+    hotKeyListener = new HotKey(this);
     connect(hotKeyListener, SIGNAL(hotKeyPressed(Qt::Key, Qt::KeyboardModifier)), this, SLOT(hotKeyPressed(Qt::Key, Qt::KeyboardModifier)));
 
     settings->setPath(enginePreferencesFile);
+#if defined(WIN32)
     settings->loadPreferences(":resources/xml/enginePreferences.xml");
+#else
+    settings->loadPreferences(":resources/xml/enginePreferences_linux.xml");
+#endif
 
     KLog::instance()->loadSettings();
     KLog::instance()->clear();
@@ -92,41 +90,9 @@ bool KServer::initialize()
 
 void KServer::shutdown()
 {
-    QDir directory;
-    QStringList dirs;
-    QStringList::iterator dit;
+    hideHUD();
 
-    QList<Widget>::iterator it;
-
-    // definitely remove these directories of uninstalled widgets
-    directory.setPath(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets/installed/");
-    dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    dit = dirs.begin();
-    while (dit != dirs.end())
-    {
-        QString filePath = directory.absolutePath() + "/" + *dit;
-        dit++;
-
-        bool found = false;
-        it = widgetList.begin();
-        while (it != widgetList.end())
-        {
-            if ((*it).path.indexOf(filePath) == 0)
-            {
-                found = true;
-                break;
-            }
-            it++;
-        }
-
-        if (!found)
-        {
-            Util::deleteDir(filePath);
-        }
-    }
-
-    // close all widgets
-    it = widgetList.begin();
+    QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
     {
         int pid = (*it).pid;
@@ -134,6 +100,8 @@ void KServer::shutdown()
             KIPC::closeProcess(pid);
         it++;
     }
+
+    hotKeyListener->deleteLater();
 
     KLog::log("KServer::shutdown");
 }
@@ -209,17 +177,22 @@ void KServer::checkUpdate()
     request.setRawHeader("User-Agent", QString(QString(KLUDGET_APPLICATION) + " " + versionString).toUtf8());
 
     net->get
-    (request);
+            (request);
 }
 
 void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
 {
     updateWidgetList();
 
-    if (hudScreens.size() > 0)
+#if 1 // defined(WIN32)
+    if (hudScreens.size() > 0) {
         hideHUD();
-    else
+    } else {
         showHUD();
+    }
+#else
+    showAllWidgets();
+#endif
 }
 
 void KServer::processWidgetQueue()
@@ -314,9 +287,9 @@ void KServer::openPackage()
     static QString lastPath = QApplication::applicationDirPath() + "/widgets";
 
     QString path = QFileDialog::getOpenFileName(0,
-                   "Open widget package",
-                   lastPath,
-                   "Zipped Package(*.zip);;Kludget Package(*.kludget)");
+                                                "Open widget package",
+                                                lastPath,
+                                                "Zipped Package(*.zip);;Kludget Package(*.kludget)");
 
     if (QFile::exists(path))
         lastPath = QDir(path).absolutePath();
@@ -421,6 +394,8 @@ void KServer::showHUD()
 {
     QDesktopWidget desktop;
 
+    sendMessageToAll(KIPC::HideWindow);
+
     for (int i = 0; i < desktop.numScreens(); i++)
     {
         QRect rect = desktop.screenGeometry(i);
@@ -428,11 +403,11 @@ void KServer::showHUD()
         w->resize(rect.width(), rect.height());
         w->move(rect.x(), rect.y());
         w->show();
-        w->raise();
         hudScreens.push_back(w);
     }
 
     sendMessageToAll(KIPC::ShowHUD);
+    //QTimer::singleShot(800, this, SLOT(showAllWidgets()));
 }
 
 void KServer::hideHUD()
@@ -441,7 +416,8 @@ void KServer::hideHUD()
     while (it != hudScreens.end())
     {
         QWidget *w = *it;
-        delete w;
+        w->hide();
+        w->deleteLater();
         it++;
     }
     hudScreens.clear();
@@ -461,7 +437,11 @@ void KServer::configure()
     prefWindow = new PreferenceWindow(settings);
     prefWindow->setAttribute(Qt::WA_DeleteOnClose);
     prefWindow->setWindowTitle("Preferences");
+#if defined(WIN32)
     prefWindow->buildPreferenceMap(":resources/xml/enginePreferences.xml");
+#else
+    prefWindow->buildPreferenceMap(":resources/xml/enginePreferences_linux.xml");
+#endif
     prefWindow->setupUI();
     prefWindow->show();
 
@@ -539,5 +519,5 @@ void KServer::onCheckDone(QNetworkReply *reply)
 void KServer::exit()
 {
     shutdown();
-    QTimer::singleShot(2000, QApplication::instance(), SLOT(quit()));
+    QTimer::singleShot(800, QApplication::instance(), SLOT(quit()));
 }

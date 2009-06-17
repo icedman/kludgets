@@ -3,7 +3,7 @@
 
 HudWindow::HudWindow()
 {
-    setWindowFlags(Qt::FramelessWindowHint | Qt::SubWindow | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
     setWindowOpacity(0.5);
 
     QPalette pal = palette();

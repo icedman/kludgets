@@ -13,6 +13,7 @@ void KWindow::updateWindowLevel(int l)
         SetWindowPos(winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     else
         SetWindowPos(winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+
     if (l == 2)
         lower();
     else

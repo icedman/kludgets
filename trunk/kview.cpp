@@ -7,7 +7,7 @@
 #include "kpluginview.h"
 #include "util.h"
 
-#define ENABLE_DASHBOARD_SUPPORT 1
+#define ENABLE_DASHBOARD_SUPPORT 0
 #define ENABLE_TRANSITION 0
 
 KView::KView(KWindow *p) :
@@ -92,7 +92,10 @@ void KView::mouseMoveEvent(QMouseEvent* ev)
         {
             QPoint p = dragStartPos - ev->pos();
             if (p.manhattanLength() > 4)
-                parent->startDrag();
+            {
+                p = dragStartPos + parent->pos();
+                parent->startDrag(p.x(), p.y());
+            }
         }
     }
 

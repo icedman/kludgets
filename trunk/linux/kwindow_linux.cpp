@@ -16,6 +16,13 @@ void KWindow::updateWindowLevel(int l)
         setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
     else if (l == 2)
         setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnBottomHint);
+    else
+        setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen);
+
+    if (l == 2)
+        lower();
+    else
+        raise();
 }
 
 void KWindow::updateMouseIgnore(bool ignore)
@@ -34,28 +41,18 @@ bool KWindow::x11Event(XEvent * ev)
         {
             switch(ev->xclient.data.l[1])
             {
-            case KIPC::ShowHUD:
-                {
-                    qDebug("ShowHUD");
-                    updateWindowLevel(1);
-                    updateMouseIgnore(false);
-                    return true;
-                }
             case KIPC::HideHUD:
                 {
                     qDebug("HideHUD");
                     lower();
-                    updateWindowLevel(windowZ);
-                    updateMouseIgnore(noMouse);
                     return true;
                 }
+            case KIPC::ShowHUD:
             case KIPC::ShowWindow:
                 {
                     qDebug("ShowWindow");
-                    //SetForegroundWindow(winId());
                     hide();
                     show();
-                    XRaiseWindow(QX11Info::display(), winId());
                     if (windowZ == 2)
                         lower();
                     else

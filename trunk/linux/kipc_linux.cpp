@@ -34,6 +34,9 @@ void sendIPCMessage(KIPC::Message msg, int w)
     static Atom a = 0;
     if (a == 0)
         a = XInternAtom(QX11Info::display(), "_KLUDGET_IPC_ATOM", True);
+    if (!a)
+        return;
+
     XEvent ev;
     ev.xclient.type = ClientMessage;
     ev.xclient.display = QX11Info::display();
@@ -53,6 +56,8 @@ void KIPC::sendMessage(Message msg, int pId)
     int screen_count = ScreenCount(dpy);
 
     Atom a = XInternAtom(QX11Info::display(), "_NET_WM_PID", False);
+    if (!a)
+        return;
 
     for (int s = 0; s < screen_count; s++) {
         Window root = RootWindow(dpy, s);

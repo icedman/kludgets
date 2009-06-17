@@ -1,8 +1,16 @@
 #include "hotkey.h"
+#include <QProcess>
 
 HotKey::HotKey(QObject *parent) :
-        hotkey_p(0)
+        externalListener(0)
 {}
+
+HotKey::~HotKey()
+{
+#if !defined(WIN32)
+    destroyExternalListener();
+#endif
+}
 
 void HotKey::registerHotKey(const QString key, int id)
 {

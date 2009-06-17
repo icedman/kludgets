@@ -3,7 +3,6 @@
 
 #include <QtCore>
 #include <QStringList>
-#include <QSharedMemory>
 
 #include "localefilelist.h"
 #include "kludgetinfo.h"
@@ -45,8 +44,6 @@ private:
     KludgetInfo info;
     QStringList instanceQueue;
     LocaleFileList localefiles;
-
-    QSharedMemory *processLock;
 };
 
 #endif // KLUDGETCLIENT_H

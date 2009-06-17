@@ -4,6 +4,7 @@
 #include "hotkey.h"
 #include "kdocument.h"
 #include "config.h"
+#include "klog.h"
 
 #include <QDesktopServices>
 
@@ -20,28 +21,29 @@ KApp::KApp(int argc, char *argv[]) :
 
 bool KApp::startClient(const QString &path)
 {
-    KClient *client = KClient::instance();
-    return client->initialize(path);
+    return KClient::instance()->initialize(path);
 }
 
 bool KApp::startServer()
 {
-    KServer *server = KServer::instance();
-    return server->initialize();
+    return KServer::instance()->initialize();
 }
 
 bool KApp::startHotKeyListener()
 {
-    HotKey hotKeyListener;
+    HotKey hotKey;
     
     QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     KDocument *doc = new KDocument;
     if (doc->openDocument(enginePreferencesFile))
     {
-        hotKeyListener.registerHotKey(doc->getValue("general/hotKey", ""));
+        hotKey.registerHotKey(doc->getValue("general/hotKey", ""));
     }
     
     delete doc;
-    hotKeyListener.run();
+
+    KLog::log("HotKeyListener::started");
+    hotKey.run();
+
     return true;
 }

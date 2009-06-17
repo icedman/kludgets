@@ -98,7 +98,11 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
 
     // instance settings
     settings->setPath(info.instancePreferenceFile);
+#if defined(WIN32)
     settings->loadPreferences(":resources/xml/widgetPreferences.xml");
+#else
+    settings->loadPreferences(":resources/xml/widgetPreferences_linux.xml");
+#endif
     settings->loadPreferences(info.configFile);
     settings->loadPreferences(info.path + "/" + PREFERENCE_FILE);
 
@@ -493,7 +497,11 @@ void Kludget::configure(QString cat)
     prefWindow->setWindowTitle("Preferences - " + info.name);
     prefWindow->buildPreferenceMap(info.configFile);
     prefWindow->buildPreferenceMap(info.path + "/" + PREFERENCE_FILE);
+#if defined(WIN32)
     prefWindow->buildPreferenceMap(":resources/xml/widgetPreferences.xml");
+#else
+    prefWindow->buildPreferenceMap(":resources/xml/widgetPreferences_linux.xml");
+#endif
     prefWindow->setupUI();
     prefWindow->show();
 

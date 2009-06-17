@@ -10,10 +10,7 @@ public:
 
     bool startClient(const QString &path);
     bool startServer();
-
-    // -l flag
     bool startHotKeyListener();
-
 };
 
 #endif // KLUDGETSAPPLICATION_H

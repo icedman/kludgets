@@ -50,21 +50,4 @@
 		<default>0</default>
 	</preference>
 	-->
-	<preference>
-		<type>separator</type>
-		<!--title>System Commands</title-->
-	</preference>
-	<preference name="general/runInShell">
-		<type>checkbox</type>
-		<title>Run system commands inside a shell like bash or sh.</title>
-		<category>General</category>
-		<default>0</default>
-	</preference>
-	<preference name="general/shellPath">
-		<type>text</type>
-		<title>Path</title>
-		<category>General</category>
-		<description>Absolute file path to the shell.</description>
-		<default>c:/Cygwin/bin/sh</default>
-	</preference>
 </preferences>
