@@ -73,8 +73,10 @@ bool KServer::initialize()
 
     settings->setPath(enginePreferencesFile);
 #if defined(WIN32)
+
     settings->loadPreferences(":resources/xml/enginePreferences.xml");
 #else
+
     settings->loadPreferences(":resources/xml/enginePreferences_linux.xml");
 #endif
 
@@ -91,6 +93,8 @@ bool KServer::initialize()
 void KServer::shutdown()
 {
     hideHUD();
+
+    trayIcon.hide();
 
     QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
@@ -177,7 +181,7 @@ void KServer::checkUpdate()
     request.setRawHeader("User-Agent", QString(QString(KLUDGET_APPLICATION) + " " + versionString).toUtf8());
 
     net->get
-            (request);
+    (request);
 }
 
 void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
@@ -185,9 +189,13 @@ void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
     updateWidgetList();
 
 #if 1 // defined(WIN32)
-    if (hudScreens.size() > 0) {
+
+    if (hudScreens.size() > 0)
+    {
         hideHUD();
-    } else {
+    }
+    else
+    {
         showHUD();
     }
 #else
@@ -287,9 +295,9 @@ void KServer::openPackage()
     static QString lastPath = QApplication::applicationDirPath() + "/widgets";
 
     QString path = QFileDialog::getOpenFileName(0,
-                                                "Open widget package",
-                                                lastPath,
-                                                "Zipped Package(*.zip);;Kludget Package(*.kludget)");
+                   "Open widget package",
+                   lastPath,
+                   "Zipped Package(*.zip);;Kludget Package(*.kludget)");
 
     if (QFile::exists(path))
         lastPath = QDir(path).absolutePath();
@@ -438,10 +446,13 @@ void KServer::configure()
     prefWindow->setAttribute(Qt::WA_DeleteOnClose);
     prefWindow->setWindowTitle("Preferences");
 #if defined(WIN32)
+
     prefWindow->buildPreferenceMap(":resources/xml/enginePreferences.xml");
 #else
+
     prefWindow->buildPreferenceMap(":resources/xml/enginePreferences_linux.xml");
 #endif
+
     prefWindow->setupUI();
     prefWindow->show();
 

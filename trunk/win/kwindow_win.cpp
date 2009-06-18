@@ -37,6 +37,7 @@ bool KWindow::winEvent(MSG *message, long *result)
     {
     case KIPC::ShowHUD:
         {
+            show();
             updateWindowLevel(1);
             updateMouseIgnore(false);
             return true;
@@ -50,6 +51,7 @@ bool KWindow::winEvent(MSG *message, long *result)
         }
     case KIPC::ShowWindow:
         {
+            hide();
             show();
             SetForegroundWindow(winId());
             if (windowZ == 2)
