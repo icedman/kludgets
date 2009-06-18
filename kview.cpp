@@ -7,7 +7,7 @@
 #include "kpluginview.h"
 #include "util.h"
 
-#define ENABLE_DASHBOARD_SUPPORT 0
+#define ENABLE_DASHBOARD_SUPPORT 1
 #define ENABLE_TRANSITION 0
 
 KView::KView(KWindow *p) :
@@ -69,6 +69,7 @@ void KView::paintEvent(QPaintEvent *ev)
 
 void KView::contextMenuEvent(QContextMenuEvent* ev)
 {
+    return ;
     if (isFrozen())
         return ;
 
@@ -154,6 +155,12 @@ void KView::mouseReleaseEvent(QMouseEvent *ev)
 
     if (isFrozen())
         return ;
+
+    if (ev->button() == Qt::RightButton)
+    {
+        emit contextMenuRequested();
+        return ;
+    }
 
     QWebView::mouseReleaseEvent(ev);
 }
