@@ -2,6 +2,12 @@
 
 = Changes =
 
+== Beta Version 0.9 2009-06-18 ==
+
+  * added heads up display
+  * updated application icons
+  * several bug fixes
+
 == Beta Version 0.9 2009-05-18 ==
 
   * added hotkey feature
