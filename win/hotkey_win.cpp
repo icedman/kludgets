@@ -132,8 +132,3 @@ bool HotKey::winEvent(MSG *message, long *result)
     }
     return false;
 }
-
-bool HotKey::run()
-{
-    return false;
-}

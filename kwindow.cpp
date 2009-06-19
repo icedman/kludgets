@@ -87,6 +87,9 @@ void KWindow::onGeometryChangeRequested(const QRect & rect)
 
 void KWindow::onUpdate()
 {
+    if (!isVisible() && !prevVisibility)
+        return ;
+
     if (isDragging() && !isIgnoreDrag())
     {
         move(QCursor::pos() - dragPos);

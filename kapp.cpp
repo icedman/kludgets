@@ -29,6 +29,7 @@ bool KApp::startServer()
     return KServer::instance()->initialize();
 }
 
+#if !defined(WIN32)
 bool KApp::startHotKeyListener()
 {
     HotKey hotKey;
@@ -47,3 +48,4 @@ bool KApp::startHotKeyListener()
 
     return true;
 }
+#endif

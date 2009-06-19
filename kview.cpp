@@ -389,6 +389,7 @@ void KView::onUpdate()
     {
         page()->mainFrame()->evaluateJavaScript("Kludget.dispatchMouseLeave()");
     }
+
     lastPos = cursorPos;
 }
 

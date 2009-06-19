@@ -146,7 +146,7 @@ AboutKludgetWindow::AboutKludgetWindow()
 
 void AboutKludgetWindow::createHeader()
 {
-	setWindowIcon(QIcon(":resources/images/kludget.png"));
+    //setWindowIcon(QIcon(":resources/images/kludget.png"));
 
     view->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     view->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);

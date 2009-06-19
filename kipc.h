@@ -19,8 +19,9 @@ public:
 
     void sendMessage(Message msg, int pId);
     void sendAllMessage(Message msg);
-    int getProcessId(QString kludgetId);
 
+    static int getProcessId(const QString &kludgetId);
+    static bool setProcessId(const QString &kludgetId, int pid);
     static void closeProcess(int pid);
     static bool checkProcess(int pid);
 };

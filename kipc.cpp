@@ -4,7 +4,7 @@
 #include <QDir>
 #include <QDesktopServices>
 
-int KIPC::getProcessId(QString kludgetId)
+int KIPC::getProcessId(const QString &kludgetId)
 {
     int pid = 0;
     QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".pid";
@@ -28,4 +28,19 @@ int KIPC::getProcessId(QString kludgetId)
     }
 
     return pid;
+}
+
+bool KIPC::setProcessId(const QString &kludgetId, int pid)
+{
+    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".pid";
+    QFile file;
+    file.setFileName(pidfile);
+    if (file.open(QIODevice::WriteOnly))
+    {
+        file.write(QString::number(pid).toUtf8());
+        file.write("\r\n", 2);
+        file.close();
+        return true;
+    }
+    return false;
 }

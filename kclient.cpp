@@ -7,12 +7,12 @@
 #include "installwindow.h"
 #include "util.h"
 #include "klog.h"
+#include "kipc.h"
 
 #include <QWebSettings>
 #include <QApplication>
 #include <QFontDatabase>
 #include <QDesktopServices>
-#include <QProcess>
 #include <QDir>
 
 #define MAX_INSTANCES 100
@@ -68,6 +68,9 @@ bool KClient::initialize(const QString& path)
 
 bool KClient::run()
 {
+    if (KIPC::checkProcess(KIPC::getProcessId(info.id)))
+        return false;
+
     bool created = false;
 
     QDirIterator it(info.storagePath);
@@ -100,16 +103,7 @@ bool KClient::run()
     doc.setValue("kludget/enabled", QString("1"));
     doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
-    // write pid file
-    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + info.id + ".pid";
-    QFile file;
-    file.setFileName(pidfile);
-    if (file.open(QIODevice::WriteOnly))
-    {
-        file.write(QString::number(QApplication::applicationPid()).toUtf8());
-        file.write("\r\n", 2);
-        file.close();
-    }
+    KIPC::setProcessId(info.id, (int)QApplication::applicationPid());
 
     QApplication::setQuitOnLastWindowClosed(false);
 
@@ -120,7 +114,8 @@ void KClient::shutdown()
 {
     QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + info.id + ".pid";
     if (QFile::exists(pidfile))
-        QFile::remove(pidfile);
+        QFile::remove
+            (pidfile);
 }
 
 bool KClient::installPackage(const QString& path)
