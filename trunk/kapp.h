@@ -10,7 +10,9 @@ public:
 
     bool startClient(const QString &path);
     bool startServer();
+#if !defined(WIN32)
     bool startHotKeyListener();
+#endif
 };
 
 #endif // KLUDGETSAPPLICATION_H

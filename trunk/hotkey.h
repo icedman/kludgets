@@ -17,11 +17,10 @@ public:
     void unregisterHotKey(int id = 1);
     void unregisterAll();
 
-    bool run();
-
 #if defined(WIN32)
     bool winEvent(MSG *message, long *result);
 #else
+    bool run();
     bool createExternalListener();
     void destroyExternalListener();
 

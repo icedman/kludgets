@@ -58,6 +58,9 @@ bool KIPC::checkProcess(int pid)
                                   FALSE, pid);
     if (hProcess == NULL)
         return false;
+
+    // check if it really is a Kludget.exe process
+
     CloseHandle(hProcess);
     return true;
 }

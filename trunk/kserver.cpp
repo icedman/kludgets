@@ -35,6 +35,12 @@ KServer::KServer() :
 
 bool KServer::initialize()
 {
+    QString appId = "com.kludgets.kengine";
+    if (KIPC::checkProcess(KIPC::getProcessId(appId)))
+        return false;
+
+    KIPC::setProcessId(appId, (int)QApplication::applicationPid());
+
     QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     if (!QFile::exists(enginePreferencesFile))
     {
