@@ -59,8 +59,6 @@ bool KServer::initialize()
         it++;
     }
 
-    setupMenu();
-
     connect(this, SIGNAL(selectWidget(int)), this, SLOT(showWidget(int)));
     connect(&runningWidgetsMapper, SIGNAL(mapped(int)), this, SIGNAL(selectWidget(int)));
     connect(this, SIGNAL(selectInstalledWidget(QString)), this, SLOT(runWidget(QString)));
@@ -93,6 +91,8 @@ bool KServer::initialize()
     updateSystemSettings();
 
     processWidgetQueue();
+
+    setupMenu();
     return true;
 }
 
@@ -216,7 +216,7 @@ void KServer::processWidgetQueue()
         QStringList::iterator it = widgetQueue.begin();
         runWidget((*it));
         widgetQueue.erase(it);
-        QTimer::singleShot(800, this, SLOT(processWidgetQueue()));
+        QTimer::singleShot(200, this, SLOT(processWidgetQueue()));
     }
     else
     {
