@@ -2,6 +2,12 @@
 
 = Changes =
 
+== Beta Version 0.9 2009-06-22 ==
+
+  * important bug fixes
+  * fixed unresponsive mouse
+  * remove debug menu items
+
 == Beta Version 0.9 2009-06-18 ==
 
   * added heads up display
