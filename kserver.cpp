@@ -256,6 +256,9 @@ void KServer::updateWidgetList()
         if (!QFile::exists(widget.path))
             continue;
 
+        if (!QFile::exists(widget.path + "/kludget.xml"))
+            continue;
+
         // has a running widget;
         if (widget.enabled)
         {
