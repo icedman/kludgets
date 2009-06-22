@@ -260,7 +260,11 @@ void Kludget::setupContextMenu()
 
     loadMenuFile(info.configFile);
     loadMenuFile(info.path + "/" + MENU_FILE);
+#if defined(WIN32)
     loadMenuFile(":resources/xml/widgetContextMenu.xml");
+#else
+    loadMenuFile(":resources/xml/widgetContextMenu_linux.xml");
+#endif
 }
 
 void Kludget::loadMenuFile(const QString &path)
@@ -300,6 +304,9 @@ void Kludget::loadMenuFile(const QString &path)
                     contextMenu.insertSeparator(0);
                     continue;
                 }
+
+		if (script == "")
+		    continue;
 
                 QAction *action = contextMenu.addAction(name);
                 connect(action, SIGNAL(triggered()), &customMenuMapper, SLOT(map()));
@@ -409,8 +416,10 @@ void Kludget::onSystemExecFinish(long id)
 void Kludget::screenshot(QString path)
 {
     if (path == "")
-        path = info.storagePath + "/screenshot.png";
+        path = info.storagePath + "/screenshot." + info.id + ".png";
     window->view()->screenshot(path);
+
+    QDesktopServices::openUrl(QUrl(path));
 }
 
 void Kludget::show()

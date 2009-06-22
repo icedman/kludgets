@@ -24,6 +24,7 @@
      <file>resources/xsl/aboutWidget.xsl</file>
      <file>resources/xsl/aboutKludget.xsl</file>
      <file>resources/xml/widgetPreferences_linux.xml</file>
+     <file>resources/xml/widgetContextMenu_linux.xml</file>
      <file>resources/xml/enginePreferences_linux.xml</file>
  </qresource>
  </RCC>
