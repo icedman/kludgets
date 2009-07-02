@@ -387,9 +387,9 @@ class ColorBox : public QWidget
         void paintEvent(QPaintEvent * /* event */)
         {
             QPainter painter(this);
-            QStyleOption option(QStyleOption::SO_Frame);
+            QStyleOption option;
             option.initFrom(this);
-            painter.fillRect(QRect(0, 0, width(), height()), color);
+            painter.fillRect(QRect(0, 0, width()-1, height()-3), color);
             style()->drawPrimitive(QStyle::PE_FrameLineEdit, &option, &painter, this);
         }
 
