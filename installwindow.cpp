@@ -154,6 +154,7 @@ void AboutKludgetWindow::createHeader()
     KDocument about;
     about.setValue("widget/name", "Kludget Engine");
     about.setValue("widget/version", KApp::version());
+    about.setValue("widget/userAgent", KApp::userAgent());
     about.setValue("widget/logo", "kludget.png");
     about.setValue("widget/icon", "engine.png");
 
