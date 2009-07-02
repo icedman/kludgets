@@ -1,7 +1,7 @@
 #include "config.h"
 #include "ksystem.h"
 #include "kludget.h"
-#include "version.h"
+#include "kapp.h"
 #include "klog.h"
 
 #include <QDesktopServices>
@@ -45,7 +45,7 @@ void KSystem::setEnableCommands(bool enable)
 
 QString KSystem::version()
 {
-    return QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION;
+	return KApp::version();
 }
 
 void KSystem::log(QString message)
