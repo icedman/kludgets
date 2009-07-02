@@ -55,7 +55,7 @@ void KSystem::log(QString message)
 
 void KSystem::openURL(QString url)
 {
-    QDesktopServices::openUrl(QUrl(url));
+    QDesktopServices::openUrl(QUrl::fromEncoded(url.toUtf8()));
 }
 
 int KSystem::execute(QString cmd)

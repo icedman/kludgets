@@ -39,7 +39,10 @@ BOOL CALLBACK EnumWindowProc_isKludget(HWND hWnd, LPARAM lParam)
 
     if (p->pid == 0 || pid == p->pid)
     {
-        if (IsKludgetHWND(hWnd))
+        TCHAR className[MAX_PATH];
+        GetClassName(hWnd, className, MAX_PATH);
+
+        if (IsKludgetHWND(hWnd) || QString::fromWCharArray(className) == "QWidget")
         {
             p->msg = 1;
         }
