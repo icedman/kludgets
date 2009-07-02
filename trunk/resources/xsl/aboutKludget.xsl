@@ -6,7 +6,7 @@
 <head>
 <style>
 	* { font-family: "verdana"; font-size: 10pt; color: #000; }
-	body { background-image:url(bgBlack.png); }
+	body { background-color: #fff; background-image:url(bgBlack.png); }
 	.title
 	{
 	width:400px;
@@ -53,7 +53,9 @@ Kludgets is an opensource project released under the GNU Lesser General Public L
 <p>
 Copyright 2008-2009 MindHyve Inc.
 </p>
-
+<p>
+<xsl:value-of select="widget/userAgent"/>
+</p>
 </div>
 	
 </body>

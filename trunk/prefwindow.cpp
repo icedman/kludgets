@@ -389,7 +389,11 @@ class ColorBox : public QWidget
             QPainter painter(this);
             QStyleOption option;
             option.initFrom(this);
-            painter.fillRect(QRect(0, 0, width()-1, height()-3), color);
+#if !defined(WIN32)
+            painter.fillRect(QRect(0, 0, width(), height()-2), color);
+#else
+            painter.fillRect(QRect(0, 0, width(), height()), color);
+#endif
             style()->drawPrimitive(QStyle::PE_FrameLineEdit, &option, &painter, this);
         }
 
