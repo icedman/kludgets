@@ -1,4 +1,4 @@
-#include "hotkey.h"
+#include "khotkey.h"
 #include <QProcess>
 
 HotKey::HotKey(QObject *parent) :

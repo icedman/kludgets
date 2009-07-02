@@ -11,7 +11,7 @@ public:
     KludgetInfo();
     KludgetInfo(const QString &path, const QString &instance);
 
-    void read();
+    bool load();
     bool isValid();
 
     QString path;

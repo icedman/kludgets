@@ -1,6 +1,6 @@
 #include "kserver.h"
 #include "ksettings.h"
-#include "hotkey.h"
+#include "khotkey.h"
 
 void KServer::updateSystemSettings()
 {

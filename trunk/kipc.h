@@ -24,6 +24,8 @@ public:
     static bool setProcessId(const QString &kludgetId, int pid);
     static void closeProcess(int pid);
     static bool checkProcess(int pid);
+    static QString getPIDFile(const QString &kludgetId);
+    static void destroyPIDFile(const QString &kludgetId);
 };
 
 #endif // KIPC_H

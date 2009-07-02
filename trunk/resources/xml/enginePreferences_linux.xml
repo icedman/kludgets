@@ -30,12 +30,14 @@
 		<default>16777274:0</default>
 		<description>Show or hide all widgets with a press of this hotkey.</description>
 	</preference>
+	<!--
 	<preference name="general/runAtStartup">
 		<type>checkbox</type>
 		<title>Run Kludgets Engine at startup.</title>
 		<category>General</category>
 		<default>0</default>
 	</preference>
+	-->
 	<preference name="general/checkForUpdates">
 		<type>checkbox</type>
 		<title>Automatically check for updates.</title>

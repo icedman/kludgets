@@ -5,7 +5,7 @@
 #include "kpage.h"
 #include "klog.h"
 #include "kpluginview.h"
-#include "util.h"
+#include "kutil.h"
 
 #define ENABLE_DASHBOARD_SUPPORT 1
 #define ENABLE_TRANSITION 0
@@ -124,6 +124,7 @@ void KView::mousePressEvent(QMouseEvent *ev)
         {
             leftButtonPressed = true;
             dragStartPos = ev->pos();
+            return ;
         }
     }
     else

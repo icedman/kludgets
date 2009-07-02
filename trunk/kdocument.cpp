@@ -59,7 +59,6 @@ bool KDocument::transform(const QString &xslPath)
     query.setFocus(&focus);
     query.setQuery(&xsl);
     query.evaluateTo(&content);
-
     setContent(content);
 
     // qDebug("%s", qPrintable(content));

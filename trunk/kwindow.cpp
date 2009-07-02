@@ -1,7 +1,7 @@
 #include "config.h"
 #include "kwindow.h"
 #include "kview.h"
-#include "util.h"
+#include "kutil.h"
 
 KWindow::KWindow() :
         webView(new KView(this)),

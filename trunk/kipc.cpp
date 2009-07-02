@@ -7,7 +7,7 @@
 int KIPC::getProcessId(const QString &kludgetId)
 {
     int pid = 0;
-    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".pid";
+    QString pidfile = getPIDFile(kludgetId);
     if (QFile::exists(pidfile))
     {
         QFile file;
@@ -32,7 +32,7 @@ int KIPC::getProcessId(const QString &kludgetId)
 
 bool KIPC::setProcessId(const QString &kludgetId, int pid)
 {
-    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".pid";
+    QString pidfile = getPIDFile(kludgetId);
     QFile file;
     file.setFileName(pidfile);
     if (file.open(QIODevice::WriteOnly))
@@ -43,4 +43,18 @@ bool KIPC::setProcessId(const QString &kludgetId, int pid)
         return true;
     }
     return false;
+}
+
+QString KIPC::getPIDFile(const QString &kludgetId)
+{
+    return QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".kludget.pid";
+}
+
+void KIPC::destroyPIDFile(const QString &kludgetId)
+{
+    QString pidfile = getPIDFile(kludgetId);
+    if (QFile::exists(pidfile))
+        QFile::remove
+            (pidfile);
+
 }
