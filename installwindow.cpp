@@ -1,7 +1,7 @@
 #include "installwindow.h"
 #include "ksettings.h"
 #include "kdocument.h"
-#include "version.h"
+#include "kapp.h"
 #include "kutil.h"
 
 #include <QWebView>
@@ -153,7 +153,7 @@ void AboutKludgetWindow::createHeader()
 
     KDocument about;
     about.setValue("widget/name", "Kludget Engine");
-    about.setValue("widget/version", QString("beta version ") + QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION);
+    about.setValue("widget/version", KApp::version());
     about.setValue("widget/logo", "kludget.png");
     about.setValue("widget/icon", "engine.png");
 

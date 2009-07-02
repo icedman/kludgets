@@ -1,5 +1,4 @@
 #include "config.h"
-#include "version.h"
 #include "kserver.h"
 #include "kclient.h"
 #include "ksettings.h"
@@ -11,6 +10,8 @@
 #include "klog.h"
 #include "khotkey.h"
 #include "khudwindow.h"
+#include "kapp.h"
+#include "version.h"
 
 #include <QDirIterator>
 #include <QApplication>
@@ -185,11 +186,9 @@ void KServer::checkUpdate()
     net->loadSettings();
     net->setAccess(true, false, QUrl());
 
-    QString versionString = QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION;
-
     QNetworkRequest request;
-    request.setUrl(QUrl(QString("http://kludgets.com/checkUpdate.php?version=") + versionString));
-    request.setRawHeader("User-Agent", QString(QString(KLUDGET_APPLICATION) + " " + versionString).toUtf8());
+    request.setUrl(QUrl(QString("http://kludgets.com/checkUpdate.php")));
+    request.setRawHeader("User-Agent", KApp::userAgent().toUtf8());
 
     net->get
     (request);
@@ -325,7 +324,7 @@ void KServer::showMenu()
     updateWidgetList();
 
     trayMenu.clear();
-    connect(trayMenu.addAction(QString(KLUDGET_APPLICATION) + " v" + KLUDGET_MAJOR_VERSION), SIGNAL(triggered()), this, SLOT(aboutKludget()));
+    connect(trayMenu.addAction(QString(KLUDGET_APPLICATION) + " v" + KApp::version()), SIGNAL(triggered()), this, SLOT(aboutKludget()));
     connect(trayMenu.addAction(QString("Preferences")), SIGNAL(triggered()), this, SLOT(configure()));
     trayMenu.insertSeparator(0);
 

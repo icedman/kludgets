@@ -11,8 +11,12 @@ public:
     bool startClient(const QString &path);
     bool startServer();
 #if !defined(WIN32)
+
     bool startHotKeyListener();
 #endif
+
+    static QString userAgent();
+    static QString version();
 };
 
 #endif // KLUDGETSAPPLICATION_H

@@ -1,5 +1,5 @@
 #include "klog.h"
-#include "version.h"
+#include "kapp.h"
 #include "config.h"
 #include "kdocument.h"
 
@@ -26,8 +26,7 @@ void KLog::setPath(const QString &p)
 void KLog::clear()
 {
     write("--------------", true);
-    write("Kludget Engine");
-    write(QString(KLUDGET_MAJOR_VERSION) + " " + KLUDGET_MINOR_VERSION);
+	write(KApp::userAgent());
     write("--------------");
 }
 
