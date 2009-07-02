@@ -4,7 +4,7 @@
 #include <QtCore>
 #include <QStringList>
 
-#include "localefilelist.h"
+#include "klocalefilelist.h"
 #include "kludgetinfo.h"
 
 class Kludget;
@@ -23,6 +23,7 @@ public:
     void shutdown();
 
     Kludget* createInstance(const QString &instance = "");
+    Kludget* getInstance(const QString &instance);
 
 private:
     bool installWidget(const QString& path, bool prompt = true);

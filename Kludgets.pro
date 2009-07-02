@@ -1,44 +1,43 @@
-
-# CONFIG += debug
 TEMPLATE = app
 TARGET = 
 DEPENDPATH =
 INCLUDEPATH += .
 
-QT += webkit network xml svg xmlpatterns
+QT += webkit network xml xmlpatterns
 
 win32* {
     LIBS += gdi32.lib user32.lib advapi32.lib
     HEADERS += win\config_win.h \
                win\windowsregistry.h
-    SOURCES += win\kipc_win.cpp \
+    SOURCES += win\khotkey_win.cpp \
+               win\kipc_win.cpp \
                win\kwindow_win.cpp \
                win\kserver_win.cpp \
                win\kpluginview_win.cpp \
-               win\windowsregistry.cpp \
-               win\hotkey_win.cpp
+               win\windowsregistry.cpp
+
     DESTDIR = ./
     RC_FILE = app.rc
 }
 
 !win32* {
-    SOURCES += linux\kipc_linux.cpp \
-           linux\kwindow_linux.cpp \
-           linux\kserver_linux.cpp \
-           linux\kpluginview_linux.cpp \
-           linux\hotkey_linux.cpp
+    SOURCES += linux\khotkey_linux.cpp \
+               linux\kipc_linux.cpp \
+               linux\kwindow_linux.cpp \
+               linux\kserver_linux.cpp \
+               linux\kpluginview_linux.cpp
 }
 
-RESOURCES += resources.qrc
 
 HEADERS += config.h \
-           hotkey.h \
-           hudwindow.h \
            installwindow.h \
            kapp.h \
            kclient.h \
            kdocument.h \
+           khotkey.h \
+           khudwindow.h \
            kipc.h \
+           klocalefilelist.h \
            klog.h \
            kludget.h \
            kludgetinfo.h \
@@ -48,20 +47,20 @@ HEADERS += config.h \
            kserver.h \
            ksettings.h \
            ksystem.h \
+           kutil.h \
            kview.h \
            kwindow.h \
-           localefilelist.h \
            prefwindow.h \
-           util.h \
            version.h
-
-SOURCES += hotkey.cpp \
-           hudwindow.cpp \
-           installwindow.cpp \
+           
+SOURCES += installwindow.cpp \
            kapp.cpp \
            kclient.cpp \
            kdocument.cpp \
+           khotkey.cpp \
+           khudwindow.cpp \
            kipc.cpp \
+           klocalefilelist.cpp \
            klog.cpp \
            kludget.cpp \
            kludgetinfo.cpp \
@@ -71,10 +70,10 @@ SOURCES += hotkey.cpp \
            kserver.cpp \
            ksettings.cpp \
            ksystem.cpp \
+           kutil.cpp \
            kview.cpp \
            kwindow.cpp \
-           localefilelist.cpp \
            main.cpp \
-           prefwindow.cpp \
-           util.cpp
+           prefwindow.cpp
            
+RESOURCES += resources.qrc

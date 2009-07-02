@@ -15,11 +15,11 @@ KludgetInfo::KludgetInfo(const QString &p, const QString &i)
 {
     path = p;
     instance = i;
-    read();
 }
 
-void KludgetInfo::read()
+bool KludgetInfo::load()
 {
+    // local
     path = QDir(path).absolutePath();
     configFile = path + "/" + QString(CONFIG_FILE);
 
@@ -46,7 +46,7 @@ void KludgetInfo::read()
         else
         {
             configFile = "";
-            return ;
+            return false;
         }
     }
 
@@ -88,6 +88,8 @@ void KludgetInfo::read()
         pluginExecutable = pluginName;
         pluginScript = pluginName + ".js";
     }
+
+    return isValid();
 }
 
 bool KludgetInfo::isValid()

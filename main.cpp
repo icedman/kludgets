@@ -2,7 +2,7 @@
 #include "kapp.h"
 #include "kclient.h"
 #include "kserver.h"
-#include "util.h"
+#include "kutil.h"
 
 #include <QApplication>
 

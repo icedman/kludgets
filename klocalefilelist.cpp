@@ -1,4 +1,4 @@
-#include "localefilelist.h"
+#include "klocalefilelist.h"
 
 #include <QDir>
 #include <QLocale>

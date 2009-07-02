@@ -1,5 +1,5 @@
 #include "config.h"
-#include "util.h"
+#include "kutil.h"
 #include "klog.h"
 
 bool Util::copyDir(const QString &source, const QString &destination, const bool overwrite)
@@ -228,7 +228,7 @@ void WindowUtil::center(QWidget *w, int offsetX, int offsetY)
 {
     QDesktopWidget desktop;
     QRect screenRect = desktop.screenGeometry(w);
-    int x = screenRect.x() + (screenRect.width() / 2 - w->width() / 2);
-    int y = screenRect.y() + (screenRect.height() / 2 - w->height() / 2);
-    w->move(x + offsetX, y + offsetY);
+    int x = screenRect.x() + (screenRect.width() / 2 - w->width() / 2) + offsetX;
+    int y = screenRect.y() + (screenRect.height() / 2 - w->height() / 2) + offsetY;
+    w->move(x, y);
 }

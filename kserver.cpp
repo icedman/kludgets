@@ -7,15 +7,17 @@
 #include "prefwindow.h"
 #include "installwindow.h"
 #include "kdocument.h"
-#include "util.h"
+#include "kutil.h"
 #include "klog.h"
-#include "hotkey.h"
-#include "hudwindow.h"
+#include "khotkey.h"
+#include "khudwindow.h"
 
 #include <QDirIterator>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QSharedMemory>
+
+#define KLUDGET_ENGINE_APP_ID "com.kludgets.kengine"
 
 KServer* KServer::instance()
 {
@@ -35,11 +37,10 @@ KServer::KServer() :
 
 bool KServer::initialize()
 {
-    QString appId = "com.kludgets.kengine";
-    if (KIPC::checkProcess(KIPC::getProcessId(appId)))
+    if (KIPC::checkProcess(KIPC::getProcessId(KLUDGET_ENGINE_APP_ID)))
         return false;
 
-    KIPC::setProcessId(appId, (int)QApplication::applicationPid());
+    KIPC::setProcessId(KLUDGET_ENGINE_APP_ID, (int)QApplication::applicationPid());
 
     QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     if (!QFile::exists(enginePreferencesFile))
@@ -98,6 +99,8 @@ bool KServer::initialize()
 
 void KServer::shutdown()
 {
+    KIPC::destroyPIDFile(KLUDGET_ENGINE_APP_ID);
+
     hideHUD();
 
     trayIcon.hide();
@@ -108,6 +111,8 @@ void KServer::shutdown()
         int pid = (*it).pid;
         if (pid > 0)
             KIPC::closeProcess(pid);
+
+        KIPC::destroyPIDFile((*it).id);
         it++;
     }
 

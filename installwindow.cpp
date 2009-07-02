@@ -2,7 +2,7 @@
 #include "ksettings.h"
 #include "kdocument.h"
 #include "version.h"
-#include "util.h"
+#include "kutil.h"
 
 #include <QWebView>
 #include <QWebFrame>

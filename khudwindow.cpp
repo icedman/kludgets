@@ -1,4 +1,4 @@
-#include "hudwindow.h"
+#include "khudwindow.h"
 #include "kserver.h"
 
 HudWindow::HudWindow()

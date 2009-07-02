@@ -5,7 +5,7 @@
 #include "ksettings.h"
 #include "kdocument.h"
 #include "installwindow.h"
-#include "util.h"
+#include "kutil.h"
 #include "klog.h"
 #include "kipc.h"
 
@@ -27,8 +27,6 @@ bool KClient::initialize(const QString& path)
 {
     KLog::instance()->loadSettings();
 
-    // QApplication::setAttribute(Qt::AA_MSWindowsUseDirect3DByDefault, true);
-
     loadCustomFonts(QApplication::applicationDirPath() + "/widgets/resources/fonts");
 
     KNetwork::instance();
@@ -36,33 +34,36 @@ bool KClient::initialize(const QString& path)
     QFileInfo fileInfo(path);
     QString appPath = fileInfo.absoluteFilePath();
 
-    if (!QFile::exists(appPath))
+    if (QFile::exists(appPath))
     {
-        KLog::log("KClient::initialize failure");
-        KLog::log(QString("path not found: ") + appPath);
-        return false;
-    }
-
-    if (!fileInfo.isDir())
-    {
-        QString suffix = fileInfo.suffix();
-        if (suffix == "zip" || suffix == "kludget")
+        if (!fileInfo.isDir())
         {
-            return installFromArchive(appPath);
+            QString suffix = fileInfo.suffix();
+            if (suffix == "zip" || suffix == "kludget")
+            {
+                return installFromArchive(appPath);
+            }
+            return false;
         }
-        return false;
     }
     else
     {
-        // run directly from directory (todo. all on debug mode only?)
-        if (0)
+        QUrl url(path);
+        if (url.scheme() == "http")
         {
-            if (appPath.indexOf(QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).absolutePath() + "/widgets") != 0)
-                return installFromDirectory(appPath);
+            appPath = path;
+        }
+        else
+        {
+            KLog::log("KClient::initialize failure");
+            KLog::log(QString("path not found: ") + appPath);
+            return false;
         }
     }
 
+    // run directly from the directory
     info = KludgetInfo(appPath, "");
+    info.load();
     return run();
 }
 
@@ -112,10 +113,7 @@ bool KClient::run()
 
 void KClient::shutdown()
 {
-    QString pidfile = QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + info.id + ".pid";
-    if (QFile::exists(pidfile))
-        QFile::remove
-            (pidfile);
+    KIPC::destroyPIDFile(info.id);
 }
 
 bool KClient::installPackage(const QString& path)
@@ -144,7 +142,7 @@ bool KClient::installFromArchive(const QString& path, bool prompt)
         {
             it.next();
             tmp = KludgetInfo(it.filePath(), "");
-            if (tmp.configFile != "")
+            if (tmp.load())
                 break;
         }
     }
@@ -165,6 +163,7 @@ bool KClient::installFromDirectory(const QString& path, bool prompt)
 bool KClient::installWidget(const QString& path, bool prompt)
 {
     info = KludgetInfo(path, "");
+    info.load();
 
     // setup storage dir
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets").mkpath(QDir(info.storagePath).dirName());
@@ -249,17 +248,12 @@ Kludget* KClient::createInstance(const QString &instance)
         }
     }
 
-    // check if this instance is already running
-    KludgetList::iterator it = kludgets.begin();
-    while (it != kludgets.end())
-    {
-        Kludget *ik = (*it);
-        if (ik->property("instance") == inst)
-            return 0;
-        it++;
-    }
+    if (getInstance(inst) != 0)
+        return 0;
 
-    Kludget *k = Kludget::create(this, KludgetInfo(info.path, inst));
+    KludgetInfo ki(info.path, inst);
+    ki.load();
+    Kludget *k = Kludget::create(this, ki);
     if (!k)
         return 0;
 
@@ -267,6 +261,19 @@ Kludget* KClient::createInstance(const QString &instance)
     connect(k, SIGNAL(destroyed(QObject*)), this, SLOT(kludgetDestroyed(QObject*)));
 
     return k;
+}
+
+Kludget* KClient::getInstance(const QString &instance)
+{
+    KludgetList::iterator it = kludgets.begin();
+    while (it != kludgets.end())
+    {
+        Kludget *ik = (*it);
+        if (ik->property("instance") == instance)
+            return ik;
+        it++;
+    }
+    return 0;
 }
 
 bool KClient::processInstanceQueue()

@@ -2,7 +2,7 @@
 #include "ksettings.h"
 #include "config_win.h"
 #include "windowsregistry.h"
-#include "hotkey.h"
+#include "khotkey.h"
 
 #include <QApplication>
 

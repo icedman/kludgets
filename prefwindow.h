@@ -49,7 +49,7 @@ public:
     virtual void setValue(const QString &q) {}
     virtual void addOption(const QString &label, const QString &value) {}
     virtual void setSize(int w, int h) {}
-    virtual void colorSelected(QColor c) {}
+    virtual void setColor(QColor c) {}
     virtual QColor currentColor() { return QColor(); }
     static PreferenceWidget* create(const Preference &pref);
 

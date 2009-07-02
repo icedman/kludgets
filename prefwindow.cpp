@@ -1,8 +1,8 @@
 #include "prefwindow.h"
 #include "ksystem.h"
 #include "ksettings.h"
-#include "util.h"
-#include "hotkey.h"
+#include "kutil.h"
+#include "khotkey.h"
 
 #include <QDomDocument>
 
@@ -378,7 +378,6 @@ protected:
     QFontComboBox *data;
 };
 
-
 class PrefColor : public PreferenceWidget
 {
 
@@ -390,8 +389,21 @@ class ColorBox : public QWidget
             QPainter painter(this);
             QStyleOption option(QStyleOption::SO_Frame);
             option.initFrom(this);
+            painter.fillRect(QRect(0, 0, width(), height()), color);
             style()->drawPrimitive(QStyle::PE_FrameLineEdit, &option, &painter, this);
         }
+
+        void setColor(QColor c)
+        {
+            color = c;
+        }
+
+        QColor getColor()
+        {
+            return color;
+        }
+
+        QColor color;
     };
 
 public:
@@ -406,46 +418,30 @@ public:
         layout->addWidget(box);
         layout->addWidget(btn);
 
-        //layout->addWidget(new QWidget());
         btn->setMaximumSize(20, 24);
         box->setMaximumSize(100, 20);
         box->setMinimumSize(100, 20);
-        box->setAutoFillBackground(true);
         connect(btn, SIGNAL(clicked()), this, SLOT(selectColor()));
     }
 
     QString getValue()
     {
-        return color().name();
+        return currentColor().name();
     }
 
     void setValue(const QString &q)
     {
-        setColor(QColor(q));
-    }
-
-    void colorSelected(QColor c)
-    {
-        setColor(c);
-    }
-
-    QColor currentColor()
-    {
-        return color();
-    }
-
-protected:
-
-    QColor color()
-    {
-        return box->palette().color(QPalette::Window);
+        box->setColor(QColor(q));
     }
 
     void setColor(QColor c)
     {
-        QPalette p;
-        p.setColor(QPalette::Base, c);
-        box->setPalette(p);
+        box->setColor(c);
+    }
+
+    QColor currentColor()
+    {
+        return box->getColor();
     }
 
 protected:
@@ -460,7 +456,7 @@ void PreferenceWidget::selectColor()
     QColor c = QColorDialog::getColor(currentColor(), 0);
     if (c.isValid())
     {
-        colorSelected(c);
+        setColor(c);
     }
 }
 
@@ -614,7 +610,7 @@ void PreferenceWindow::setupUI()
 
     QFile file(":resources/style/application.css");
     file.open(QIODevice::ReadOnly);
-    setStyleSheet(QString(file.readAll()));
+    //setStyleSheet(QString(file.readAll()));
     file.close();
 
     layout = new QVBoxLayout;
@@ -659,11 +655,9 @@ void PreferenceWindow::setupUI()
     }
 
     createDialogControls();
-
-    WindowUtil::center(this, -50, -100);
-
     if (defaultAction)
         onTriggeredAction(defaultAction);
+    WindowUtil::center(this, -50, -50);
 }
 
 void PreferenceWindow::createToolbar()

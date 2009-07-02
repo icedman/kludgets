@@ -8,6 +8,12 @@ typedef struct _sendMsgParam
 }
 sendMsgParam;
 
+BOOL IsKludgetHWND(HWND hWnd)
+{
+    // very crude & inaccurate
+    return (GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_LAYERED);
+}
+
 BOOL CALLBACK EnumWindowProc_SendMessage(HWND hWnd, LPARAM lParam)
 {
     sendMsgParam *p = (sendMsgParam*)lParam;
@@ -16,11 +22,29 @@ BOOL CALLBACK EnumWindowProc_SendMessage(HWND hWnd, LPARAM lParam)
 
     if (p->pid == 0 || pid == p->pid)
     {
-        if (GetWindowLong(hWnd, GWL_EXSTYLE) & WS_EX_LAYERED)
+        if (IsKludgetHWND(hWnd))
         {
             SendMessage(hWnd, p->msg, 0, 0);
         }
     }
+
+    return TRUE;
+}
+
+BOOL CALLBACK EnumWindowProc_isKludget(HWND hWnd, LPARAM lParam)
+{
+    sendMsgParam *p = (sendMsgParam*)lParam;
+    DWORD pid = 0;
+    GetWindowThreadProcessId(hWnd, &pid);
+
+    if (p->pid == 0 || pid == p->pid)
+    {
+        if (IsKludgetHWND(hWnd))
+        {
+            p->msg = 1;
+        }
+    }
+
     return TRUE;
 }
 
@@ -59,8 +83,12 @@ bool KIPC::checkProcess(int pid)
     if (hProcess == NULL)
         return false;
 
-    // check if it really is a Kludget.exe process
+    sendMsgParam p;
+    p.pid = pid;
+    p.msg = 0;
+    EnumWindows(EnumWindowProc_isKludget, (LPARAM)&p);
 
     CloseHandle(hProcess);
-    return true;
+
+    return (p.msg == 1);
 }

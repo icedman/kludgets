@@ -1,4 +1,4 @@
-#include "hotkey.h"
+#include "khotkey.h"
 #include "klog.h"
 #include "config_win.h"
 

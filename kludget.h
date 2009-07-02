@@ -7,7 +7,6 @@
 #include <QLibrary>
 
 #include "kludgetinfo.h"
-#include "version.h"
 
 class KClient;
 class KWindow;
@@ -42,7 +41,6 @@ private:
     private
 Q_SLOTS:
 
-    void onBeginShowCountDown();
     void onShow();
     void onHide();
     void onStartDrag();

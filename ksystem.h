@@ -62,6 +62,7 @@ private:
     QStringList outputList;
 
     QMap<long, KSystem*> processes;
+    QString tempFile;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #include "config.h"
 #include "knetwork.h"
 #include "kdocument.h"
-#include "localefilelist.h"
+#include "klocalefilelist.h"
 #include "klog.h"
 
 #include <QAuthenticator>

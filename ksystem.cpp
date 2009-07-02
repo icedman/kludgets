@@ -24,7 +24,13 @@ KSystem::KSystem(QObject* parent) :
 }
 
 KSystem::~KSystem()
-{}
+{
+    if (QFile::exists(tempFile))
+    {
+        QFile::remove
+            (tempFile);
+    }
+}
 
 void KSystem::setShellPath(const QString path)
 {
@@ -71,6 +77,7 @@ int KSystem::execute(QString cmd)
     }
 
     KSystem *k = new KSystem(this);
+    k->tempFile = tmpScript.fileName();
     QProcess *p = k->process;
     p->start(cmd, QIODevice::ReadWrite);
     k->pid = (long)p->pid();
@@ -102,6 +109,7 @@ void KSystem::cancel(long pid, int wait)
         if (wait)
             p->waitForFinished(wait);
         p->terminate();
+        p->close();
         k->readyReadStandardError();
         k->readyReadStandardOutput();
     }
@@ -175,6 +183,17 @@ KSystem *KSystem::getProcess(long pid)
         // qDebug("not found %d!", pid);
         return this;
     }
+
+    KSystem *sys = processes.value(pid);
+    if (sys->process->state() == QProcess::NotRunning)
+    {
+        if (QFile::exists(sys->tempFile))
+        {
+            QFile::remove
+                (sys->tempFile);
+        }
+    }
+
     // qDebug("found %d!", pid);
-    return processes.value(pid);
+    return sys;
 }

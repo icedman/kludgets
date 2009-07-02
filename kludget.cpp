@@ -8,6 +8,7 @@
 #include "ksystem.h"
 #include "knetwork.h"
 #include "klog.h"
+#include "version.h"
 
 #include "prefwindow.h"
 #include "installwindow.h"
@@ -99,10 +100,13 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     // instance settings
     settings->setPath(info.instancePreferenceFile);
 #if defined(WIN32)
+
     settings->loadPreferences(":resources/xml/widgetPreferences.xml");
 #else
+
     settings->loadPreferences(":resources/xml/widgetPreferences_linux.xml");
 #endif
+
     settings->loadPreferences(info.configFile);
     settings->loadPreferences(info.path + "/" + PREFERENCE_FILE);
 
@@ -184,7 +188,6 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         window->hide();
         if (!QFile::exists(info.contentSrc))
         {
-
             KLog::log("Kludget::load fail");
             KLog::log(QString("content source not found. ") + info.contentSrc);
             return false;
@@ -258,11 +261,11 @@ void Kludget::setupContextMenu()
 {
     contextMenu.clear();
 
-    loadMenuFile(info.configFile);
-    loadMenuFile(info.path + "/" + MENU_FILE);
 #if defined(WIN32)
+
     loadMenuFile(":resources/xml/widgetContextMenu.xml");
 #else
+
     loadMenuFile(":resources/xml/widgetContextMenu_linux.xml");
 #endif
 }
@@ -288,16 +291,13 @@ void Kludget::loadMenuFile(const QString &path)
                 QDomElement menuItem = menuItemList.item(i).toElement();
                 QString name = menuItem.firstChild().nodeValue();
                 QString script = menuItem.attributes().namedItem("action").nodeValue();
-                QString filter = menuItem.attributes().namedItem("filter").nodeValue();
 
-#if 0
-
-                if (filter.indexOf("debug") != -1 && !info.debug)
+                if (menuItem.nodeName().toLower() == "custom_menu")
+                {
+                    loadMenuFile(info.configFile);
+                    loadMenuFile(info.path + "/" + MENU_FILE);
                     continue;
-
-                if (filter.indexOf("instance") != -1 && 0)
-                    continue;
-#endif
+                }
 
                 if (menuItem.nodeName().toLower() == "separator")
                 {
@@ -305,8 +305,8 @@ void Kludget::loadMenuFile(const QString &path)
                     continue;
                 }
 
-		if (script == "")
-		    continue;
+                if (script == "")
+                    continue;
 
                 QAction *action = contextMenu.addAction(name);
                 connect(action, SIGNAL(triggered()), &customMenuMapper, SLOT(map()));
@@ -314,12 +314,6 @@ void Kludget::loadMenuFile(const QString &path)
             }
         }
     }
-}
-
-void Kludget::onBeginShowCountDown()
-{
-    // hack. show two seconds after
-    QTimer::singleShot(2000, this, SLOT(show()));
 }
 
 void Kludget::onShow()
@@ -507,10 +501,13 @@ void Kludget::configure(QString cat)
     prefWindow->buildPreferenceMap(info.configFile);
     prefWindow->buildPreferenceMap(info.path + "/" + PREFERENCE_FILE);
 #if defined(WIN32)
+
     prefWindow->buildPreferenceMap(":resources/xml/widgetPreferences.xml");
 #else
+
     prefWindow->buildPreferenceMap(":resources/xml/widgetPreferences_linux.xml");
 #endif
+
     prefWindow->setupUI();
     prefWindow->show();
 
@@ -521,6 +518,12 @@ void Kludget::configure(QString cat)
 void Kludget::createInstance(QString instance)
 {
     client->createInstance(instance);
+
+    QString scriptObjectName = "_kludgetInstance" + instance;
+    QWebFrame *frame = window->view()->page()->mainFrame();
+    frame->addToJavaScriptWindowObject(scriptObjectName, client->getInstance(instance));
+    QString script = "Kludget." + scriptObjectName + "=" + scriptObjectName;
+    frame->evaluateJavaScript(script);
 }
 
 void Kludget::move(int x, int y)

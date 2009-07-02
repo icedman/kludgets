@@ -1,7 +1,7 @@
 #include "kapp.h"
 #include "kclient.h"
 #include "kserver.h"
-#include "hotkey.h"
+#include "khotkey.h"
 #include "kdocument.h"
 #include "config.h"
 #include "klog.h"

@@ -2,12 +2,16 @@
 <menu>
 <item action="Kludget.about()">About</item>
 <separator/>
-<item action="Kludget.createInstance()" filter="instance">Create Instance</item>
-<separator filter="instance"/>
-<item action="Kludget.screenshot()" filter="debug">Screenshot</item>
-<item action="Kludget.inspect()" filter="debug">Inspect</item>
-<item action="Kludget.reload()" filter="debug">Reload</item>
-<separator filter="debug"/>
+<item action="Kludget.createInstance()">Create Instance</item>
+<separator/>
+
+<custom_menu/>
+
+<item action="Kludget.screenshot()">Screenshot</item>
+<item action="Kludget.inspect()">Inspect</item>
+<item action="Kludget.reload()">Reload</item>
+<separator/>
+
 <item action="Kludget.configure()">Widget Preferences</item>
 <separator/>
 <item action="Kludget.hide()">Hide Widget</item>
