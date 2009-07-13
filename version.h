@@ -3,7 +3,7 @@
 
 #define KLUDGET_MAJOR_VERSION "0.9"
 #define KLUDGET_MINOR_VERSION "4"
-#define KLUDGET_BUILD_DATE "20090702"
+#define KLUDGET_BUILD_DATE "20090709"
 #define KLUDGET_APPLICATION "Kludget Engine"
 #define KLUDGET_NAME "Kludgets"
 #define KLUDGET_AUTHOR "kludgeteer"

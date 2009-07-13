@@ -1,6 +1,6 @@
 * {
 	cursor:default;
-	-webkit-nbsp-mode: space;
+	-webkit-user-select:text;
 }
 
 button, input, select, textarea, {
@@ -13,7 +13,9 @@ select {
 
 input[type="text"],
 input[type="password"],
+input[type="search"],
 input[type="searchfield"],
+select,
 textarea {
 	border: 1px solid #ddd;
 	padding: 3px;

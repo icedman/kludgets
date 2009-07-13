@@ -8,6 +8,7 @@
 #include "kutil.h"
 #include "klog.h"
 #include "kipc.h"
+#include "kapp.h"
 
 #include <QWebSettings>
 #include <QApplication>
@@ -27,13 +28,13 @@ bool KClient::initialize(const QString& path)
 {
     KLog::instance()->loadSettings();
 
-    loadCustomFonts(QApplication::applicationDirPath() + "/widgets/resources/fonts");
+    loadFonts(QApplication::applicationDirPath() + "/widgets/resources/fonts");
 
     KNetwork::instance();
 
+    // run package
     QFileInfo fileInfo(path);
     QString appPath = fileInfo.absoluteFilePath();
-
     if (QFile::exists(appPath))
     {
         if (!fileInfo.isDir())
@@ -41,24 +42,20 @@ bool KClient::initialize(const QString& path)
             QString suffix = fileInfo.suffix();
             if (suffix == "zip" || suffix == "kludget")
             {
-                return installFromArchive(appPath);
+                if (loadPackage(appPath))
+                {
+                    run();
+                    return true;
+                }
             }
             return false;
         }
     }
     else
     {
-        QUrl url(path);
-        if (url.scheme() == "http")
-        {
-            appPath = path;
-        }
-        else
-        {
-            KLog::log("KClient::initialize failure");
-            KLog::log(QString("path not found: ") + appPath);
-            return false;
-        }
+        KLog::log("KClient::initialize failure");
+        KLog::log(QString("path not found: ") + appPath);
+        return false;
     }
 
     // run directly from the directory
@@ -95,7 +92,7 @@ bool KClient::run()
     KNetwork::instance()->setLocaleFiles(&localefiles);
 
     // fonts and plugins
-    loadCustomFonts(info.path + "/fonts");
+    loadFonts(info.path + "/fonts");
     loadPlugins(info.path + "/plugins");
 
     // enable
@@ -107,7 +104,6 @@ bool KClient::run()
     KIPC::setProcessId(info.id, (int)QApplication::applicationPid());
 
     QApplication::setQuitOnLastWindowClosed(false);
-
     return processInstanceQueue();
 }
 
@@ -116,24 +112,24 @@ void KClient::shutdown()
     KIPC::destroyPIDFile(info.id);
 }
 
-bool KClient::installPackage(const QString& path)
+bool KClient::registerPackage(const QString& path)
 {
     KClient client;
-    client.installFromArchive(path, false);
-    return true;
+    return client.loadPackage(path);
 }
 
-bool KClient::installFromArchive(const QString& path, bool prompt)
+bool KClient::loadPackage(const QString& path)
 {
     QFileInfo fileInfo(path);
     QString suffix = fileInfo.suffix();
 
-    QString out = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets/installed/") + fileInfo.fileName() + QString("/");
+    QString out = KApp::temporaryDirPath() + "/" + fileInfo.fileName() + "/";
     out.replace("." + suffix, "");
 
     Util::extract(path, out);
 
     KludgetInfo tmp(out, "");
+    tmp.load();
 
     if (tmp.configFile == "")
     {
@@ -147,22 +143,7 @@ bool KClient::installFromArchive(const QString& path, bool prompt)
         }
     }
 
-    return installWidget(tmp.path, prompt);
-}
-
-bool KClient::installFromDirectory(const QString& path, bool prompt)
-{
-    QString dest = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets/installed/") + QDir(path).dirName();
-    if (Util::copyDir(path, dest, true))
-    {
-        return installWidget(QDir(dest).absolutePath(), prompt);
-    }
-    return false;
-}
-
-bool KClient::installWidget(const QString& path, bool prompt)
-{
-    info = KludgetInfo(path, "");
+    info = KludgetInfo(tmp.path, "");
     info.load();
 
     // setup storage dir
@@ -172,6 +153,8 @@ bool KClient::installWidget(const QString& path, bool prompt)
     doc.setValue("kludget/name", info.name);
     doc.setValue("kludget/id", info.id);
     doc.setValue("kludget/path", info.path);
+    doc.setValue("kludget/package", path);
+    doc.setValue("kludget/storage", QDir(info.storagePath).absolutePath());
     doc.setValue("kludget/enabled", "1");
     doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
@@ -200,8 +183,7 @@ bool KClient::installWidget(const QString& path, bool prompt)
         access.setValue("kludget/access/system", "1");
     access.saveDocument(info.storagePath + "/access.xml");
 
-    if (!prompt)
-        return true;
+    return true;
 
     InstallWindow *installWindow = new InstallWindow(info);
     installWindow->setAttribute(Qt::WA_DeleteOnClose);
@@ -217,12 +199,10 @@ bool KClient::installWidget(const QString& path, bool prompt)
 
     connect(installWindow, SIGNAL(saved()), this, SLOT(run()));
     connect(installWindow, SIGNAL(cancelled()), this, SLOT(exit()));
-
-    QApplication::setQuitOnLastWindowClosed(true);
     return true;
 }
 
-void KClient::loadCustomFonts(const QString &path)
+void KClient::loadFonts(const QString &path)
 {
     QDirIterator it(path);
     while (it.hasNext())

@@ -1,14 +1,19 @@
 #include "config.h"
 #include "kdocument.h"
+#include "kutil.h"
 
 #include <QApplication>
-#include <QXmlQuery>
+#include <QTemporaryFile>
 #include <QUrl>
 #include <QDir>
 #include <QFile>
 #include <QBuffer>
 #include <QFileInfo>
 #include <QStringList>
+
+#if defined(QT_XMLPATTERNS_LIB)
+#include <QXmlQuery>
+#endif
 
 bool KDocument::openDocument(const QString &path)
 {
@@ -44,6 +49,38 @@ bool KDocument::saveDocument(const QString &path)
 
 bool KDocument::transform(const QString &xslPath)
 {
+#if !defined(QT_XMLPATTERNS_LIB)
+    QTemporaryFile tempXsl;
+    QTemporaryFile tempContent;
+
+    QFile file;
+    file.setFileName(xslPath);
+    if (!file.open(QIODevice::ReadOnly))
+        return false;
+
+    tempXsl.open();
+    tempXsl.setAutoRemove(false);
+    tempXsl.write(file.readAll());
+    tempXsl.close();
+
+    tempContent.open();
+    tempContent.setAutoRemove(false);
+    tempContent.write(toString().toUtf8());
+    tempContent.close();
+
+    QStringList args;
+    args.push_back(tempXsl.fileName());
+    args.push_back(tempContent.fileName());
+
+    QString content = Util::execute("xmlpatterns", args);
+    qDebug("%s\n", qPrintable(content));
+    setContent(content);
+
+    tempXsl.remove();
+    tempContent.remove();
+
+#else
+
     QFile xsl;
     xsl.setFileName(xslPath);
     if (!xsl.open(QIODevice::ReadOnly))
@@ -60,7 +97,7 @@ bool KDocument::transform(const QString &xslPath)
     query.setQuery(&xsl);
     query.evaluateTo(&content);
     setContent(content);
-
+#endif
     // qDebug("%s", qPrintable(content));
     return true;
 

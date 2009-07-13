@@ -28,6 +28,8 @@ public:
         QString id;
         QString name;
         QString path;
+        QString package;
+        QString storage;
         int pid;
         bool active;
         bool enabled;
@@ -63,10 +65,11 @@ Q_SLOTS:
     void processWidgetQueue();
     void runWidget(const QString &path);
     void openPackage();
+    void trayActivated(QSystemTrayIcon::ActivationReason r);
     void showMenu();
     void showWidget(int);
     void showAllWidgets();
-    void uninstallWidgets();
+    void clearRecentPackages();
     void configure();
     void aboutKludget();
     void goToWidgetsSite();

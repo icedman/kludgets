@@ -81,7 +81,7 @@ KNetwork* KNetwork::instance()
 
 void KNetwork::loadSettings()
 {
-#if 0
+#if 1
 
     QNetworkDiskCache *diskCache = new QNetworkDiskCache(this);
     QString location = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);

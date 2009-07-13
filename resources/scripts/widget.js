@@ -1,3 +1,14 @@
+Kludget.onshow = function() {}
+Kludget.onhide = function() {}
+Kludget.onstartdrag = function() {}
+Kludget.onenddrag = function() {}
+Kludget.onremove = function() {}
+Kludget.onsettingschanged = function() {}
+Kludget.onurlreceived = function(url) {}
+
+/*
+Apple Dashboard
+*/
 
 Kludget.setPreferenceForKey = function(value, key)
 {
@@ -48,19 +59,28 @@ Kludget.openApplication = function(path)
   alert("app: " + path);
 }
 
-Kludget.getInstance = function(id) {
-  if (!Kludget["_kludgetInstance" + id])
-    Kludget.createInstance(id);
-  return Kludget["_kludgetInstance" + id];
+/*
+Opera
+*/
+
+Kludget.showNotification = function(n, fn)
+{
+  alert(n);
 }
 
-Kludget.onshow = function() {}
-Kludget.onhide = function() {}
-Kludget.onstartdrag = function() {}
-Kludget.onenddrag = function() {}
-Kludget.onremove = function() {}
-Kludget.onsettingschanged = function() {}
-Kludget.onurlreceived = function(url) {}
+Kludget.getAttention = function()
+{
+  Kludget.show();
+  for(var i = 0; i<3; i++)
+  {
+    setTimeout("Kludget.hide()", 100 + (i*200));
+    setTimeout("Kludget.show()", 200 + (i*200));
+  }
+}
+
+/*
+Kludgets Internal
+*/
 
 Kludget.dispatchMouseLeave = function()
 {
@@ -71,6 +91,10 @@ Kludget.dispatchMouseLeave = function()
       false, false);
   document.body.dispatchEvent(evt);
 }
+
+/*
+Aliases
+*/
 
 window.kludget = Kludget;
 window.widget = Kludget;

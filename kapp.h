@@ -15,6 +15,7 @@ public:
     bool startHotKeyListener();
 #endif
 
+    static QString temporaryDirPath();
     static QString userAgent();
     static QString version();
 };

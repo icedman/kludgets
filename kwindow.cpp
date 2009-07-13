@@ -14,7 +14,6 @@ KWindow::KWindow() :
         alpha(255),
         snap(false),
         zoom(1),
-        prevVisibility(false),
         autoSized(true)
 {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -87,7 +86,7 @@ void KWindow::onGeometryChangeRequested(const QRect & rect)
 
 void KWindow::onUpdate()
 {
-    if (!isVisible() && !prevVisibility)
+    if (!isVisible())
         return ;
 
     if (isDragging() && !isIgnoreDrag())
@@ -106,15 +105,6 @@ void KWindow::onUpdate()
 
         if (isAutoSize())
             autoSize();
-    }
-
-    if (prevVisibility != isVisible())
-    {
-        if (isVisible())
-            emit onShow();
-        else
-            emit onHide();
-        prevVisibility = isVisible();
     }
 }
 
@@ -239,10 +229,7 @@ void KWindow::setupWindow()
     pal.setBrush(QPalette::Base, Qt::transparent);
     webView->setPalette(pal);
 
-    if (1)
-    {
-        setAttribute(Qt::WA_TranslucentBackground, true);
-    }
+    setAttribute(Qt::WA_TranslucentBackground, true);
 
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
     webView->page()->mainFrame()->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);

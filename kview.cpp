@@ -58,7 +58,16 @@ void KView::paintEvent(QPaintEvent *ev)
 
         QPainter p;
         p.begin(this);
-        p.drawPixmap(0, 0, buffer);
+        p.drawImage(0, 0, buffer);
+
+#if 0
+
+        QImage blurred = buffer;
+        ImageUtil::blur(blurred, 1);
+        p.setOpacity(0.4);
+        p.drawImage(0, 0, blurred);
+#endif
+
         p.end();
 
         return ;
@@ -69,7 +78,6 @@ void KView::paintEvent(QPaintEvent *ev)
 
 void KView::contextMenuEvent(QContextMenuEvent* ev)
 {
-    return ;
     if (isFrozen())
         return ;
 
@@ -115,8 +123,11 @@ void KView::mousePressEvent(QMouseEvent *ev)
     allowDrag = !page()->dashboardRegionContains(ev->pos());
 #else
 
-    allowDrag = (ev->modifiers() & Qt::ControlModifier);
-#endif
+    allowDrag = ev->modifiers() & Qt::ControlModifier;
+#endif;
+
+    if (ev->button() == Qt::RightButton)
+        return ;
 
     if (allowDrag)
     {
@@ -233,7 +244,7 @@ void KView::setupBuffer()
 {
     if (isBuffered())
     {
-        buffer = QPixmap(width(), height());
+        buffer = QImage(width(), height(), QImage::Format_RGB32);
         buffer.fill(Qt::transparent);
         update();
     }
@@ -298,7 +309,7 @@ void KView::screenshot(const QString &path)
     }
 }
 
-void KView::paintToBuffer(QPixmap *buf)
+void KView::paintToBuffer(QImage *buf)
 {
     QWebFrame *frame = page()->mainFrame();
     if (!frame)
@@ -315,7 +326,6 @@ void KView::paintToBuffer(QPixmap *buf)
     p.begin(buf);
 
     // clear
-    p.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
     p.setCompositionMode(QPainter::CompositionMode_Source);
     p.fillRect(geometry(), Qt::transparent);
     p.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -323,7 +333,7 @@ void KView::paintToBuffer(QPixmap *buf)
     // background
     if (buf == &buffer)
     {
-        p.drawPixmap(0, 0, layers[0]);
+        p.drawImage(0, 0, layers[0]);
     }
 
     // body
@@ -332,7 +342,7 @@ void KView::paintToBuffer(QPixmap *buf)
     // foreground
     if (buf == &buffer)
     {
-        p.drawPixmap(0, 0, layers[1]);
+        p.drawImage(0, 0, layers[1]);
     }
 
     p.end();
@@ -342,16 +352,12 @@ void KView::paintToBuffer(QPixmap *buf)
         // apply image filter
         if (isGrayed())
         {
-            buffer = QPixmap::fromImage(ImageUtil::grayedImage(buffer.toImage()));
+            buffer = ImageUtil::grayedImage(buffer);
         }
         else if (isTinted())
         {
-            buffer = QPixmap::fromImage(ImageUtil::tintedImage(buffer.toImage(), tintColor(), (QPainter::CompositionMode)tintMode()));
+            buffer = ImageUtil::tintedImage(buffer, tintColor(), (QPainter::CompositionMode)tintMode());
         }
-
-        // set mask
-        if (!parent->testAttribute(Qt::WA_TranslucentBackground))
-            parent->setMask(buffer.mask());
     }
 }
 
@@ -362,19 +368,19 @@ void KView::renderLayer(int z)
 
     if (layers[z].width() != width() && layers[z].height() != height())
     {
-        layers[z] = QPixmap(width(), height());
+        layers[z] = QImage(width(), height(), QImage::Format_RGB32);
         layers[z].fill(Qt::transparent);
     }
 
     paintToBuffer(&layers[z]);
 }
 
-void KView::setTransitionLayer(const QPixmap pix)
+void KView::setTransitionLayer(const QImage pix)
 {
     layers[Transition] = pix;
 }
 
-QPixmap& KView::bufferImage()
+QImage& KView::bufferImage()
 {
     return buffer;
 }
@@ -470,7 +476,7 @@ void KView::updateTransition()
     double a1 = (double)transitionFrame / transitionLength;
     double a2 = 1 - ((double)transitionFrame / transitionLength);
 
-    buffer = QPixmap::fromImage(ImageUtil::blendImages(buffer.toImage(), a1, layers[2].toImage(), a2));
+    buffer = ImageUtil::blendImages(buffer, a1, layers[2], a2);
 
     emit bufferUpdated();
 }
