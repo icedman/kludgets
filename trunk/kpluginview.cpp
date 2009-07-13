@@ -1,4 +1,5 @@
 #include "kpluginview.h"
+#include "kview.h"
 
 KPluginView::KPluginView(KWindow *window, KView *webview) :
         parent(window),

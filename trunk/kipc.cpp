@@ -1,4 +1,5 @@
 #include "kipc.h"
+#include "kapp.h"
 
 #include <QFile>
 #include <QDir>
@@ -47,7 +48,7 @@ bool KIPC::setProcessId(const QString &kludgetId, int pid)
 
 QString KIPC::getPIDFile(const QString &kludgetId)
 {
-    return QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation)).absolutePath() + "/" + kludgetId + ".kludget.pid";
+	return KApp::temporaryDirPath() + "/" + kludgetId + ".kludget.pid";
 }
 
 void KIPC::destroyPIDFile(const QString &kludgetId)

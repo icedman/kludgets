@@ -56,7 +56,6 @@ void KPluginView::onUpdate()
                 rect.right - x(),
                 rect.bottom - y()),
             true);
-
         return ;
     }
 

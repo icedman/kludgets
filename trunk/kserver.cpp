@@ -56,7 +56,7 @@ bool KServer::initialize()
     {
         if ((*it).active && (*it).enabled)
         {
-            widgetQueue.push_back((*it).path);
+            widgetQueue.push_back((*it).package);
         }
         it++;
     }
@@ -66,7 +66,8 @@ bool KServer::initialize()
     connect(this, SIGNAL(selectInstalledWidget(QString)), this, SLOT(runWidget(QString)));
     connect(&installedWidgetsMapper, SIGNAL(mapped(QString)), this, SIGNAL(selectInstalledWidget(QString)));
 
-    connect(&trayIcon, SIGNAL(messageClicked()), this, SLOT(openPackage()));
+    // connect(&trayIcon, SIGNAL(messageClicked()), this, SLOT(openPackage()));
+    connect(&trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
 
     KNetwork *net = KNetwork::instance();
     connect(net, SIGNAL(finished(QNetworkReply*)), this, SLOT(onCheckDone(QNetworkReply*)));
@@ -112,18 +113,19 @@ void KServer::shutdown()
         int pid = (*it).pid;
         if (pid > 0)
             KIPC::closeProcess(pid);
-
         KIPC::destroyPIDFile((*it).id);
         it++;
     }
 
     hotKeyListener->deleteLater();
 
+    Util::deleteDir(KApp::temporaryDirPath());
     KLog::log("KServer::shutdown");
 }
 
 void KServer::sendMessageToAll(KIPC::Message msg)
 {
+    updateWidgetList();
     QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
     {
@@ -136,8 +138,6 @@ void KServer::sendMessageToAll(KIPC::Message msg)
 
 void KServer::loadDefaultWidgets()
 {
-    // todo: have this as an absolute list.. for security
-
     QDir directory(QApplication::applicationDirPath() + "/widgets/");
     QStringList files = directory.entryList(QDir::Files);
     QStringList::iterator fit = files.begin();
@@ -145,16 +145,16 @@ void KServer::loadDefaultWidgets()
     while (fit != files.end())
     {
         QString filePath = directory.absolutePath() + "/" + *fit;
-        // qDebug("%s", qPrintable(filePath));
         QFileInfo fileInfo(filePath);
         if (fileInfo.suffix() == "zip")
         {
-            KClient::installPackage(filePath);
+            KClient::registerPackage(filePath);
         }
         fit++;
     }
 
-    // todo: run widget manager
+    runWidget(directory.absolutePath() + "/com.kludgets.clock.zip");
+    runWidget(directory.absolutePath() + "/com.kludgets.calendar.zip");
 }
 
 void KServer::setupMenu()
@@ -196,9 +196,7 @@ void KServer::checkUpdate()
 
 void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
 {
-    updateWidgetList();
-
-#if 1 // defined(WIN32)
+#if defined(WIN32)
 
     if (hudScreens.size() > 0)
     {
@@ -208,6 +206,7 @@ void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
     {
         showHUD();
     }
+
 #else
     showAllWidgets();
 #endif
@@ -254,19 +253,18 @@ void KServer::updateWidgetList()
         widget.pid = 0;
         widget.name = doc.getValue("kludget/name", "");
         widget.path = doc.getValue("kludget/path", "");
+        widget.package = doc.getValue("kludget/package", "");
+        widget.storage = doc.getValue("kludget/storage", "");
         widget.enabled = (doc.getValue("kludget/enabled", "1").toInt() != 0);
         widget.active = false;
 
-        if (!QFile::exists(widget.path))
-            continue;
-
-        if (!QFile::exists(widget.path + "/kludget.xml"))
+        if (!QFile::exists(widget.package))
             continue;
 
         // has a running widget;
         if (widget.enabled)
         {
-            QDirIterator instDir(filePath);
+            QDirIterator instDir(widget.storage);
             while (instDir.hasNext())
             {
                 instDir.next();
@@ -319,6 +317,22 @@ void KServer::openPackage()
         runWidget(path);
 }
 
+void KServer::trayActivated(QSystemTrayIcon::ActivationReason r)
+{
+    if (r == QSystemTrayIcon::DoubleClick)
+    {
+        KLog::log("KServer::trayActivated");
+#if defined(WIN32)
+
+        showHUD();
+#else
+
+        showAllWidgets();
+#endif
+
+    }
+}
+
 void KServer::showMenu()
 {
     updateWidgetList();
@@ -344,7 +358,7 @@ void KServer::showMenu()
         {
             QAction *action = widgetsMenu.addAction((*it).name);
             connect(action, SIGNAL(triggered()), &installedWidgetsMapper, SLOT(map()));
-            installedWidgetsMapper.setMapping(action, (*it).path);
+            installedWidgetsMapper.setMapping(action, (*it).package);
             hasNonRunningWidgets = true;
         }
         it++;
@@ -353,7 +367,7 @@ void KServer::showMenu()
     if (hasNonRunningWidgets)
     {
         widgetsMenu.insertSeparator(0);
-        connect(widgetsMenu.addAction(QString("Clear this list")), SIGNAL(triggered()), this, SLOT(uninstallWidgets()));
+        connect(widgetsMenu.addAction(QString("Clear this list")), SIGNAL(triggered()), this, SLOT(clearRecentPackages()));
         trayMenu.addMenu(&widgetsMenu);
     }
 
@@ -397,14 +411,14 @@ void KServer::showAllWidgets()
     sendMessageToAll(KIPC::ShowWindow);
 }
 
-void KServer::uninstallWidgets()
+void KServer::clearRecentPackages()
 {
     QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
     {
         if (!(*it).active)
         {
-            QString path = (*it).path;
+            QString path = (*it).storage;
             Util::deleteDir(path);
         }
         it++;
@@ -413,9 +427,9 @@ void KServer::uninstallWidgets()
 
 void KServer::showHUD()
 {
-    QDesktopWidget desktop;
+    updateWidgetList();
 
-    sendMessageToAll(KIPC::HideWindow);
+    QDesktopWidget desktop;
 
     for (int i = 0; i < desktop.numScreens(); i++)
     {
@@ -428,7 +442,6 @@ void KServer::showHUD()
     }
 
     sendMessageToAll(KIPC::ShowHUD);
-    //QTimer::singleShot(800, this, SLOT(showAllWidgets()));
 }
 
 void KServer::hideHUD()

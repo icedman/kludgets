@@ -7,17 +7,47 @@
 
 #include <windows.h>
 
+void raiseWindow(HWND hWnd, bool raise = true)
+{
+    QWidget topMost;
+    if (!raise)
+    {
+        SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOREDRAW);
+    }
+    else
+    {
+        SetWindowPos(topMost.winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        //SetWindowPos(topMost.winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+        SetWindowPos(hWnd, topMost.winId(), 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_NOREDRAW);
+    }
+}
+
+void KWindow::moveToTop()
+{
+    raiseWindow(winId());
+}
+
+void KWindow::moveToBottom()
+{
+    lower();
+    raiseWindow(winId(), false);
+}
+
 void KWindow::updateWindowLevel(int l)
 {
+    if (l == 2)
+    {
+        lower();
+    }
+    else
+    {
+        raise();
+    }
+
     if (l == 1)
         SetWindowPos(winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     else
         SetWindowPos(winId(), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-
-    if (l == 2)
-        lower();
-    else
-        raise();
 }
 
 void KWindow::updateMouseIgnore(bool ignore)
@@ -37,31 +67,30 @@ bool KWindow::winEvent(MSG *message, long *result)
     {
     case KIPC::ShowHUD:
         {
+            if (!isVisible())
+                emit onShow();
             show();
-            updateWindowLevel(1);
+            moveToTop();
             updateMouseIgnore(false);
             return true;
         }
     case KIPC::HideHUD:
         {
-            lower();
+            moveToBottom();
             updateWindowLevel(windowZ);
             updateMouseIgnore(noMouse);
             return true;
         }
     case KIPC::ShowWindow:
         {
-            hide();
+            emit onShow();
             show();
-            SetForegroundWindow(winId());
-            if (windowZ == 2)
-                lower();
-            else
-                raise();
+            updateWindowLevel(windowZ);
             return true;
         }
     case KIPC::HideWindow:
         {
+            emit onHide();
             hide();
             return true;
         }

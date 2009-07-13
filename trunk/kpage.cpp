@@ -44,5 +44,7 @@ void KPage::javaScriptConsoleMessage(const QString& msg, unsigned int lineNumber
 
 QWebPage *KPage::createWindow(QWebPage::WebWindowType t)
 {
-    return QWebPage::createWindow(t);
+    qDebug("create!");
+    QWebView *w = new QWebView;
+    return w->page();
 }

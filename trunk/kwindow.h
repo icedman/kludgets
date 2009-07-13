@@ -43,6 +43,9 @@ public:
     double zoomFactor();
     void setZoomFactor(double f);
 
+    void moveToTop();
+    void moveToBottom();
+
     private
 Q_SLOTS:
     void onGeometryChangeRequested(const QRect & rect);
@@ -63,7 +66,6 @@ private:
     KView *webView;
     QTimer updateTimer;
 
-    bool prevVisibility;
     bool dragging;
     bool noMouse;
     bool noDrag;

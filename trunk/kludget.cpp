@@ -42,7 +42,6 @@ Kludget::Kludget(KClient *parent) :
     connect(window->view(), SIGNAL(contextMenuRequested()), this, SLOT(onContextMenu()));
     connect(window->view(), SIGNAL(urlReceived(const QUrl*)), this, SLOT(onUrlReceived(const QUrl*)));
     connect(window->view()->page(), SIGNAL(loadFinished(bool)), this, SLOT(show()));
-    //connect(window->view()->page()->mainFrame(), SIGNAL(initialLayoutCompleted ()), this, SLOT(show()));
     connect(window->view()->page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(onJavaScriptWindowObjectCleared()));
     connect(window->view()->page(), SIGNAL(frameCreated(QWebFrame*)), this, SLOT(onFrameCreated(QWebFrame*)));
 
@@ -75,6 +74,16 @@ Kludget* Kludget::create(KClient *client, const KludgetInfo &i)
 bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
 {
     info = i;
+
+#if 1
+
+    qDebug("path: %s", qPrintable(info.path));
+    qDebug("name: %s", qPrintable(info.name));
+    qDebug("config: %s", qPrintable(info.configFile));
+    qDebug("instance config: %s", qPrintable(info.instancePreferenceFile));
+    qDebug("storage: %s", qPrintable(info.storagePath));
+    qDebug("contentSrc: %s", qPrintable(info.contentSrc));
+#endif
 
     if (!QFile::exists(info.configFile))
     {
@@ -149,6 +158,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     webSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     webSettings->setAttribute(QWebSettings::PluginsEnabled, accessPlugins);
     webSettings->setUserStyleSheetUrl(QUrl("resource:style/widget.css"));
+    webSettings->setWebGraphic(QWebSettings::MissingImageGraphic, QPixmap());
 
     // network settings
     KNetwork *net = KNetwork::instance();
@@ -192,27 +202,16 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
             KLog::log(QString("content source not found. ") + info.contentSrc);
             return false;
         }
+
         window->view()->load(QUrl(QString("file:///") + info.contentSrc));
         KLog::log(QString("Kludget::load ") + info.id);
 
-        QString defaultPng = info.path + "/Default.png";
-        if (QFile::exists(defaultPng))
+        QString defaultBg = info.path + "/Default.png";
+        if (QFile::exists(defaultBg))
         {
-            //KLog::log("default.png exists");
-            //window->view()->setTransitionLayer(QPixmap(defaultPng));
+            //window->view()->setTransitionLayer(QImage(defaultBg));
         }
     }
-
-#if 0
-
-    qDebug("path: %s", qPrintable(info.path));
-    qDebug("name: %s", qPrintable(info.name));
-    qDebug("config: %s", qPrintable(info.configFile));
-    qDebug("instance config: %s", qPrintable(info.instancePreferenceFile));
-    qDebug("storage: %s", qPrintable(info.storagePath));
-    qDebug("contentSrc: %s", qPrintable(info.contentSrc));
-    qDebug("kludget created %s!" , qPrintable(info.instance));
-#endif
 
     return true;
 }
@@ -373,6 +372,7 @@ void Kludget::onPreferencesClosed()
 
 void Kludget::onContextMenu()
 {
+    onEvaluate("getSelection().empty()");
     contextMenu.popup(QCursor::pos());
 }
 
@@ -396,14 +396,12 @@ void Kludget::onUrlReceived(const QUrl *url)
 void Kludget::onSystemExecUpdate(long id)
 {
     QString obj = QString("_syscmd_") + QString::number(id);
-    //qDebug("onSystemExecUpdate: %s", qPrintable(obj));
     onEvaluate(obj + ".update()");
 }
 
 void Kludget::onSystemExecFinish(long id)
 {
     QString obj = QString("_syscmd_") + QString::number(id);
-    //qDebug("onSystemExecFinish: %s", qPrintable(obj));
     onEvaluate(obj + ".onfinish()");
 }
 
@@ -418,22 +416,13 @@ void Kludget::screenshot(QString path)
 
 void Kludget::show()
 {
-    /*
-       if (firstShow)
-       {
-           window->view()->setTransition(KView::FirstShow);
-           window->view()->setFrozen(true);
-           performTransition();
-           firstShow = false;
-       }
-    */
-
-    window->raise();
+    onShow();
     window->show();
 }
 
 void Kludget::hide()
 {
+    onHide();
     window->hide();
 }
 
@@ -442,14 +431,10 @@ void Kludget::close()
     window->hide();
     window->close();
 
-    if (1)
-    {
-        // forcefully remove preference file
-        settings->clear();
-        settings->setPath("");
-        QFile::remove
-            (info.instancePreferenceFile);
-    }
+#if 1
+    // forcefully remove preference file
+    settings->clear();
+#endif
 
     onRemove();
 }
@@ -518,12 +503,6 @@ void Kludget::configure(QString cat)
 void Kludget::createInstance(QString instance)
 {
     client->createInstance(instance);
-
-    QString scriptObjectName = "_kludgetInstance" + instance;
-    QWebFrame *frame = window->view()->page()->mainFrame();
-    frame->addToJavaScriptWindowObject(scriptObjectName, client->getInstance(instance));
-    QString script = "Kludget." + scriptObjectName + "=" + scriptObjectName;
-    frame->evaluateJavaScript(script);
 }
 
 void Kludget::move(int x, int y)
@@ -598,7 +577,5 @@ void Kludget::prepareForTransition(QString transition)
 
 void Kludget::performTransition()
 {
-    //qDebug("perfromTransition");
-
     window->view()->beginTransition();
 }

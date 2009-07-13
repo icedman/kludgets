@@ -8,6 +8,7 @@
 #include "version.h"
 
 #include <QDesktopServices>
+#include <QDir>
 
 KApp::KApp(int argc, char *argv[]) :
         QApplication(argc, argv)
@@ -17,7 +18,7 @@ KApp::KApp(int argc, char *argv[]) :
     setQuitOnLastWindowClosed(false);
 
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets")).mkdir("installed");
+    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("temp");
 }
 
 bool KApp::startClient(const QString &path)
@@ -69,4 +70,9 @@ QString KApp::userAgent()
 QString KApp::version()
 {
     return QString(KLUDGET_MAJOR_VERSION) + "." + KLUDGET_MINOR_VERSION;
+}
+
+QString KApp::temporaryDirPath()
+{
+    return QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).absolutePath() + "/temp";
 }

@@ -16,6 +16,8 @@ public:
     KPluginView(KWindow *window, KView *webview);
     void closeEvent(QCloseEvent *ev);
 
+    QRegion region();
+
     static bool findAndHostPlugins(KWindow *window, KView *webview);
 
     private
@@ -29,6 +31,7 @@ private:
     QTimer updateTimer;
     QTime lastUpdate;
     int windowId;
+
 };
 
 #endif // KPLUGINVIEW_H

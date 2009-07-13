@@ -8,6 +8,7 @@
 #include <QWebPage>
 #include <QWebFrame>
 
+class KPluginView;
 class KWindow;
 class KView : public QWebView
 {
@@ -42,12 +43,12 @@ public:
     void dragEnterEvent(QDragEnterEvent *);
     void dropEvent(QDropEvent *);
 
-    void paintToBuffer(QPixmap *buf = 0);
+    void paintToBuffer(QImage *buf = 0);
     bool isBuffered();
     void setBuffered(bool);
     void setupBuffer();
     void renderLayer(int z);
-    void setTransitionLayer(const QPixmap pix);
+    void setTransitionLayer(const QImage pix);
 
     void setFrozen(bool);
     bool isFrozen();
@@ -68,7 +69,7 @@ public Q_SLOTS:
     bool beginTransition();
     void endTransition();
 
-    QPixmap &bufferImage();
+    QImage &bufferImage();
 
 private:
 
@@ -83,11 +84,11 @@ private:
     QColor tint;
     int tintCompositionMode;
 
-    QPixmap buffer;
+    QImage buffer;
     bool buffered;
     bool dirtyBuffer;
     QTimer updateTimer;
-    QPixmap layers[3];
+    QImage layers[3];
 
     QPoint lastPos;
     QPoint dragStartPos;
