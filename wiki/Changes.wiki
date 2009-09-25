@@ -2,6 +2,20 @@
 
 = Changes =
 
+== Beta Version 0.9.6 2009-09-24 ==
+
+  * fixed widget links to open external brower
+  * compiled back with "full" Qt support
+  * ships with openssl libraries
+  * kludget.xml now supports online or web widgets by specifying a url in content/src
+  * kludget.xml now supports inline html by specifying content/html
+
+== Beta Version 0.9.5 2009-08-01 ==
+
+  * compiled with a "lean" version of Qt
+  * ships with all Qt image formats
+  * ships with phonon (audio, video) support. this needs testing
+
 == Beta Version 0.9.4 2009-07-09 ==
 
   * several minor tweaks under the hood
