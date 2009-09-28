@@ -51,6 +51,11 @@ HEADERS += config.h \
            kview.h \
            kwindow.h \
            prefwindow.h \
+           skulpture.h \
+           skulpture_p.h \
+           sk_effects.h \
+           sk_factory.h \
+           theme.h \
            version.h
            
 SOURCES += installwindow.cpp \
@@ -74,6 +79,8 @@ SOURCES += installwindow.cpp \
            kview.cpp \
            kwindow.cpp \
            main.cpp \
-           prefwindow.cpp
+           prefwindow.cpp \
+           skulpture.cpp \
+           theme.cpp
            
 RESOURCES += resources.qrc

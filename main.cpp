@@ -3,12 +3,15 @@
 #include "kclient.h"
 #include "kserver.h"
 #include "kutil.h"
+#include "theme.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {    
     KApp app(argc, argv);
+
+	Theme::loadTheme("skulpture");
 
     if (argc > 1)
     {

@@ -24,6 +24,36 @@ public:
     }
 };
 
+class PrefTextArea : public PreferenceWidget
+{
+public:
+
+    PrefTextArea(const Preference &pref) : data(new QTextEdit())
+    {
+        setValue(pref.value);
+        addWidget(data);
+
+        if (pref.width > 0)
+        {
+            data->setMaximumWidth(pref.width);
+        }
+    }
+
+    QString getValue()
+    {
+        return data->toPlainText();
+    }
+
+    void setValue(const QString &q)
+    {
+        data->setPlainText(q);
+    }
+
+protected:
+
+    QTextEdit *data;
+};
+
 class PrefText : public PreferenceWidget
 {
 public:
@@ -468,6 +498,9 @@ PreferenceWidget* PreferenceWidget::create(const Preference &pref)
 {
     if (pref.type == "text")
         return new PrefText(pref);
+
+    if (pref.type == "textarea")
+        return new PrefTextArea(pref);
 
     if (pref.type == "separator")
         return new PrefSeparator(pref);

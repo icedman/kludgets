@@ -196,21 +196,34 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     if (loadPage)
     {
         window->hide();
+		QUrl url(QString("file:///%1").arg(info.contentSrc));
         if (!QFile::exists(info.contentSrc))
         {
-            KLog::log("Kludget::load fail");
-            KLog::log(QString("content source not found. ") + info.contentSrc);
-            return false;
-        }
-
-        window->view()->load(QUrl(QString("file:///") + info.contentSrc));
+			url = QUrl(info.contentSrc);
+			if (url.scheme().toLower() == "http")
+			{
+				window->view()->load(url);
+			} else if (info.contentHtml == "") {
+				KLog::log("Kludget::load fail");
+				KLog::log(QString("content source not found. ") + info.contentSrc);
+				return false;
+			}
+		}
+		
+		if (info.contentHtml != "")
+			window->view()->setHtml(info.contentHtml);
+		else
+			window->view()->load(url);
+		
         KLog::log(QString("Kludget::load ") + info.id);
 
+#if 0
         QString defaultBg = info.path + "/Default.png";
         if (QFile::exists(defaultBg))
         {
             //window->view()->setTransitionLayer(QImage(defaultBg));
         }
+#endif
     }
 
     return true;

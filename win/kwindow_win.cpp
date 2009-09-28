@@ -85,6 +85,7 @@ bool KWindow::winEvent(MSG *message, long *result)
         {
             emit onShow();
             show();
+			moveToTop();
             updateWindowLevel(windowZ);
             return true;
         }
