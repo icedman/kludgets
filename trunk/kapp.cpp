@@ -17,8 +17,12 @@ KApp::KApp(int argc, char *argv[]) :
     setApplicationName("Kludgets");
     setQuitOnLastWindowClosed(false);
 
+	qDebug(qPrintable(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
+
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
     QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("temp");
+
+	addLibraryPath(applicationDirPath() + "/plugins");
 }
 
 bool KApp::startClient(const QString &path)

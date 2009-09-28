@@ -35,24 +35,18 @@ bool KClient::initialize(const QString& path)
     // run package
     QFileInfo fileInfo(path);
     QString appPath = fileInfo.absoluteFilePath();
-    if (QFile::exists(appPath))
-    {
-        if (!fileInfo.isDir())
-        {
+    if (QFile::exists(appPath)) {
+        if (!fileInfo.isDir()) {
             QString suffix = fileInfo.suffix();
-            if (suffix == "zip" || suffix == "kludget")
-            {
-                if (loadPackage(appPath))
-                {
+            if (suffix == "zip" || suffix == "kludget") {
+                if (loadPackage(appPath)) {
                     run();
                     return true;
                 }
             }
             return false;
         }
-    }
-    else
-    {
+    } else {
         KLog::log("KClient::initialize failure");
         KLog::log(QString("path not found: ") + appPath);
         return false;
@@ -64,6 +58,21 @@ bool KClient::initialize(const QString& path)
     return run();
 }
 
+void KClient::setEnabled(bool enabled)
+{
+    KDocument doc;
+    doc.openDocument(info.storagePath + "/" + CONFIG_FILE);
+	doc.setValue("kludget/enabled", enabled ? QString("1") : QString("0"));
+    doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
+}
+
+bool KClient::isEnabled()
+{
+    KDocument doc;
+    doc.openDocument(info.storagePath + "/" + CONFIG_FILE);
+    return (doc.getValue("kludget/enabled", "1").toInt() != 0);
+}
+
 bool KClient::run()
 {
     if (KIPC::checkProcess(KIPC::getProcessId(info.id)))
@@ -72,13 +81,11 @@ bool KClient::run()
     bool created = false;
 
     QDirIterator it(info.storagePath);
-    while (it.hasNext())
-    {
+    while (it.hasNext()) {
         it.next();
 
         QString instanceFile(it.filePath() + "/" + PREFERENCE_FILE);
-        if (QFile::exists(instanceFile))
-        {
+        if (QFile::exists(instanceFile)) {
             instanceQueue.push_back(it.fileName());
             created = true;
         }
@@ -96,10 +103,7 @@ bool KClient::run()
     loadPlugins(info.path + "/plugins");
 
     // enable
-    KDocument doc;
-    doc.openDocument(info.storagePath + "/" + CONFIG_FILE);
-    doc.setValue("kludget/enabled", QString("1"));
-    doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
+	setEnabled(true);
 
     KIPC::setProcessId(info.id, (int)QApplication::applicationPid());
 
@@ -131,11 +135,9 @@ bool KClient::loadPackage(const QString& path)
     KludgetInfo tmp(out, "");
     tmp.load();
 
-    if (tmp.configFile == "")
-    {
+    if (tmp.configFile == "") {
         QDirIterator it(out);
-        while (it.hasNext())
-        {
+        while (it.hasNext()) {
             it.next();
             tmp = KludgetInfo(it.filePath(), "");
             if (tmp.load())
@@ -159,8 +161,7 @@ bool KClient::loadPackage(const QString& path)
     doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 
     KDocument config;
-    if (!config.openDocument(info.configFile))
-    {
+    if (!config.openDocument(info.configFile)) {
         KLog::log("KClient::installWidget failure");
         KLog::log("config file not found");
         return false;
@@ -183,14 +184,12 @@ bool KClient::loadPackage(const QString& path)
         access.setValue("kludget/access/system", "1");
     access.saveDocument(info.storagePath + "/access.xml");
 
-    return true;
-
+#if 0
     InstallWindow *installWindow = new InstallWindow(info);
     installWindow->setAttribute(Qt::WA_DeleteOnClose);
     installWindow->setWindowTitle("Installation - " + info.name);
 
-    if (local || network || plugins || system)
-    {
+    if (local || network || plugins || system) {
         installWindow->buildPreferenceMap(":resources/xml/accessPreferences.xml", true);
     }
 
@@ -199,14 +198,15 @@ bool KClient::loadPackage(const QString& path)
 
     connect(installWindow, SIGNAL(saved()), this, SLOT(run()));
     connect(installWindow, SIGNAL(cancelled()), this, SLOT(exit()));
+#endif
+
     return true;
 }
 
 void KClient::loadFonts(const QString &path)
 {
     QDirIterator it(path);
-    while (it.hasNext())
-    {
+    while (it.hasNext()) {
         it.next();
         QFontDatabase::addApplicationFont(it.filePath());
     }
@@ -218,10 +218,8 @@ void KClient::loadPlugins(const QString& path)
 Kludget* KClient::createInstance(const QString &instance)
 {
     QString inst = instance;
-    if (inst == "" && kludgets.length() > 0)
-    {
-        for (int i = 0; i < MAX_INSTANCES; i++)
-        {
+    if (inst == "" && kludgets.length() > 0) {
+        for (int i = 0; i < MAX_INSTANCES; i++) {
             inst = QString::number(i);
             if (!QFile(info.storagePath + "/" + inst + "/" + PREFERENCE_FILE).exists())
                 break;
@@ -246,8 +244,7 @@ Kludget* KClient::createInstance(const QString &instance)
 Kludget* KClient::getInstance(const QString &instance)
 {
     KludgetList::iterator it = kludgets.begin();
-    while (it != kludgets.end())
-    {
+    while (it != kludgets.end()) {
         Kludget *ik = (*it);
         if (ik->property("instance") == instance)
             return ik;
@@ -258,8 +255,7 @@ Kludget* KClient::getInstance(const QString &instance)
 
 bool KClient::processInstanceQueue()
 {
-    if (instanceQueue.size())
-    {
+    if (instanceQueue.size()) {
         QStringList::iterator it = instanceQueue.begin();
         createInstance((*it));
         instanceQueue.erase(it);
@@ -277,8 +273,8 @@ bool KClient::processInstanceQueue()
 void KClient::kludgetDestroyed(QObject *k)
 {
     kludgets.removeAll((Kludget*)k);
-    if (kludgets.length() == 0)
-    {
+    if (kludgets.length() == 0) {
+		setEnabled(false);
         exit();
     }
 }

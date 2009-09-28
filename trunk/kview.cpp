@@ -168,11 +168,14 @@ void KView::mouseReleaseEvent(QMouseEvent *ev)
     if (isFrozen())
         return ;
 
+	/*
+	// this breaks the menu on windows 7
     if (ev->button() == Qt::RightButton)
     {
-        emit contextMenuRequested();
+        //emit contextMenuRequested();
         return ;
     }
+	*/
 
     QWebView::mouseReleaseEvent(ev);
 }

@@ -25,6 +25,9 @@ public:
     Kludget* createInstance(const QString &instance = "");
     Kludget* getInstance(const QString &instance);
 
+	void setEnabled(bool enabled);
+	bool isEnabled();
+
 private:
     bool loadPackage(const QString& path);
     void loadFonts(const QString& path);
