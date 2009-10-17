@@ -2,6 +2,10 @@
 
 = Changes =
 
+== Beta Version 0.9.7 2009-10-17 ==
+  * fixed weather widget bug
+  * fixed screenshot
+
 == Beta Version 0.9.6 2009-09-24 ==
 
   * fixed widget links to open external brower
