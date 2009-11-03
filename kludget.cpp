@@ -15,6 +15,7 @@
 
 #include <QtXml>
 #include <QUrl>
+#include <QFileDialog>
 
 Kludget::Kludget(KClient *parent) :
         QObject(parent),
@@ -168,9 +169,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     // system settings
     system->setEnableCommands(accessSystem);
     if (engine.getValue("kludget/general/runInShell", "0").toInt())
-    {
         system->setShellPath(engine.getValue("kludget/general/shellPath", ""));
-    }
 
     // plugin
     if (!plugin.isLoaded() && accessPlugins && info.pluginPath != "")
@@ -196,33 +195,33 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     if (loadPage)
     {
         window->hide();
-		QUrl url(QString("file:///%1").arg(info.contentSrc));
+        QUrl url(QString("file:///%1").arg(info.contentSrc));
         if (!QFile::exists(info.contentSrc))
         {
-			url = QUrl(info.contentSrc);
-			if (url.scheme().toLower() == "http")
-			{
-				window->view()->load(url);
-			} else if (info.contentHtml == "") {
-				KLog::log("Kludget::load fail");
-				KLog::log(QString("content source not found. ") + info.contentSrc);
-				return false;
-			}
-		}
-		
-		if (info.contentHtml != "")
-			window->view()->setHtml(info.contentHtml);
-		else
-			window->view()->load(url);
-		
+            url = QUrl(info.contentSrc);
+            if (url.scheme().toLower() == "http")
+            {
+                window->view()->load(url);
+            }
+            else if (info.contentHtml == "")
+            {
+                KLog::log("Kludget::load fail");
+                KLog::log(QString("content source not found. ") + info.contentSrc);
+                return false;
+            }
+        }
+
+        if (info.contentHtml != "")
+            window->view()->setHtml(info.contentHtml);
+        else
+            window->view()->load(url);
+
         KLog::log(QString("Kludget::load ") + info.id);
 
 #if 0
         QString defaultBg = info.path + "/Default.png";
         if (QFile::exists(defaultBg))
-        {
             //window->view()->setTransitionLayer(QImage(defaultBg));
-        }
 #endif
     }
 
@@ -421,7 +420,14 @@ void Kludget::onSystemExecFinish(long id)
 void Kludget::screenshot(QString path)
 {
     if (path == "")
-        path = info.storagePath + "/screenshot." + info.id + ".png";
+    {
+        path = QFileDialog::getSaveFileName(0,
+                                            "Save Image",
+                                            QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                            "Image Files (*.png *.jpg *.bmp)");
+        if (path == "")
+            return;
+    }
     window->view()->screenshot(path);
 
     QDesktopServices::openUrl(QUrl(path));

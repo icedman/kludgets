@@ -308,7 +308,11 @@ void KView::screenshot(const QString &path)
     if (isBuffered())
     {
         KLog::log(QString("screenshot:") + path);
-        buffer.save(path);
+		QImage img(buffer.width(), buffer.height(), QImage::Format_ARGB32);
+		img.fill(Qt::white);
+		QPainter p(&img);
+		p.drawImage(0,0,buffer);
+        img.save(path);
     }
 }
 
