@@ -13,6 +13,7 @@
      <file>resources/scripts/widget.js</file>
      <file>resources/scripts/json2.js</file>
      <file>resources/scripts/debug.js</file>
+     <file>resources/scripts/macoswidgets.js</file>
      <file>resources/style/widget.css</file>
      <file>resources/xml/engine.xml</file>
      <file>resources/xml/widgetPreferences.xml</file>

@@ -92,6 +92,7 @@ Q_SLOTS:
     void createInstance(QString instance = "");
     void move(int x, int y);
     void resize(int w, int h);
+	void resizeAndMoveTo(int x, int y, int w, int h);
     void renderLayer(QString layer);
     void prepareForTransition(QString transition);
     void performTransition();

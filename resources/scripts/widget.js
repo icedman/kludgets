@@ -3,6 +3,7 @@ Kludget.onhide = function() {}
 Kludget.onstartdrag = function() {}
 Kludget.onenddrag = function() {}
 Kludget.onremove = function() {}
+Kludget.onsync = function() {}
 Kludget.onsettingschanged = function() {}
 Kludget.onurlreceived = function(url) {}
 
