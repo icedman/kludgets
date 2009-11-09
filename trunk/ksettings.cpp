@@ -126,9 +126,6 @@ QVariant KSettings::read(const QString &key, QVariant defaultValue)
 
 bool KSettings::write(const QString &key, QVariant value)
 {
-    if (key == "")
-        return false;
-
     if (settings && !readOnly)
     {
         settings->setValue(prependRootKey(key), value);

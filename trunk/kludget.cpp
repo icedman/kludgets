@@ -245,6 +245,9 @@ void Kludget::addJavaScriptWindowObjects(QWebFrame* frame)
     runJavaScriptFile(frame, ":resources/scripts/widget.js");
     runJavaScriptFile(frame, ":resources/scripts/debug.js");
 
+	// dashboard widget specific
+	runJavaScriptFile(frame, ":resources/scripts/macoswidgets.js");
+
     // add plugin here
     if (plugin.isLoaded())
     {
@@ -447,15 +450,16 @@ void Kludget::hide()
 
 void Kludget::close()
 {
+	onRemove();
+
     window->hide();
     window->close();
 
 #if 1
     // forcefully remove preference file
+	settings->sync();
     settings->clear();
 #endif
-
-    onRemove();
 }
 
 void Kludget::inspect()
@@ -534,6 +538,12 @@ void Kludget::resize(int w, int h)
     if (w > 0 && h > 0)
         window->setMinimumSize(QSize(w, h));
     window->resize(w, h);
+}
+
+void Kludget::resizeAndMoveTo(int x, int y, int w, int h)
+{
+	resize(w,h);
+	move(x,y);
 }
 
 int Kludget::opacity()
