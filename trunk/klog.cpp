@@ -33,7 +33,6 @@ void KLog::clear()
 void KLog::write(const QString &message, bool clear)
 {
     qDebug("%s", qPrintable(message));
-    return;
 
     if (!enabled())
         return ;
@@ -64,7 +63,7 @@ void KLog::loadSettings()
     KDocument doc;
     if (doc.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE))
     {
-        if (doc.getValue("kludget/general/enableLog", "0").toInt() != 1)
+        if (doc.getValue("kludget/general/enableLog", "1").toInt() != 1)
         {
             setEnabled(false);
         }

@@ -460,6 +460,7 @@ void Kludget::close()
 	settings->sync();
     settings->clear();
 #endif
+
 }
 
 void Kludget::inspect()

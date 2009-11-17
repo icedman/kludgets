@@ -3,6 +3,7 @@
 #include "kdocument.h"
 #include "klocalefilelist.h"
 #include "klog.h"
+#include "kutil.h"
 
 #include <QAuthenticator>
 #include <QDesktopServices>
@@ -107,7 +108,7 @@ void KNetwork::loadSettings()
             proxy.setHostName(host);
             proxy.setPort(port.toInt());
             proxy.setUser(doc.getValue("kludget/network/proxyUser", ""));
-            proxy.setPassword(doc.getValue("kludget/network/proxyPassword", ""));
+            proxy.setPassword(Util::decrypt(doc.getValue("kludget/network/proxyPassword", "")));
         }
     }
     setProxy(proxy);
@@ -139,9 +140,12 @@ void KNetwork::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenti
     auth->setPassword("");
 }
 
-QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& req, QIODevice* outgoingData)
+QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& request, QIODevice* outgoingData)
 {
+	QNetworkRequest req = request;
     QUrl url = req.url();
+	//req.setRawHeader("Accept-Encoding","gzip");
+	//req.setRawHeader("Accept-Encoding","identity");
 
     //qDebug("request:%s %s\n%s", qPrintable(url.scheme()), qPrintable(url.path()), qPrintable(base.path()));
 
@@ -208,5 +212,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& req,
         }
     }
 
-    return QNetworkAccessManager::createRequest(op, req, outgoingData);
+	QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
+	reply->ignoreSslErrors();
+	return reply;
 }

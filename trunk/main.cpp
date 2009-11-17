@@ -8,7 +8,7 @@
 #include <QApplication>
 
 int main(int argc, char *argv[])
-{    
+{
     KApp app(argc, argv);
 
 	// Theme::loadTheme("skulpture");

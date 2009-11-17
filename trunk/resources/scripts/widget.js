@@ -7,6 +7,15 @@ Kludget.onsync = function() {}
 Kludget.onsettingschanged = function() {}
 Kludget.onurlreceived = function(url) {}
 
+onshow = Kludget.onshow;
+onhide = Kludget.onhide;
+onstartdrag = Kludget.onstartdrag;
+onenddrag = Kludget.onenddrag;
+onremove = Kludget.onremove;
+onsync = Kludget.onsync;
+onsettingschanged = Kludget.onsettingschanged;
+onurlreceived = Kludget.onurlreceived;
+
 /*
 Apple Dashboard
 */
