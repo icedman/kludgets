@@ -29,7 +29,8 @@ win32* {
 }
 
 
-HEADERS += config.h \
+HEADERS += aes.h \
+		   config.h \
            installwindow.h \
            kapp.h \
            kclient.h \
@@ -51,14 +52,10 @@ HEADERS += config.h \
            kview.h \
            kwindow.h \
            prefwindow.h \
-           skulpture.h \
-           skulpture_p.h \
-           sk_effects.h \
-           sk_factory.h \
-           theme.h \
            version.h
            
-SOURCES += installwindow.cpp \
+SOURCES += aes.cpp \
+		   installwindow.cpp \
            kapp.cpp \
            kclient.cpp \
            kdocument.cpp \
@@ -79,8 +76,6 @@ SOURCES += installwindow.cpp \
            kview.cpp \
            kwindow.cpp \
            main.cpp \
-           prefwindow.cpp \
-           skulpture.cpp \
-           theme.cpp
+           prefwindow.cpp
            
 RESOURCES += resources.qrc

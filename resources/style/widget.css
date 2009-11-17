@@ -8,7 +8,8 @@ button, input, select, textarea, {
 }
 
 select {
-	font-size:8pt;
+	font-family:arial;
+	font-size:6pt;
 }
 
 input[type="text"],
@@ -18,7 +19,7 @@ input[type="searchfield"],
 select,
 textarea {
 	border: 1px solid #ddd;
-	padding: 3px;
+	padding: 2px;
 	background: #fff;
 	-webkit-border-radius: 4px;
 }

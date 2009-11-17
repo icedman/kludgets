@@ -3,6 +3,7 @@
 #include "kludget.h"
 #include "kapp.h"
 #include "klog.h"
+#include "kutil.h"
 
 #include <QDesktopServices>
 #include <QUrl>
@@ -196,4 +197,14 @@ KSystem *KSystem::getProcess(long pid)
 
     // qDebug("found %d!", pid);
     return sys;
+}
+
+QString KSystem::encrypt(QString s)
+{
+	return Util::encrypt(s);
+}
+
+QString KSystem::decrypt(QString s)
+{
+	return Util::decrypt(s);
 }
