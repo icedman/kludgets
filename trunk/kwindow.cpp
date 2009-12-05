@@ -106,6 +106,11 @@ void KWindow::onUpdate()
         if (isAutoSize())
             autoSize();
     }
+
+	//if (isMinimized())
+	{
+		showNormal();
+	}
 }
 
 void KWindow::setAutoSize(bool s)

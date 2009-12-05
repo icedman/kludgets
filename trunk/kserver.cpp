@@ -146,10 +146,8 @@ void KServer::loadDefaultWidgets()
     {
         QString filePath = directory.absolutePath() + "/" + *fit;
         QFileInfo fileInfo(filePath);
-        if (fileInfo.suffix() == "zip")
-        {
+        if (fileInfo.suffix() == "zip" || fileInfo.suffix() == "wgt")
             KClient::registerPackage(filePath);
-        }
         fit++;
     }
 
@@ -308,7 +306,7 @@ void KServer::openPackage()
     QString path = QFileDialog::getOpenFileName(0,
                    "Open widget package",
                    lastPath,
-                   "Zipped Package(*.zip);;Kludget Package(*.kludget)");
+                   "Zipped Package(*.zip);;Kludget Package(*.kludget)");//;;Widget Package(*.wgt)");
 
     if (QFile::exists(path))
         lastPath = QDir(path).absolutePath();

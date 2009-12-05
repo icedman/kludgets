@@ -11,11 +11,13 @@ widget.calculator.evaluateExpression = function(exp, param)
 	}
 	return eval(exp);
 }
+
 // weather
 widget.closestCity = function()
 {
 	return null;
 }
+
 // KeychainHelper (gmail widget)
 KeychainHelper = new Object;
 KeychainHelper.passwordForApplication = function(key, id)
@@ -46,7 +48,8 @@ KeyChainAccess.savePassword = function(user, passwd)
 }
 KeyChainAccess.setDebugOn = function(debug)
 {}
-// roundplugin
+
+// roundplugin (converter)
 RoundPlugin = new Object;
 RoundPlugin.logMessage = function(msg) { alert(msg); }
 RoundPlugin.getFormattedValue = function(v)
