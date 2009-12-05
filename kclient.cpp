@@ -38,7 +38,7 @@ bool KClient::initialize(const QString& path)
     if (QFile::exists(appPath)) {
         if (!fileInfo.isDir()) {
             QString suffix = fileInfo.suffix();
-            if (suffix == "zip" || suffix == "kludget") {
+            if (suffix == "zip" || suffix == "kludget" || suffix == "wgt") {
                 if (loadPackage(appPath)) {
                     run();
                     return true;

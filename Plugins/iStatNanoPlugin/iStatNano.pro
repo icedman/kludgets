@@ -7,7 +7,7 @@ INCLUDEPATH += .
 QT += webkit
 
 win32* {
-    DESTDIR = "C:\Documents and Settings\marvin\Local Settings\Application Data\MindHyve\Kludgets\widgets\installed\istatnano\iStat nano.wdgt\iStatNano.bundle\Contents\Windows"
+    #DESTDIR = "C:\Documents and Settings\marvin\Local Settings\Application Data\MindHyve\Kludgets\widgets\installed\istatnano\iStat nano.wdgt\iStatNano.bundle\Contents\Windows"
     LIBS += Setupapi.lib
 }
 
