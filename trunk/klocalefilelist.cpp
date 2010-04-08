@@ -43,7 +43,6 @@ bool LocaleFileList::localized(const QString &file, QString &localized)
 
 void LocaleFileList::addDirectory(const QString &path)
 {
-    //qDebug("add locale dir: %s", qPrintable(path));
     QDir directory(path);
     QStringList dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
     QStringList::iterator dit = dirs.begin();
@@ -61,7 +60,6 @@ void LocaleFileList::addDirectory(const QString &path)
         QString pathName = fullPath;
         pathName.replace(baseLangPath + "/", "");
         map.insert(basePath + "/" + pathName, fullPath);
-        //qDebug("add locale file:\n%s\n%s", qPrintable(pathName), qPrintable(fullPath));
         fit++;
     }
 }

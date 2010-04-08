@@ -14,8 +14,11 @@ void KServer::updateSystemSettings()
     if (settings->read("general/runAtStartup", 0).toInt() != 0)
     {
         TCHAR szRunPath[MAX_PATH];
-        int len = QApplication::applicationFilePath().toWCharArray(szRunPath);
+		QString runPath = QString("\"%1\"").arg(QApplication::applicationFilePath());
+		runPath.replace("/","\\");
+        int len = runPath.toWCharArray(szRunPath);
         szRunPath[len] = 0;
+		
         reg.WriteString(_T("KludgetEngine"), szRunPath);
     }
     else

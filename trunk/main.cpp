@@ -9,6 +9,12 @@
 
 int main(int argc, char *argv[])
 {
+#if 1
+	QApplication::setGraphicsSystem("software");
+#else
+	QApplication::setGraphicsSystem("opengl");
+#endif
+
     KApp app(argc, argv);
 
 	// Theme::loadTheme("skulpture");
