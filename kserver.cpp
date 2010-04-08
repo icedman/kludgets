@@ -158,7 +158,6 @@ void KServer::loadDefaultWidgets()
 void KServer::setupMenu()
 {
     connect(&trayMenu, SIGNAL(aboutToShow()), this, SLOT(showMenu()));
-
     trayIcon.setIcon(QIcon(":resources/images/windows.png"));
     trayIcon.setContextMenu(&trayMenu);
     trayIcon.show();
