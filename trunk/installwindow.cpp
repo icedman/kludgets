@@ -36,11 +36,11 @@ void InstallWindow::createHeader()
     view->setHtml(about.toString(), QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/resources/"));
     layout->addWidget(view);
 
-	/*
-	QString url = about.getValue("widget/about/url","");
-	if (url !=  "")
-		QDesktopServices::openUrl(QUrl(url));
-	*/
+    /*
+    QString url = about.getValue("widget/about/url","");
+    if (url !=  "")
+    	QDesktopServices::openUrl(QUrl(url));
+    */
 
     QPalette pal = palette();
     pal.setBrush(QPalette::Background, Qt::white);

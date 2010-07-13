@@ -62,7 +62,7 @@ void KClient::setEnabled(bool enabled)
 {
     KDocument doc;
     doc.openDocument(info.storagePath + "/" + CONFIG_FILE);
-	doc.setValue("kludget/enabled", enabled ? QString("1") : QString("0"));
+    doc.setValue("kludget/enabled", enabled ? QString("1") : QString("0"));
     doc.saveDocument(info.storagePath + "/" + CONFIG_FILE);
 }
 
@@ -103,7 +103,7 @@ bool KClient::run()
     loadPlugins(info.path + "/plugins");
 
     // enable
-	setEnabled(true);
+    setEnabled(true);
 
     KIPC::setProcessId(info.id, (int)QApplication::applicationPid());
 
@@ -274,7 +274,7 @@ void KClient::kludgetDestroyed(QObject *k)
 {
     kludgets.removeAll((Kludget*)k);
     if (kludgets.length() == 0) {
-		setEnabled(false);
+        setEnabled(false);
         exit();
     }
 }

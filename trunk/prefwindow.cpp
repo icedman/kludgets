@@ -411,7 +411,7 @@ protected:
 class PrefColor : public PreferenceWidget
 {
 
-class ColorBox : public QWidget
+    class ColorBox : public QWidget
     {
     public:
         void paintEvent(QPaintEvent * /* event */)

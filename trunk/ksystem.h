@@ -26,8 +26,8 @@ Q_SLOTS:
     void openURL(QString url);
     int execute(QString cmd);
     void close(long pid = 0);
-	QString encrypt(QString s);
-	QString decrypt(QString s);
+    QString encrypt(QString s);
+    QString decrypt(QString s);
 
     void write(QString string, long pid = 0);
     void cancel(long pid = 0, int wait = 0);

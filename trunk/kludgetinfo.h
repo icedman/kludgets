@@ -31,7 +31,7 @@ public:
     int width;
     int height;
     QString contentSrc;
-	QString contentHtml;
+    QString contentHtml;
 };
 
 #endif // KLUDGETINFO_H

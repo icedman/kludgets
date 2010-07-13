@@ -42,7 +42,10 @@ public:
     bool initialize();
     void shutdown();
 
-    QList<Widget>* widgets() { updateWidgetList(); return &widgetList; }
+    QList<Widget>* widgets() {
+        updateWidgetList();
+        return &widgetList;
+    }
 
     void showHUD();
     void hideHUD();
@@ -101,6 +104,7 @@ private:
     HotKey *hotKeyListener;
     QTimer updateTimer;
     KIPC ipc;
+    KIPCServer ipcServer;
 };
 
 #endif // KLUDGETSERVER_H

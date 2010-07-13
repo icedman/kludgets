@@ -129,7 +129,7 @@ bool KSettings::write(const QString &key, QVariant value)
     if (settings && !readOnly)
     {
         settings->setValue(prependRootKey(key), value);
-		sync();
+        sync();
         return true;
     }
 
@@ -194,9 +194,9 @@ QString KSettings::prependRootKey(const QString &k)
             key = rootKey + "/" + k;
         }
     }
-	key.replace("@","");
-	//key.replace(":","");
-	//key.replace(".","");
+    key.replace("@","");
+    //key.replace(":","");
+    //key.replace(".","");
     return key.replace(" ", "");
 }
 
@@ -217,5 +217,5 @@ void KSettings::clear()
         return ;
 
     QFile::remove
-        (settingsPath);
+    (settingsPath);
 }

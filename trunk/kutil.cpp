@@ -95,7 +95,7 @@ bool Util::deleteDir(const QString &source)
     for (f = files.begin(); f != files.end(); ++f)
     {
         QFile::remove
-            (directory.path() + "/" + (*f));
+        (directory.path() + "/" + (*f));
     }
 
     QString dir = directory.dirName();
@@ -162,43 +162,43 @@ QString xorString(const QString &source, const QString &hash)
 
 Aarni::AES* aes()
 {
-	return 0;
-	static Aarni::AES a;
-	static bool init = false;
-	if (!init)
-	{
-		if (a.init(QByteArray(AES_KEY), QByteArray(AES_TWEAK)) != 0)
-			return 0;
-	}
-	return &a;
+    return 0;
+    static Aarni::AES a;
+    static bool init = false;
+    if (!init)
+    {
+        if (a.init(QByteArray(AES_KEY), QByteArray(AES_TWEAK)) != 0)
+            return 0;
+    }
+    return &a;
 }
 
 QString Util::encrypt(const QString &source)
 {
-	Aarni::AES *a = aes();
-	if (a)
-	{
-		QString s = source + XOR_HASH1;
-		QByteArray out;
-		int res = a->encrypt(s.toAscii().data(), out);
-		qDebug("encrypt: %d", res);
-		return out;
-	}
+    Aarni::AES *a = aes();
+    if (a)
+    {
+        QString s = source + XOR_HASH1;
+        QByteArray out;
+        int res = a->encrypt(s.toAscii().data(), out);
+        qDebug("encrypt: %d", res);
+        return out;
+    }
     return xorString(xorString(source, XOR_HASH1), XOR_HASH2);
 }
 
 QString Util::decrypt(const QString &source)
 {
-	Aarni::AES *a = aes();
-	if (a)
-	{
-		QByteArray out;
-		int res = a->decrypt(source.toAscii().data(), out);
-		qDebug("decrypt: %d", res);
-		QString tmp = out;
-		tmp.replace(XOR_HASH1, "");
-		return tmp;
-	}
+    Aarni::AES *a = aes();
+    if (a)
+    {
+        QByteArray out;
+        int res = a->decrypt(source.toAscii().data(), out);
+        qDebug("decrypt: %d", res);
+        QString tmp = out;
+        tmp.replace(XOR_HASH1, "");
+        return tmp;
+    }
     return xorString(xorString(source, XOR_HASH2), XOR_HASH1);
 }
 

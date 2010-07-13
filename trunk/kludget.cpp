@@ -49,6 +49,7 @@ Kludget::Kludget(KClient *parent) :
     connect(this, SIGNAL(evaluate(const QString &)), this, SLOT(onEvaluate(const QString &)));
     connect(&customMenuMapper, SIGNAL(mapped(const QString &)), this, SIGNAL(evaluate(const QString &)));
 
+    connect(&ipcClient, SIGNAL(messageReceived(QString,QString,QString)), this, SLOT(messageReceived(QString,QString,QString)));
     KLog::log("Kludget::created");
 }
 
@@ -223,7 +224,9 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         if (QFile::exists(defaultBg))
             //window->view()->setTransitionLayer(QImage(defaultBg));
 #endif
-    }
+        }
+
+    ipcClient.connectToServer();
 
     return true;
 }
@@ -245,8 +248,8 @@ void Kludget::addJavaScriptWindowObjects(QWebFrame* frame)
     runJavaScriptFile(frame, ":resources/scripts/widget.js");
     runJavaScriptFile(frame, ":resources/scripts/debug.js");
 
-	// dashboard widget specific
-	runJavaScriptFile(frame, ":resources/scripts/macoswidgets.js");
+    // dashboard widget specific
+    runJavaScriptFile(frame, ":resources/scripts/macoswidgets.js");
 
     // add plugin here
     if (plugin.isLoaded())
@@ -450,14 +453,14 @@ void Kludget::hide()
 
 void Kludget::close()
 {
-	onRemove();
+    onRemove();
 
     window->hide();
     window->close();
 
 #if 1
     // forcefully remove preference file
-	settings->sync();
+    settings->sync();
     settings->clear();
 #endif
 
@@ -543,8 +546,8 @@ void Kludget::resize(int w, int h)
 
 void Kludget::resizeAndMoveTo(int x, int y, int w, int h)
 {
-	resize(w,h);
-	move(x,y);
+    resize(w,h);
+    move(x,y);
 }
 
 int Kludget::opacity()
@@ -608,4 +611,66 @@ void Kludget::prepareForTransition(QString transition)
 void Kludget::performTransition()
 {
     window->view()->beginTransition();
+}
+void Kludget::messageReceived(QString message, QString id, QString instance)
+{
+    if (message == "ping") {
+        ipcClient.sendMessage("pong", info.id, info.instance);
+        return;
+    }
+
+    KLog::log(QString("kludget messageReceived: %1").arg(message));
+    
+    int messageId = message.toUInt();
+    switch (messageId)
+    {
+    case KIPC::ShowHUD:
+    {
+        /*
+        if (!window->isVisible())
+            emit onShow();
+        */
+        //window->show();
+        //window->moveToTop();
+        //window->updateMouseIgnore(false);
+        break;
+    }
+    case KIPC::HideHUD:
+    {
+        //window->moveToBottom();
+        //window->updateWindowLevel(windowZ);
+        //window->updateMouseIgnore(noMouse);
+        break;
+    }
+    case KIPC::ShowWindow:
+    {
+        show();
+        //emit onShow();
+        //window->show();
+        //window->moveToTop();
+        //updateWindowLevel(windowZ);
+        break;
+    }
+    case KIPC::HideWindow:
+    {
+        hide();
+        //emit onHide();
+        //window->hide();
+        break;
+    }
+    case KIPC::LowerWindow:
+    {
+        //window->lower();
+        break;
+    }
+    case KIPC::SettingsChanged:
+    {
+        onSettingsChanged();
+        break;
+    }
+    default:
+
+        evaluate(message);
+        break;
+    }
 }

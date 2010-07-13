@@ -45,12 +45,16 @@ class PreferenceWidget : public QHBoxLayout
 {
     Q_OBJECT
 public:
-    virtual QString getValue() { return ""; }
+    virtual QString getValue() {
+        return "";
+    }
     virtual void setValue(const QString &q) {}
     virtual void addOption(const QString &label, const QString &value) {}
     virtual void setSize(int w, int h) {}
     virtual void setColor(QColor c) {}
-    virtual QColor currentColor() { return QColor(); }
+    virtual QColor currentColor() {
+        return QColor();
+    }
     static PreferenceWidget* create(const Preference &pref);
 
     public

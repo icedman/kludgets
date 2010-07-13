@@ -142,10 +142,10 @@ void KNetwork::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenti
 
 QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& request, QIODevice* outgoingData)
 {
-	QNetworkRequest req = request;
+    QNetworkRequest req = request;
     QUrl url = req.url();
-	//req.setRawHeader("Accept-Encoding","gzip");
-	//req.setRawHeader("Accept-Encoding","identity");
+    //req.setRawHeader("Accept-Encoding","gzip");
+    //req.setRawHeader("Accept-Encoding","identity");
 
     //qDebug("request:%s %s\n%s", qPrintable(url.scheme()), qPrintable(url.path()), qPrintable(base.path()));
 
@@ -212,7 +212,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
         }
     }
 
-	QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
-	reply->ignoreSslErrors();
-	return reply;
+    QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
+    reply->ignoreSslErrors();
+    return reply;
 }

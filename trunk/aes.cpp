@@ -744,7 +744,7 @@ const quint32 AES::aesRCon_[10] = {
 
 // Constructor.
 AES::AES()
-    : initialized_(false)
+        : initialized_(false)
 {
     // do nothing
 }
@@ -1047,10 +1047,18 @@ void AES::aesExpandDecryptionKey(const quint8* key, quint32* expandedKey)
 
     for (qint32 i = 0, j = rounds << 2; i < j; i += 4, j -= 4)
     {
-        temp = expandedKey[i    ]; expandedKey[i    ] = expandedKey[j    ]; expandedKey[j    ] = temp;
-        temp = expandedKey[i + 1]; expandedKey[i + 1] = expandedKey[j + 1]; expandedKey[j + 1] = temp;
-        temp = expandedKey[i + 2]; expandedKey[i + 2] = expandedKey[j + 2]; expandedKey[j + 2] = temp;
-        temp = expandedKey[i + 3]; expandedKey[i + 3] = expandedKey[j + 3]; expandedKey[j + 3] = temp;
+        temp = expandedKey[i    ];
+        expandedKey[i    ] = expandedKey[j    ];
+        expandedKey[j    ] = temp;
+        temp = expandedKey[i + 1];
+        expandedKey[i + 1] = expandedKey[j + 1];
+        expandedKey[j + 1] = temp;
+        temp = expandedKey[i + 2];
+        expandedKey[i + 2] = expandedKey[j + 2];
+        expandedKey[j + 2] = temp;
+        temp = expandedKey[i + 3];
+        expandedKey[i + 3] = expandedKey[j + 3];
+        expandedKey[j + 3] = temp;
     }
 
     for (qint32 i = 1; i < rounds; i++)

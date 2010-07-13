@@ -29,7 +29,7 @@ KSystem::~KSystem()
     if (QFile::exists(tempFile))
     {
         QFile::remove
-            (tempFile);
+        (tempFile);
     }
 }
 
@@ -46,7 +46,7 @@ void KSystem::setEnableCommands(bool enable)
 
 QString KSystem::version()
 {
-	return KApp::version();
+    return KApp::version();
 }
 
 void KSystem::log(QString message)
@@ -191,7 +191,7 @@ KSystem *KSystem::getProcess(long pid)
         if (QFile::exists(sys->tempFile))
         {
             QFile::remove
-                (sys->tempFile);
+            (sys->tempFile);
         }
     }
 
@@ -201,10 +201,10 @@ KSystem *KSystem::getProcess(long pid)
 
 QString KSystem::encrypt(QString s)
 {
-	return Util::encrypt(s);
+    return Util::encrypt(s);
 }
 
 QString KSystem::decrypt(QString s)
 {
-	return Util::decrypt(s);
+    return Util::decrypt(s);
 }

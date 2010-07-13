@@ -126,6 +126,8 @@ void KServer::shutdown()
 void KServer::sendMessageToAll(KIPC::Message msg)
 {
     updateWidgetList();
+    ipcServer.sendMessage(QString("%1").arg(KIPC::ShowWindow));
+    /*
     QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
     {
@@ -134,6 +136,7 @@ void KServer::sendMessageToAll(KIPC::Message msg)
             ipc.sendMessage(msg, pid);
         it++;
     }
+    */
 }
 
 void KServer::loadDefaultWidgets()
@@ -400,7 +403,14 @@ void KServer::showMenu()
 
 void KServer::showWidget(int pid)
 {
-    ipc.sendMessage(KIPC::ShowWindow, pid);
+    //ipc.sendMessage(KIPC::ShowWindow, pid);
+    QList<Widget>::iterator it = widgetList.begin();
+    while (it != widgetList.end())
+    {
+        if (pid == (*it).pid)
+            ipcServer.sendMessage(QString("%1").arg(KIPC::ShowWindow), QString("%1").arg((*it).id));
+        it++;
+    }
 }
 
 void KServer::showAllWidgets()
@@ -553,5 +563,5 @@ void KServer::onCheckDone(QNetworkReply *reply)
 void KServer::exit()
 {
     shutdown();
-    QTimer::singleShot(800, QApplication::instance(), SLOT(quit()));
+    QTimer::singleShot(1000, QApplication::instance(), SLOT(quit()));
 }

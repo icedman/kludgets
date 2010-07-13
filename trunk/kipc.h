@@ -2,6 +2,55 @@
 #define KIPC_H
 
 #include <QString>
+#include <QLocalServer>
+#include <QLocalSocket>
+#include <QTimer>
+
+class KIPCClient : public QObject
+{
+    Q_OBJECT
+public:
+
+    KIPCClient(QObject *parent = 0, QLocalSocket *socket = 0);
+    ~KIPCClient();
+
+    bool sendMessage(QString message, QString id = "", QString instance = "");
+    bool isConnected();
+    void connectToServer();
+
+Q_SIGNALS:
+    void messageReceived(QString message, QString id, QString instance);
+
+private Q_SLOTS:
+    void onUpdateConnection();
+    void onReadyRead();
+
+private:
+    QLocalSocket *_socket;
+    QTimer _updateTimer;
+    QString _id;
+    QString _instance;
+    int _ipcIndex;
+};
+
+class KIPCServer : public QObject
+{
+    Q_OBJECT
+public:
+
+    KIPCServer(QObject *parent = 0);
+    ~KIPCServer();
+
+    void listen();
+
+    bool sendMessage(QString message, QString id = "", QString instance = "");
+
+private Q_SLOTS:
+    void onProcessNewConnection();
+
+private:
+    QLocalServer *_server;
+};
 
 class KIPC
 {
@@ -16,9 +65,6 @@ public:
         HideHUD,
         SettingsChanged
     };
-
-    void sendMessage(Message msg, int pId);
-    void sendAllMessage(Message msg);
 
     static int getProcessId(const QString &kludgetId);
     static bool setProcessId(const QString &kludgetId, int pid);
