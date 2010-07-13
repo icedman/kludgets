@@ -7,7 +7,7 @@
 #include "kpluginview.h"
 #include "kutil.h"
 
-#define ENABLE_DASHBOARD_SUPPORT 1
+#define ENABLE_DASHBOARD_SUPPORT 0
 #define ENABLE_TRANSITION 0
 
 KView::KView(KWindow *p) :
@@ -52,7 +52,7 @@ void KView::paintEvent(QPaintEvent *ev)
         else
         {
             while (KPluginView::findAndHostPlugins(parent, this))
-            {}
+                {}
             paintToBuffer();
         }
 
@@ -124,7 +124,7 @@ void KView::mousePressEvent(QMouseEvent *ev)
 #else
 
     allowDrag = ev->modifiers() & Qt::ControlModifier;
-#endif;
+#endif
 
     if (ev->button() == Qt::RightButton)
         return ;
@@ -168,14 +168,14 @@ void KView::mouseReleaseEvent(QMouseEvent *ev)
     if (isFrozen())
         return ;
 
-	/*
-	// this breaks the menu on windows 7
+    /*
+    // this breaks the menu on windows 7
     if (ev->button() == Qt::RightButton)
     {
         //emit contextMenuRequested();
         return ;
     }
-	*/
+    */
 
     QWebView::mouseReleaseEvent(ev);
 }
@@ -308,10 +308,10 @@ void KView::screenshot(const QString &path)
     if (isBuffered())
     {
         KLog::log(QString("screenshot:") + path);
-		QImage img(buffer.width(), buffer.height(), QImage::Format_ARGB32);
-		img.fill(Qt::white);
-		QPainter p(&img);
-		p.drawImage(0,0,buffer);
+        QImage img(buffer.width(), buffer.height(), QImage::Format_ARGB32);
+        img.fill(Qt::white);
+        QPainter p(&img);
+        p.drawImage(0,0,buffer);
         img.save(path);
     }
 }

@@ -10,14 +10,14 @@
 int main(int argc, char *argv[])
 {
 #if 1
-	QApplication::setGraphicsSystem("software");
+    QApplication::setGraphicsSystem("software");
 #else
-	QApplication::setGraphicsSystem("opengl");
+    QApplication::setGraphicsSystem("opengl");
 #endif
 
     KApp app(argc, argv);
 
-	// Theme::loadTheme("skulpture");
+    // Theme::loadTheme("skulpture");
 
     if (argc > 1)
     {

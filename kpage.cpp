@@ -51,11 +51,11 @@ QWebPage *KPage::createWindow(QWebPage::WebWindowType t)
 
 bool KPage::acceptNavigationRequest(QWebFrame* frame, const QNetworkRequest& request, NavigationType type)
 {
-	if (!frame)
-	{
-		QDesktopServices desktop;
-		desktop.openUrl(request.url());
-		return false;
-	}
-	return QWebPage::acceptNavigationRequest(frame, request, type);
+    if (!frame)
+    {
+        QDesktopServices desktop;
+        desktop.openUrl(request.url());
+        return false;
+    }
+    return QWebPage::acceptNavigationRequest(frame, request, type);
 }

@@ -29,7 +29,7 @@ void HotKey::registerHotKey(const QString key, int id)
 
 void HotKey::unregisterAll()
 {
-    while(registeredKeys.size())
+    while (registeredKeys.size())
     {
         unregisterHotKey(registeredKeys.keys().at(0));
     }

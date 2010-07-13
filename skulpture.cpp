@@ -5309,8 +5309,8 @@ void SkulptureStyle::drawItemPixmap(QPainter *painter, const QRect &rectangle, i
 
 int SkulptureStyle::Private::verticalTextShift(const QFontMetrics &fontMetrics)
 {
-	if (!qApp)
-		return 0;
+    if (!qApp)
+        return 0;
     if (fontMetrics == qApp->fontMetrics())
     {
         return textShift;

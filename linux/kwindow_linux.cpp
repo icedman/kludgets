@@ -29,6 +29,7 @@ void KWindow::updateMouseIgnore(bool ignore)
 {
 }
 
+#if 0
 bool KWindow::x11Event(XEvent * ev)
 {
     static Atom a = 0;
@@ -82,3 +83,5 @@ bool KWindow::x11Event(XEvent * ev)
     }
     return false;
 }
+
+#endif

@@ -26,7 +26,7 @@ void KLog::setPath(const QString &p)
 void KLog::clear()
 {
     write("--------------", true);
-	write(KApp::userAgent());
+    write(KApp::userAgent());
     write("--------------");
 }
 

@@ -81,6 +81,7 @@ private:
     void updateWindowLevel(int);
     void updateMouseIgnore(bool);
 
+#if 0
 #if defined(WIN32)
 
     bool winEvent(MSG *message, long *result);
@@ -88,6 +89,8 @@ private:
 
     bool x11Event(XEvent * event);
 #endif
+#endif
+
 };
 
 #endif // KLUDGETWINDOW_H

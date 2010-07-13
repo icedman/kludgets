@@ -7,6 +7,7 @@
 #include <QLibrary>
 
 #include "kludgetinfo.h"
+#include "kipc.h"
 
 class KClient;
 class KWindow;
@@ -61,6 +62,7 @@ private:
 
     KludgetInfo info;
 
+    KIPCClient ipcClient;
     KClient *client;
     KWindow *window;
     KSystem *system;
@@ -92,10 +94,12 @@ Q_SLOTS:
     void createInstance(QString instance = "");
     void move(int x, int y);
     void resize(int w, int h);
-	void resizeAndMoveTo(int x, int y, int w, int h);
+    void resizeAndMoveTo(int x, int y, int w, int h);
     void renderLayer(QString layer);
     void prepareForTransition(QString transition);
     void performTransition();
+
+    void messageReceived(QString message, QString id, QString instance);
 
 public:
     int opacity();

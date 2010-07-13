@@ -41,7 +41,7 @@ private:
     void registerHotKey(Qt::Key key, Qt::KeyboardModifier modifier, int id = 1);
 
 private:
-    QMap<int, QString> registeredKeys;    
+    QMap<int, QString> registeredKeys;
     QProcess *externalListener;
 
 };

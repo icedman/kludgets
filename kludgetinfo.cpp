@@ -63,12 +63,12 @@ bool KludgetInfo::load()
     id = doc.getValue("widget/id", defaultId);
     name = doc.getValue("widget/name", defaultName);
 
-	QUrl url = QUrl(doc.getValue("widget/content/src", ""));
-	if (url.scheme() == "http")
-		contentSrc = url.toString();
-	else
-		contentSrc = path + "/" + doc.getValue("widget/content/src", "index.html");
-	contentHtml = doc.getValue("widget/content/html", "").trimmed();
+    QUrl url = QUrl(doc.getValue("widget/content/src", ""));
+    if (url.scheme() == "http")
+        contentSrc = url.toString();
+    else
+        contentSrc = path + "/" + doc.getValue("widget/content/src", "index.html");
+    contentHtml = doc.getValue("widget/content/html", "").trimmed();
     width = doc.getValue("widget/width", "0").toInt();
     height = doc.getValue("widget/height", "0").toInt();
     debug = (doc.getValue("widget/debug", "0").toInt() != 0);
