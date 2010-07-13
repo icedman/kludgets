@@ -442,7 +442,11 @@ void Kludget::screenshot(QString path)
 void Kludget::show()
 {
     onShow();
+#ifndef WIN32
+    window->hide();
+#endif
     window->show();
+    window->moveToTop();
 }
 
 void Kludget::hide()
@@ -645,22 +649,16 @@ void Kludget::messageReceived(QString message, QString id, QString instance)
     case KIPC::ShowWindow:
     {
         show();
-        //emit onShow();
-        //window->show();
-        //window->moveToTop();
-        //updateWindowLevel(windowZ);
         break;
     }
     case KIPC::HideWindow:
     {
         hide();
-        //emit onHide();
-        //window->hide();
         break;
     }
     case KIPC::LowerWindow:
     {
-        //window->lower();
+        window->lower();
         break;
     }
     case KIPC::SettingsChanged:
