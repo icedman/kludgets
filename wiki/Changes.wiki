@@ -2,6 +2,8 @@
 
 = Changes =
 
+== Beta Version 0.9.9 2010-07-113 ==
+  * ipc system now using local sockets
 
 == Beta Version 0.9.8 2009-11-18 ==
   * improved dashboard support
