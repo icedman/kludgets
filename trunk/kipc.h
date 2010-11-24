@@ -25,7 +25,8 @@ private Q_SLOTS:
     void onUpdateConnection();
     void onReadyRead();
 
-private:
+protected:
+	friend class KIPCServer;
     QLocalSocket *_socket;
     QTimer _updateTimer;
     QString _id;
@@ -44,6 +45,7 @@ public:
     void listen();
 
     bool sendMessage(QString message, QString id = "", QString instance = "");
+	QStringList getInstances(QString id);
 
 private Q_SLOTS:
     void onProcessNewConnection();
@@ -51,6 +53,7 @@ private Q_SLOTS:
 private:
     QLocalServer *_server;
 };
+
 
 class KIPC
 {
@@ -63,6 +66,7 @@ public:
         LowerWindow,
         ShowHUD,
         HideHUD,
+		Configure,
         SettingsChanged
     };
 

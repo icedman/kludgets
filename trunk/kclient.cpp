@@ -213,7 +213,9 @@ void KClient::loadFonts(const QString &path)
 }
 
 void KClient::loadPlugins(const QString& path)
-{}
+{
+	
+}
 
 Kludget* KClient::createInstance(const QString &instance)
 {

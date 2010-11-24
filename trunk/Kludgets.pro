@@ -29,8 +29,7 @@ win32* {
 }
 
 
-HEADERS += aes.h \
-		   config.h \
+HEADERS += config.h \
            installwindow.h \
            kapp.h \
            kclient.h \
@@ -54,8 +53,7 @@ HEADERS += aes.h \
            prefwindow.h \
            version.h
            
-SOURCES += aes.cpp \
-		   installwindow.cpp \
+SOURCES += installwindow.cpp \
            kapp.cpp \
            kclient.cpp \
            kdocument.cpp \

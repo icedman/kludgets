@@ -56,6 +56,7 @@ void iStatNanoPlugin::initWithWebView(QWebView *v)
 
 void iStatNanoPlugin::windowScriptObjectAvailable(QWebFrame *frame)
 {
+	qDebug("plugin added");
     frame->addToJavaScriptWindowObject("iStatNano", this);
     frame->evaluateJavaScript(loadScript(":plugin.js"));
 }

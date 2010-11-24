@@ -51,7 +51,7 @@
 Kludgets is an opensource project released under the GNU Lesser General Public License.
 </p>
 <p>
-Copyright 2008-2009 MindHyve Inc.
+Copyright 2008-2010 MindHyve Inc.
 </p>
 <p>
 <xsl:value-of select="widget/userAgent"/>

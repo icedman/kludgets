@@ -67,6 +67,7 @@ Q_SLOTS:
     void hotKeyPressed(Qt::Key, Qt::KeyboardModifier);
     void processWidgetQueue();
     void runWidget(const QString &path);
+	void configureWidget(const QString &id);
     void openPackage();
     void trayActivated(QSystemTrayIcon::ActivationReason r);
     void showMenu();
@@ -85,6 +86,7 @@ Q_SLOTS:
 Q_SIGNALS:
     void selectWidget(int);
     void selectInstalledWidget(QString);
+	void selectConfigureWidget(QString);
 
 private:
     QList<QWidget*> hudScreens;
@@ -93,9 +95,11 @@ private:
 
     QMenu trayMenu;
     QMenu widgetsMenu;
+	QMenu addWidgetsMenu;
     QSystemTrayIcon trayIcon;
     QSignalMapper runningWidgetsMapper;
     QSignalMapper installedWidgetsMapper;
+	QSignalMapper configureWidgetMapper;
 
     PreferenceWindow *prefWindow;
     AboutKludgetWindow *aboutWindow;
@@ -103,7 +107,6 @@ private:
 
     HotKey *hotKeyListener;
     QTimer updateTimer;
-    KIPC ipc;
     KIPCServer ipcServer;
 };
 

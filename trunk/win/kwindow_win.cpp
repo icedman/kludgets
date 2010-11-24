@@ -24,6 +24,7 @@ void raiseWindow(HWND hWnd, bool raise = true)
 
 void KWindow::moveToTop()
 {
+	raise();
     raiseWindow(winId());
 }
 
@@ -36,13 +37,9 @@ void KWindow::moveToBottom()
 void KWindow::updateWindowLevel(int l)
 {
     if (l == 2)
-    {
         lower();
-    }
     else
-    {
         raise();
-    }
 
     if (l == 1)
         SetWindowPos(winId(), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
@@ -58,53 +55,4 @@ void KWindow::updateMouseIgnore(bool ignore)
     else
         exStyle = exStyle | WS_EX_TRANSPARENT;
     SetWindowLong(winId(), GWL_EXSTYLE, exStyle);
-}
-
-bool KWindow::winEvent(MSG *message, long *result)
-{
-    result = 0;
-    switch (message->message)
-    {
-    case KIPC::ShowHUD:
-        {
-            if (!isVisible())
-                emit onShow();
-            show();
-            moveToTop();
-            updateMouseIgnore(false);
-            return true;
-        }
-    case KIPC::HideHUD:
-        {
-            moveToBottom();
-            updateWindowLevel(windowZ);
-            updateMouseIgnore(noMouse);
-            return true;
-        }
-    case KIPC::ShowWindow:
-        {
-            emit onShow();
-            show();
-			moveToTop();
-            updateWindowLevel(windowZ);
-            return true;
-        }
-    case KIPC::HideWindow:
-        {
-            emit onHide();
-            hide();
-            return true;
-        }
-    case KIPC::LowerWindow:
-        {
-            lower();
-            return true;
-        }
-    case KIPC::SettingsChanged:
-        {
-            emit onSettingsChanged();
-            return true;
-        }
-    }
-    return false;
 }

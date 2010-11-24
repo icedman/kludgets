@@ -241,3 +241,9 @@ void KWindow::setupWindow()
 
     webView->setBuffered(true);
 }
+
+void KWindow::applySettings()
+{
+    updateWindowLevel(windowZ);
+    updateMouseIgnore(noMouse);
+}
