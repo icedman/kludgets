@@ -1,7 +1,6 @@
 #include "config.h"
 #include "kutil.h"
 #include "klog.h"
-#include "aes.h"
 
 bool Util::copyDir(const QString &source, const QString &destination, const bool overwrite)
 {
@@ -157,48 +156,13 @@ QString xorString(const QString &source, const QString &hash)
     return res;
 }
 
-#define AES_KEY   "b94a54d87ab421a1d3d5631d1fc04e6c"
-#define AES_TWEAK "7517d4a1f9871e57"
-
-Aarni::AES* aes()
-{
-    return 0;
-    static Aarni::AES a;
-    static bool init = false;
-    if (!init)
-    {
-        if (a.init(QByteArray(AES_KEY), QByteArray(AES_TWEAK)) != 0)
-            return 0;
-    }
-    return &a;
-}
-
 QString Util::encrypt(const QString &source)
 {
-    Aarni::AES *a = aes();
-    if (a)
-    {
-        QString s = source + XOR_HASH1;
-        QByteArray out;
-        int res = a->encrypt(s.toAscii().data(), out);
-        qDebug("encrypt: %d", res);
-        return out;
-    }
     return xorString(xorString(source, XOR_HASH1), XOR_HASH2);
 }
 
 QString Util::decrypt(const QString &source)
 {
-    Aarni::AES *a = aes();
-    if (a)
-    {
-        QByteArray out;
-        int res = a->decrypt(source.toAscii().data(), out);
-        qDebug("decrypt: %d", res);
-        QString tmp = out;
-        tmp.replace(XOR_HASH1, "");
-        return tmp;
-    }
     return xorString(xorString(source, XOR_HASH2), XOR_HASH1);
 }
 

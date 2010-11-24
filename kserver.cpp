@@ -65,6 +65,8 @@ bool KServer::initialize()
     connect(&runningWidgetsMapper, SIGNAL(mapped(int)), this, SIGNAL(selectWidget(int)));
     connect(this, SIGNAL(selectInstalledWidget(QString)), this, SLOT(runWidget(QString)));
     connect(&installedWidgetsMapper, SIGNAL(mapped(QString)), this, SIGNAL(selectInstalledWidget(QString)));
+	connect(this, SIGNAL(selectConfigureWidget(QString)), this, SLOT(configureWidget(QString)));
+	connect(&configureWidgetMapper, SIGNAL(mapped(QString)), this, SIGNAL(selectConfigureWidget(QString)));
 
     // connect(&trayIcon, SIGNAL(messageClicked()), this, SLOT(openPackage()));
     connect(&trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(trayActivated(QSystemTrayIcon::ActivationReason)));
@@ -126,17 +128,7 @@ void KServer::shutdown()
 void KServer::sendMessageToAll(KIPC::Message msg)
 {
     updateWidgetList();
-    ipcServer.sendMessage(QString("%1").arg(KIPC::ShowWindow));
-    /*
-    QList<Widget>::iterator it = widgetList.begin();
-    while (it != widgetList.end())
-    {
-        int pid = (*it).pid;
-        if (pid > 0)
-            ipc.sendMessage(msg, pid);
-        it++;
-    }
-    */
+    ipcServer.sendMessage(QString("%1").arg(msg));
 }
 
 void KServer::loadDefaultWidgets()
@@ -199,13 +191,9 @@ void KServer::hotKeyPressed(Qt::Key, Qt::KeyboardModifier)
 #if defined(WIN32)
 
     if (hudScreens.size() > 0)
-    {
         hideHUD();
-    }
     else
-    {
         showHUD();
-    }
 
 #else
     showAllWidgets();
@@ -285,6 +273,7 @@ void KServer::updateWidgetList()
 
 void KServer::updateWidgetListPID()
 {
+    KIPC ipc;
     QList<Widget>::iterator it = widgetList.begin();
     while (it != widgetList.end())
     {
@@ -299,6 +288,17 @@ void KServer::runWidget(const QString &path)
     args.push_back(path);
     QProcess *process = new QProcess(this);
     process->start(QApplication::applicationFilePath(), args, QIODevice::ReadOnly);
+}
+
+void KServer::configureWidget(const QString &widgetId)
+{
+	QStringList widget = widgetId.split(":");
+	QString id = widget[0];
+	QString instance = "";
+	if (widget.size() > 1)
+		instance = widget[1];
+	
+	ipcServer.sendMessage(QString("%1").arg(KIPC::Configure), id, instance);
 }
 
 void KServer::openPackage()
@@ -344,8 +344,11 @@ void KServer::showMenu()
 
     connect(trayMenu.addAction(QString("Open widget package...")), SIGNAL(triggered()), this, SLOT(openPackage()));
 
-    widgetsMenu.clear();
-    widgetsMenu.setTitle("Add widget");
+    addWidgetsMenu.clear();
+    addWidgetsMenu.setTitle("Add widget");
+
+	widgetsMenu.clear();
+    widgetsMenu.setTitle("Widget Preferences");
 
     connect(trayMenu.addAction(QString("Find more widgets...")), SIGNAL(triggered()), this, SLOT(goToWidgetsSite()));
 
@@ -356,7 +359,7 @@ void KServer::showMenu()
     {
         if (!(*it).active || (*it).pid == 0)
         {
-            QAction *action = widgetsMenu.addAction((*it).name);
+            QAction *action = addWidgetsMenu.addAction((*it).name);
             connect(action, SIGNAL(triggered()), &installedWidgetsMapper, SLOT(map()));
             installedWidgetsMapper.setMapping(action, (*it).package);
             hasNonRunningWidgets = true;
@@ -366,9 +369,9 @@ void KServer::showMenu()
 
     if (hasNonRunningWidgets)
     {
-        widgetsMenu.insertSeparator(0);
-        connect(widgetsMenu.addAction(QString("Clear this list")), SIGNAL(triggered()), this, SLOT(clearRecentPackages()));
-        trayMenu.addMenu(&widgetsMenu);
+        addWidgetsMenu.insertSeparator(0);
+        connect(addWidgetsMenu.addAction(QString("Clear this list")), SIGNAL(triggered()), this, SLOT(clearRecentPackages()));
+        trayMenu.addMenu(&addWidgetsMenu);
     }
 
     trayMenu.insertSeparator(0);
@@ -377,24 +380,43 @@ void KServer::showMenu()
     it = widgetList.begin();
     while (it != widgetList.end())
     {
-        QString name = (*it).name;
-        int pid = (*it).pid;
+		Widget &widget = *it;
+        QString name = widget.name;
+        int pid = widget.pid;
+        it++;
 
-        if (KIPC::checkProcess(pid))
+		QStringList instances = ipcServer.getInstances(widget.id);
+
+        if (KIPC::checkProcess(pid) && instances.size() > 0)
         {
             QAction *action = trayMenu.addAction(name);
             connect(action, SIGNAL(triggered()), &runningWidgetsMapper, SLOT(map()));
             runningWidgetsMapper.setMapping(action, pid);
             hasRunningWidgets = true;
-        }
 
-        it++;
+			for(int i = 0; i<instances.size(); i++) {
+				QString name = widget.name;
+				QString widgetId = widget.id;
+				if (instances.size() > 1) {
+					name += ":";
+					name += instances.at(i);
+					widgetId += ":";
+					widgetId += instances.at(i);
+				}
+				QAction *action = widgetsMenu.addAction(name);
+				connect(action, SIGNAL(triggered()), &configureWidgetMapper, SLOT(map()));
+				configureWidgetMapper.setMapping(action, widgetId);
+			}
+
+        }
     }
 
     if (hasRunningWidgets)
     {
         trayMenu.insertSeparator(0);
         connect(trayMenu.addAction(QString("Show all widgets")), SIGNAL(triggered()), this, SLOT(showAllWidgets()));
+		if (hasRunningWidgets)
+			trayMenu.addMenu(&widgetsMenu);
         trayMenu.insertSeparator(0);
     }
 

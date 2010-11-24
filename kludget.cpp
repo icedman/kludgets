@@ -162,6 +162,10 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     webSettings->setUserStyleSheetUrl(QUrl("resource:style/widget.css"));
     webSettings->setWebGraphic(QWebSettings::MissingImageGraphic, QPixmap());
 
+#if 0
+	window->view()->page()->triggerAction(QWebPage::InspectElement);
+#endif
+
     // network settings
     KNetwork *net = KNetwork::instance();
     net->loadSettings();
@@ -442,11 +446,7 @@ void Kludget::screenshot(QString path)
 void Kludget::show()
 {
     onShow();
-#ifndef WIN32
-    window->hide();
-#endif
     window->show();
-    window->moveToTop();
 }
 
 void Kludget::hide()
@@ -616,8 +616,14 @@ void Kludget::performTransition()
 {
     window->view()->beginTransition();
 }
+
 void Kludget::messageReceived(QString message, QString id, QString instance)
 {
+	if (instance != "") {
+		if (info.instance != instance)
+			return;
+	}
+
     if (message == "ping") {
         ipcClient.sendMessage("pong", info.id, info.instance);
         return;
@@ -630,25 +636,21 @@ void Kludget::messageReceived(QString message, QString id, QString instance)
     {
     case KIPC::ShowHUD:
     {
-        /*
-        if (!window->isVisible())
-            emit onShow();
-        */
-        //window->show();
-        //window->moveToTop();
-        //window->updateMouseIgnore(false);
+        window->moveToTop();
+        window->updateMouseIgnore(false);
         break;
     }
     case KIPC::HideHUD:
     {
-        //window->moveToBottom();
-        //window->updateWindowLevel(windowZ);
-        //window->updateMouseIgnore(noMouse);
+		window->applySettings();
+        window->moveToBottom();
         break;
     }
     case KIPC::ShowWindow:
     {
         show();
+		window->moveToTop();
+		window->applySettings();
         break;
     }
     case KIPC::HideWindow:
@@ -664,6 +666,11 @@ void Kludget::messageReceived(QString message, QString id, QString instance)
     case KIPC::SettingsChanged:
     {
         onSettingsChanged();
+        break;
+    }
+	case KIPC::Configure:
+    {
+        configure();
         break;
     }
     default:

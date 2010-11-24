@@ -47,7 +47,7 @@ bool KIPCServer::sendMessage(QString message, QString id, QString instance)
     QList<KIPCClient*> clients = findChildren<KIPCClient*>();
     bool hasSent = false;
     for (int i = 0; i<clients.length(); i++) {
-        KLog::log(QString("sending %1").arg(clients[i]->isConnected()));
+        // KLog::log(QString("sending %1").arg(clients[i]->isConnected()));
         hasSent = clients[i]->sendMessage(message, id, instance) || hasSent;
     }
 
@@ -59,6 +59,19 @@ bool KIPCServer::sendMessage(QString message, QString id, QString instance)
         }
     }
     return hasSent;
+}
+
+QStringList KIPCServer::getInstances(QString id)
+{
+	QStringList instances;
+	QList<KIPCClient*> clients = findChildren<KIPCClient*>();
+	for (int i = 0; i<clients.length(); i++) {
+		if (id != clients[i]->_id)
+			continue;
+		if (clients[i]->isConnected())
+			instances.push_back(clients[i]->_instance);
+	}
+	return instances;
 }
 
 KIPCClient::KIPCClient(QObject *parent, QLocalSocket *socket) : QObject(parent), _socket(socket), _ipcIndex(0)
@@ -121,6 +134,7 @@ bool KIPCClient::sendMessage(QString message, QString id, QString instance)
 
     if (id.length() && _id.length()) {
         if (id != _id) {
+			KLog::log(QString("sendMessage %1 %2").arg(id).arg(_id));
             return false;
         }
     }

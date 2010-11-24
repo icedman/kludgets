@@ -7,7 +7,7 @@
 #include "kpluginview.h"
 #include "kutil.h"
 
-#define ENABLE_DASHBOARD_SUPPORT 0
+#define ENABLE_DASHBOARD_SUPPORT 1
 #define ENABLE_TRANSITION 0
 
 KView::KView(KWindow *p) :

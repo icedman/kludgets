@@ -46,6 +46,10 @@ public:
     void moveToTop();
     void moveToBottom();
 
+    void applySettings();
+    void updateWindowLevel(int);
+    void updateMouseIgnore(bool);
+
     private
 Q_SLOTS:
     void onGeometryChangeRequested(const QRect & rect);
@@ -57,9 +61,6 @@ Q_SIGNALS:
     void onStartDrag();
     void onEndDrag();
     void onSettingsChanged();
-
-private:
-    void setupWindow();
 
 private:
 
@@ -78,19 +79,7 @@ private:
     double zoom;
 
 private:
-    void updateWindowLevel(int);
-    void updateMouseIgnore(bool);
-
-#if 0
-#if defined(WIN32)
-
-    bool winEvent(MSG *message, long *result);
-#else
-
-    bool x11Event(XEvent * event);
-#endif
-#endif
-
+	void setupWindow();
 };
 
 #endif // KLUDGETWINDOW_H
