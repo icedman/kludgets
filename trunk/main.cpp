@@ -6,9 +6,9 @@
 // #include "theme.h"
 
 #include <QApplication>
-
 int main(int argc, char *argv[])
 {
+
 #if 1
     QApplication::setGraphicsSystem("software");
 #else
@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     KApp app(argc, argv);
 
-    // Theme::loadTheme("skulpture");
+    //Theme::loadTheme("skulpture");
 
     if (argc > 1)
     {

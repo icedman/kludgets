@@ -284,10 +284,17 @@ void KServer::updateWidgetListPID()
 
 void KServer::runWidget(const QString &path)
 {
-    QStringList args;
-    args.push_back(path);
-    QProcess *process = new QProcess(this);
-    process->start(QApplication::applicationFilePath(), args, QIODevice::ReadOnly);
+#if 1
+		QStringList args;
+		args.push_back(path);
+		QProcess *process = new QProcess(this);
+		process->start(QApplication::applicationFilePath(), args, QIODevice::ReadOnly);
+#else
+		// run everyone on the same process
+		// todo
+		KClient *k = new KClient;
+		k->initialize(path);
+#endif
 }
 
 void KServer::configureWidget(const QString &widgetId)

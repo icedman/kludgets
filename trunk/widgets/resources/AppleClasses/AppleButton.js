@@ -1,9 +1,9 @@
 /*
-A© Copyright 2005 Apple Computer, Inc. All rights reserved.
+¬© Copyright 2007 Apple Inc. All rights reserved.
 
 IMPORTANT:  This Apple software and the associated images located in
 /System/Library/WidgetResources/AppleClasses/ (collectively "Apple Software")
-are supplied to you by Apple Computer, Inc. (aà?Appleaà?) in consideration of your
+are supplied to you by Apple Computer, Inc. (‚ÄúApple‚Äù) in consideration of your
 agreement to the following terms. Your use, installation and/or redistribution
 of this Apple Software constitutes acceptance of these terms. If you do not
 agree with these terms, please do not use, install, or redistribute this Apple
@@ -11,7 +11,7 @@ Software.
 
 In consideration of your agreement to abide by the following terms, and subject
 to these terms, Apple grants you a personal, non-exclusive license, under
-Appleaàôs copyrights in the Apple Software, to use, reproduce, and redistribute
+Apple‚Äôs copyrights in the Apple Software, to use, reproduce, and redistribute
 the Apple Software, in text form (for JavaScript files) or binary form (for
 associated images), for the sole purpose of creating Dashboard widgets for Mac
 OS X.
@@ -103,17 +103,17 @@ AppleButton.prototype._init = function(button, text, height,
 	var element = document.createElement("div");
 	var style = element.style;
 	style.display = "inline-block";
+	style.verticalAlign = "bottom";
 	style.background = "url(" + this._imgLeftPath + ") no-repeat top left";
 	style.height = height + "px";
-	style.lineHeight = height + "px";
 	style.width = imgLeftWidth + "px";
-	element.innerHTML = "&nbsp;";
 	container.appendChild(element);
 	
 	element = document.createElement("div");
 	element.innerText = text;
 	style = element.style;
 	style.display = "inline-block";
+	style.verticalAlign = "bottom";
 	style.backgroundRepeat = "repeat-x";
 	style.backgroundImage = "url(" + this._imgMiddlePath + ")";
 	style.lineHeight = height + "px";
@@ -127,11 +127,10 @@ AppleButton.prototype._init = function(button, text, height,
 	element = document.createElement("div");
 	style = element.style;
 	style.display = "inline-block";
+	style.verticalAlign = "bottom";
 	style.background = "url(" + this._imgRightPath + ") no-repeat top left";
 	style.height = height + "px";
-	style.lineHeight = height + "px";
-	style.width = imgLeftWidth + "px";
-	element.innerHTML = "&nbsp;";
+	style.width = imgRightWidth + "px";
 	container.appendChild(element);
 	style = container.style;
 	style.appleDashboardRegion = "dashboard-region(control rectangle)";

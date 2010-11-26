@@ -130,11 +130,11 @@ void KIPCClient::onReadyRead()
 
 bool KIPCClient::sendMessage(QString message, QString id, QString instance)
 {
-    KLog::log("sendMessage");
+    // KLog::log("sendMessage");
 
     if (id.length() && _id.length()) {
         if (id != _id) {
-			KLog::log(QString("sendMessage %1 %2").arg(id).arg(_id));
+			// KLog::log(QString("sendMessage %1 %2").arg(id).arg(_id));
             return false;
         }
     }

@@ -1,5 +1,5 @@
 /*
-© Copyright 2005 Apple Computer, Inc. All rights reserved.
+© Copyright 2007 Apple Inc. All rights reserved.
 
 IMPORTANT:  This Apple software and the associated images located in
 /System/Library/WidgetResources/AppleClasses/ (collectively "Apple Software")
@@ -109,7 +109,8 @@ AppleScrollArea.prototype.addScrollbar = function(scrollbar)
 AppleScrollArea.prototype.removeScrollbar = function(scrollbar)
 {
 	var scrollbars = this._scrollbars;
-	for (i in scrollbars)
+	var c = scrollbars.length;
+	for (var i = 0; i < c; ++i)
 	{
 		if (scrollbars[i] == scrollbar)
 		{
@@ -124,7 +125,8 @@ AppleScrollArea.prototype.remove = function()
 	this.content.removeEventListener("mousewheel", this._mousewheelScrollHandler, true);
 	
 	var scrollbars = this._scrollbars;
-	for (i in scrollbars)
+	var c = scrollbars.length;
+	for (var i = 0; i < c; ++i)
 	{
 		scrollbars[i].setScrollArea(null);
 	}
@@ -152,7 +154,10 @@ AppleScrollArea.prototype.refresh = function()
 	   
 	
 	if (this.content.scrollHeight > this.viewHeight)
+	{
 		this.viewToContentHeightRatio = this.viewHeight / this.content.scrollHeight;
+		this.verticalScrollTo(this.content.scrollTop);
+	}
 	else
 	{
 		this.viewToContentHeightRatio = 1.0;
@@ -160,7 +165,10 @@ AppleScrollArea.prototype.refresh = function()
 	}
 	
 	if (this.content.scrollWidth > this.viewWidth)
+	{
 		this.viewToContentWidthRatio = this.viewWidth / this.content.scrollWidth;
+		this.horizontalScrollTo(this.content.scrollLeft);
+	}
 	else
 	{
 		this.viewToContentWidthRatio = 1.0;
@@ -168,7 +176,8 @@ AppleScrollArea.prototype.refresh = function()
 	}
 	
 	var scrollbars = this._scrollbars;
-	for (i in scrollbars)
+	var c = scrollbars.length;
+	for (var i = 0; i < c; ++i)
 	{
 		scrollbars[i].refresh();
 	}
@@ -242,7 +251,8 @@ AppleScrollArea.prototype.verticalScrollTo = function(new_content_top)
 	this.content.scrollTop = new_content_top;
 	
 	var scrollbars = this._scrollbars;
-	for (i in scrollbars)
+	var c = scrollbars.length;
+	for (var i = 0; i < c; ++i)
 	{
 		scrollbars[i].verticalHasScrolled();
 	}
@@ -267,7 +277,8 @@ AppleScrollArea.prototype.horizontalScrollTo = function(new_content_left)
 	this.content.scrollLeft = new_content_left;
 	
 	var scrollbars = this._scrollbars;
-	for (i in scrollbars)
+	var c = scrollbars.length;
+	for (var i = 0; i < c; ++i)
 	{
 		scrollbars[i].horizontalHasScrolled();
 	}

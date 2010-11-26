@@ -159,8 +159,11 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     webSettings->setOfflineStorageDefaultQuota(5000000);
     webSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     webSettings->setAttribute(QWebSettings::PluginsEnabled, accessPlugins);
-    webSettings->setUserStyleSheetUrl(QUrl("resource:style/widget.css"));
     webSettings->setWebGraphic(QWebSettings::MissingImageGraphic, QPixmap());
+	webSettings->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
+
+	webSettings->setUserStyleSheetUrl(QUrl("resource:style/widget.css"));
+	webSettings->setUserStyleSheetUrl(QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/resources/style.css"));
 
 #if 0
 	window->view()->page()->triggerAction(QWebPage::InspectElement);
@@ -177,18 +180,24 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         system->setShellPath(engine.getValue("kludget/general/shellPath", ""));
 
     // plugin
+	KLog::log("plugin");
     if (!plugin.isLoaded() && accessPlugins && info.pluginPath != "")
     {
         plugin.setFileName(info.pluginPath + "/" + info.pluginExecutable);
-        if (plugin.load())
-        {
+		KLog::log(QString("loading %1").arg(plugin.fileName()));
+
+		if (plugin.load())
+        {	
             typedef void (*initWithWebView)(QWebView*);
             initWithWebView init = (initWithWebView)plugin.resolve("initWithWebView");
             if (init)
             {
                 init((QWebView*)window->view());
+				KLog::log(QString("plugin loaded %1").arg(plugin.fileName()));
             }
-        }
+		} else {
+			KLog::log(QString("unable to load %1").arg(plugin.fileName()));
+		}
     }
 
     // drop
@@ -262,7 +271,7 @@ void Kludget::addJavaScriptWindowObjects(QWebFrame* frame)
         windowScriptObjectAvailable wsoAvailable = (windowScriptObjectAvailable)plugin.resolve("windowScriptObjectAvailable");
         if (wsoAvailable)
         {
-            // KLog::log("plugin::windowScriptObjectAvailable");
+            KLog::log("plugin::windowScriptObjectAvailable");
             wsoAvailable(frame);
         }
     }
@@ -445,6 +454,12 @@ void Kludget::screenshot(QString path)
 
 void Kludget::show()
 {
+#if 1
+	QWebFrame *frame = window->view()->page()->frameAt(QPoint(0,0));
+	if (frame)
+		frame->evaluateJavaScript("Kludget.setUserStyleSheet()");
+#endif
+
     onShow();
     window->show();
 }
