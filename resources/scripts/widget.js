@@ -102,6 +102,17 @@ Kludget.dispatchMouseLeave = function()
   document.body.dispatchEvent(evt);
 }
 
+Kludget.setUserStyleSheet = function()
+{
+	var body = document.getElementsByTagName('body')[0];
+	var cssNode = document.createElement('link');
+	cssNode.type = 'text/css';
+	cssNode.rel = 'stylesheet';
+	cssNode.href = 'resource://style/widget.css';
+	cssNode.media = 'screen';
+	body.appendChild(cssNode);
+}
+
 /*
 Aliases
 */
@@ -109,3 +120,4 @@ Aliases
 window.kludget = Kludget;
 window.widget = Kludget;
 window.Widget = Kludget;
+

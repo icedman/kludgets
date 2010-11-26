@@ -15,53 +15,6 @@
 #include <QFile>
 #include <QStringList>
 
-KNetworkReply::KNetworkReply(const QNetworkRequest& req, const QString& path, QObject* parent) : QNetworkReply(parent)
-{
-    OpenMode mode = QIODevice::ReadOnly;
-
-    setRequest(req);
-    setOperation(QNetworkAccessManager::GetOperation);
-
-    m_buf.setFileName(path);
-    if (!m_buf.open(mode))
-        qDebug("unable to open %s", qPrintable(path));
-
-    open(mode);
-    QTimer::singleShot(0, this, SLOT(go()));
-}
-
-qint64 KNetworkReply::readData(char* data, qint64 size)
-{
-    qint64 r = m_buf.read(data, size);
-    if (r <= 0)
-    {
-        m_buf.close();
-        close();
-        emit finished();
-    }
-    else
-    {
-        emit readyRead();
-    }
-    return r;
-}
-
-qint64 KNetworkReply::bytesAvailable() const
-{
-    return m_buf.size() + QNetworkReply::bytesAvailable();
-}
-
-void KNetworkReply::abort()
-{}
-
-void KNetworkReply::go()
-{
-    setAttribute(QNetworkRequest::HttpStatusCodeAttribute, 200);
-    setAttribute(QNetworkRequest::HttpReasonPhraseAttribute, "OK");
-    emit metaDataChanged();
-    emit readyRead();
-}
-
 KNetwork::KNetwork(QObject *parent) :
         QNetworkAccessManager(parent),
         allowLocalAccess(false),
@@ -147,15 +100,19 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
     //req.setRawHeader("Accept-Encoding","gzip");
     //req.setRawHeader("Accept-Encoding","identity");
 
-    //qDebug("request:%s %s\n%s", qPrintable(url.scheme()), qPrintable(url.path()), qPrintable(base.path()));
+#if 0
+	KLog::log(QString("request:%1 %2\n%3")
+			.arg(url.scheme())
+			.arg(url.path())
+			.arg(base.path()));
+#endif
 
     if (url.scheme() == "resource")
     {
         QString path = ":resources/" + url.toString(QUrl::RemoveScheme);
         path.replace("//", "");
-        qDebug("resource: %s", qPrintable(path));
-        // KLog::log(QString("resource:") + path);
-        return new KNetworkReply(req, path, this);
+        KLog::log(QString("resources:") + path);
+		return createRequestLocalFile(op, path, outgoingData);
     }
 
     // hack for AppleClasses
@@ -164,8 +121,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
         QString path = url.toLocalFile();
         //todo replace path for AppleClasses
         path.replace("/System/Library/WidgetResources", QApplication::applicationDirPath() + "/widgets/resources");
-        qDebug("appleClasses: %s", qPrintable(path));
-        return new KNetworkReply(req, path, this);
+		return createRequestLocalFile(op, path, outgoingData);
     }
 
     bool accessDenied = false;
@@ -193,9 +149,10 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
 
     if (accessDenied)
     {
-        KNetworkReply *reply = new KNetworkReply(req, "", this);
-        reply->setError(QNetworkReply::ContentAccessDenied, QString(""));
-        return reply;
+		//todo
+		//QNetworkReply *reply = createRequestLocalFile(op, "", outgoingData);
+        //reply->setError(QNetworkReply::ContentAccessDenied, QString(""));
+        //return reply;
     }
 
     // check locale
@@ -207,12 +164,20 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
             if (localefiles->localized(url.toLocalFile(), path))
             {
                 qDebug("localized: %s", qPrintable(path));
-                return new KNetworkReply(req, path, this);
+				return createRequestLocalFile(op, path, outgoingData);
             }
         }
     }
 
-    QNetworkReply *reply = QNetworkAccessManager::createRequest(op, req, outgoingData);
+    QNetworkReply *reply = QNetworkAccessManager::createRequest(op, request, outgoingData);
     reply->ignoreSslErrors();
     return reply;
+}
+
+
+QNetworkReply* KNetwork::createRequestLocalFile(Operation op, const QString& path, QIODevice* outgoingData)
+{
+	QNetworkRequest request;
+	request.setUrl(QUrl::fromLocalFile(path));
+	return QNetworkAccessManager::createRequest(op, request, outgoingData);
 }

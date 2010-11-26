@@ -1,92 +1,57 @@
 /*
+© Copyright 2007 Apple Inc. All rights reserved.
 
-File: AppleAnimator.js
+IMPORTANT:  This Apple software and the associated images located in
+/System/Library/WidgetResources/AppleClasses/ (collectively "Apple Software")
+are supplied to you by Apple Computer, Inc. (“Apple”) in consideration of your
+agreement to the following terms. Your use, installation and/or redistribution
+of this Apple Software constitutes acceptance of these terms. If you do not
+agree with these terms, please do not use, install, or redistribute this Apple
+Software.
 
-Abstract: Standard Apple class for a timed animation task; included in this
-	widget under an "AppleClasses" directory for compatibility with Mac OS X
-	10.4.0-10.4.2.  On Mac OS X 10.4.3 and later, Dashboard will first check
-	in /System/Library/WidgetResources when loading script references to the
-	AppleClasses directory.
+In consideration of your agreement to abide by the following terms, and subject
+to these terms, Apple grants you a personal, non-exclusive license, under
+Apple’s copyrights in the Apple Software, to use, reproduce, and redistribute
+the Apple Software, in text form (for JavaScript files) or binary form (for
+associated images), for the sole purpose of creating Dashboard widgets for Mac
+OS X.
 
-Version: 2.0
+If you redistribute the Apple Software, you must retain this entire notice and
+the warranty disclaimers and limitation of liability provisions (last two
+paragraphs below) in all such redistributions of the Apple Software.
 
-� Copyright 2005 Apple Computer, Inc. All rights reserved.
+You may not use the name, trademarks, service marks or logos of Apple to endorse
+or promote products that include the Apple Software without the prior written
+permission of Apple. Except as expressly stated in this notice, no other rights
+or licenses, express or implied, are granted by Apple herein, including but not
+limited to any patent rights that may be infringed by your products that
+incorporate the Apple Software or by other works in which the Apple Software may
+be incorporated.
 
-IMPORTANT:  This Apple software is supplied to 
-you by Apple Computer, Inc. ("Apple") in 
-consideration of your agreement to the following 
-terms, and your use, installation, modification 
-or redistribution of this Apple software 
-constitutes acceptance of these terms.  If you do 
-not agree with these terms, please do not use, 
-install, modify or redistribute this Apple 
-software.
+The Apple Software is provided on an "AS IS" basis.  APPLE MAKES NO WARRANTIES,
+EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED WARRANTIES OF
+NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE,
+REGARDING THE APPPLE SOFTWARE OR ITS USE AND OPERATION ALONE OR IN COMBINATION
+WITH YOUR PRODUCTS.
 
-In consideration of your agreement to abide by 
-the following terms, and subject to these terms, 
-Apple grants you a personal, non-exclusive 
-license, under Apple's copyrights in this 
-original Apple software (the "Apple Software"), 
-to use, reproduce, modify and redistribute the 
-Apple Software, with or without modifications, in 
-source and/or binary forms; provided that if you 
-redistribute the Apple Software in its entirety 
-and without modifications, you must retain this 
-notice and the following text and disclaimers in 
-all such redistributions of the Apple Software. 
-Neither the name, trademarks, service marks or 
-logos of Apple Computer, Inc. may be used to 
-endorse or promote products derived from the 
-Apple Software without specific prior written 
-permission from Apple.  Except as expressly 
-stated in this notice, no other rights or 
-licenses, express or implied, are granted by 
-Apple herein, including but not limited to any 
-patent rights that may be infringed by your 
-derivative works or by other works in which the 
-Apple Software may be incorporated.
-
-The Apple Software is provided by Apple on an "AS 
-IS" basis.  APPLE MAKES NO WARRANTIES, EXPRESS OR 
-IMPLIED, INCLUDING WITHOUT LIMITATION THE IMPLIED 
-WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY 
-AND FITNESS FOR A PARTICULAR PURPOSE, REGARDING 
-THE APPLE SOFTWARE OR ITS USE AND OPERATION ALONE 
-OR IN COMBINATION WITH YOUR PRODUCTS.
-
-IN NO EVENT SHALL APPLE BE LIABLE FOR ANY 
-SPECIAL, INDIRECT, INCIDENTAL OR CONSEQUENTIAL 
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
-PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS 
-OF USE, DATA, OR PROFITS; OR BUSINESS 
-INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, 
-REPRODUCTION, MODIFICATION AND/OR DISTRIBUTION OF 
-THE APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER 
-UNDER THEORY OF CONTRACT, TORT (INCLUDING 
-NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN 
-IF APPLE HAS BEEN ADVISED OF THE POSSIBILITY OF 
-SUCH DAMAGE.
-
-*/ 
-
-/*
- Copyright � 2005, Apple Computer, Inc.  All rights reserved.
- NOTE:  Use of this source code is subject to the terms of the Software
- License Agreement for Mac OS X, which accompanies the code.  Your use
- of this source code signifies your agreement to such license terms and
- conditions.  Except as expressly granted in the Software License Agreement
- for Mac OS X, no other copyright, patent, or other intellectual property
- license or right is granted, either expressly or by implication, by Apple.
- */
+IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION, AND/OR DISTRIBUTION OF THE
+APPLE SOFTWARE, HOWEVER CAUSED AND WHETHER UNDER THEORY OF CONTRACT, TORT
+(INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
 
 function AppleAnimator (duration, interval, optionalFrom, optionalTo, optionalCallback)
-{	
+{
 	this.startTime = 0;
 	this.duration = duration;
 	this.interval = interval;
 	this.animations = new Array;
 	this.timer = null;
 	this.oncomplete = null;
+	
 	this._firstTime = true;
 	
 	var self = this;
@@ -121,7 +86,6 @@ function AppleAnimator (duration, interval, optionalFrom, optionalTo, optionalCa
 		if (done)
 		{
 			self.stop();
-			DEBUG("done: oncomplete: " + self.oncomplete);
 			if  (self.oncomplete != null)
 			{
 				self.oncomplete();
@@ -133,7 +97,6 @@ function AppleAnimator (duration, interval, optionalFrom, optionalTo, optionalCa
 
 	if (optionalFrom !== undefined && optionalTo !== undefined && optionalCallback !== undefined)
 	{
-		DEBUG("creating default animation");
 		this.addAnimation(new AppleAnimation (optionalFrom, optionalTo, optionalCallback));
 	}
 }
@@ -172,7 +135,7 @@ function AppleAnimation (from, to, callback)
 	this.from = from;
 	this.to = to;
 	this.callback = callback;
-	DEBUG("from: " + from + " to: " +  to + " callback: " + callback);
+	
 	this.now = from;
 	this.ease = 0;
 	this.time = 0;

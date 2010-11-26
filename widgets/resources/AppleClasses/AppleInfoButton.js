@@ -1,5 +1,5 @@
 /*
-© Copyright 2005 Apple Computer, Inc. All rights reserved.
+© Copyright 2007 Apple Inc. All rights reserved.
 
 IMPORTANT:  This Apple software and the associated images located in
 /System/Library/WidgetResources/AppleClasses/ (collectively "Apple Software")

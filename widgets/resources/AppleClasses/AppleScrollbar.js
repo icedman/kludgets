@@ -1,5 +1,5 @@
 /*
-© Copyright 2005 Apple Computer, Inc. All rights reserved.
+Â© Copyright 2007 Apple Inc. All rights reserved.
 
 IMPORTANT:  This Apple software and the associated images located in
 /System/Library/WidgetResources/AppleClasses/ (collectively "Apple Software")
@@ -57,14 +57,15 @@ AppleScrollbar.prototype._init = function()
 {
 	var style = null;
 	var element = null;
-
+		
 	// Scrollbar Track
-	this._track = document.createElement("div"); 	
+	this._track = document.createElement("div");
 	style = this._track.style;
 	// fill our containing div
 	style.height = "100%";
 	style.width = "100%";
 	this.scrollbar.appendChild(this._track);
+	
 	// Scrollbar Track Top
 	element = document.createElement("div");
 	element.style.position = "absolute";
@@ -86,7 +87,7 @@ AppleScrollbar.prototype._init = function()
 	this._thumb = document.createElement("div");
 	style = this._thumb.style;
 	style.position = "absolute";
-	style.height = this.minThumbSize + "px";  // default height
+	this._setObjectSize(this._thumb, this.minThumbSize); // default size
 	this._track.appendChild(this._thumb);
 	
 	// Scrollbar Thumb Top
@@ -372,6 +373,7 @@ AppleScrollbar.prototype.show = function()
 AppleScrollbar.prototype.setSize = function(size)
 {
 	this.size = size;
+	
 	this._setObjectSize(this.scrollbar, size);
 	this._setObjectSize(this._track.children[1], size);
 	this._setObjectSize(this._thumb.children[1], size);
@@ -461,7 +463,10 @@ AppleScrollbar.prototype._thumbPositionForContentPosition = function(page_pos)
 	}
 	else
 	{
-		return this.padding - -(page_pos / ((this._getContentLength() - this._getViewLength()) / this._numScrollablePixels));
+		var result = this.padding - -(page_pos / ((this._getContentLength() - this._getViewLength()) / this._numScrollablePixels));
+		if (isNaN(result))
+			result = 0;
+		return result;
 	}
 }
 

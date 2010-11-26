@@ -6,11 +6,12 @@
 
 DataMinerDisk::DataMinerDisk(QObject *parent)
         : QObject(parent),
-        perf(0),
+        perf(new CPerfMon),
         diskCount(0)
 {
     setObjectName("disk");
-    update();
+	perf->Initialize();
+    // update();
 }
 
 DataMinerDisk::~DataMinerDisk()
@@ -24,12 +25,6 @@ DataMinerDisk::~DataMinerDisk()
 
 void DataMinerDisk::enumerateDisks()
 {
-    if (!perf)
-    {
-        perf = new CPerfMon;
-        perf->Initialize();
-    }
-
     int counterIndex[26];
     for (int i = 0; i < 26; i++)
     {

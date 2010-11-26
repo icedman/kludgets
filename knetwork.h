@@ -20,9 +20,10 @@ public:
     static KNetwork* instance();
 
 protected:
-    QNetworkReply* createRequest(Operation op, const QNetworkRequest& req, QIODevice* outgoingData = 0 );
-
+    QNetworkReply* createRequest(Operation op, const QNetworkRequest& req, QIODevice* outgoingData = 0);
+	QNetworkReply* createRequestLocalFile(Operation op, const QString& path, QIODevice* outgoingData = 0);
 private slots:
+
     void authenticationRequired(QNetworkReply *reply, QAuthenticator *auth);
     void proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *auth);
 
@@ -32,24 +33,5 @@ private:
     bool allowNetworkAccess;
     LocaleFileList *localefiles;
 };
-
-class KNetworkReply : public QNetworkReply
-{
-    Q_OBJECT
-public:
-    KNetworkReply(const QNetworkRequest& req, const QString& path, QObject* parent);
-    qint64 bytesAvailable() const;
-    qint64 readData(char* data, qint64 size);
-    void abort();
-
-private slots:
-    void go();
-
-private:
-    QFile m_buf;
-
-    friend class KNetwork;
-};
-
 
 #endif // KLUDGETNETWORK_H

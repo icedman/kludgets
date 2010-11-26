@@ -101,6 +101,7 @@ bool KClient::run()
     // fonts and plugins
     loadFonts(info.path + "/fonts");
     loadPlugins(info.path + "/plugins");
+	loadPlugins(info.pluginPath);
 
     // enable
     setEnabled(true);
@@ -214,7 +215,12 @@ void KClient::loadFonts(const QString &path)
 
 void KClient::loadPlugins(const QString& path)
 {
-	
+	KLog::log(path);
+	QDir dir(path);
+	QStringList dlls = dir.entryList(QDir::Filter::Files);
+	for(int i = 0; i <dlls.size(); i++) {
+		QString f = dir.absolutePath() + dlls.at(i);
+	}
 }
 
 Kludget* KClient::createInstance(const QString &instance)
