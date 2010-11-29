@@ -2,6 +2,12 @@
 
 = Changes =
 
+== Version 1.0.0 2010-11-26 ===
+  * upgraded to Qt 4.7
+  * improved performance
+  * added widget options menu on system tray
+  * fixed default css bugs
+
 == Beta Version 0.9.9 2010-07-113 ==
   * ipc system now using local sockets
 
