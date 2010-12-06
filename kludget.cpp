@@ -153,26 +153,23 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     setupContextMenu();
 
     QWebSettings *webSettings = window->view()->page()->settings();
+#if 0
     webSettings->setAttribute(QWebSettings::OfflineStorageDatabaseEnabled, true);
     webSettings->setAttribute(QWebSettings::LocalStorageDatabaseEnabled, true);
     webSettings->setOfflineStoragePath(info.storagePath);
     webSettings->setOfflineStorageDefaultQuota(5000000);
+#endif
     webSettings->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);
     webSettings->setAttribute(QWebSettings::PluginsEnabled, accessPlugins);
     webSettings->setWebGraphic(QWebSettings::MissingImageGraphic, QPixmap());
 	webSettings->setAttribute(QWebSettings::LocalContentCanAccessRemoteUrls, true);
-
-	webSettings->setUserStyleSheetUrl(QUrl("resource:style/widget.css"));
-	webSettings->setUserStyleSheetUrl(QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/resources/style.css"));
-
-#if 0
-	window->view()->page()->triggerAction(QWebPage::InspectElement);
-#endif
+	webSettings->setAttribute(QWebSettings::LocalContentCanAccessFileUrls, true);
+	webSettings->setUserStyleSheetUrl(QUrl::fromLocalFile(":resources/style/widget.css"));
 
     // network settings
     KNetwork *net = KNetwork::instance();
     net->loadSettings();
-    net->setAccess(accessNetwork, accessLocal, QUrl(QString("file:///") + QFileInfo(info.contentSrc).absolutePath()));
+    net->setAccess(accessNetwork, accessLocal, QUrl::fromLocalFile(QFileInfo(info.contentSrc).absolutePath()));
 
     // system settings
     system->setEnableCommands(accessSystem);
@@ -203,13 +200,10 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     // drop
     window->view()->setAcceptDrops(true);
 
-    if (info.debug)
-        inspect();
-
     if (loadPage)
     {
         window->hide();
-        QUrl url(QString("file:///%1").arg(info.contentSrc));
+        QUrl url = QUrl::fromLocalFile(info.contentSrc);
         if (!QFile::exists(info.contentSrc))
         {
             url = QUrl(info.contentSrc);
@@ -240,7 +234,6 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
         }
 
     ipcClient.connectToServer();
-
     return true;
 }
 
@@ -454,12 +447,6 @@ void Kludget::screenshot(QString path)
 
 void Kludget::show()
 {
-#if 1
-	QWebFrame *frame = window->view()->page()->frameAt(QPoint(0,0));
-	if (frame)
-		frame->evaluateJavaScript("Kludget.setUserStyleSheet()");
-#endif
-
     onShow();
     window->show();
 }

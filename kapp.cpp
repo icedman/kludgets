@@ -13,8 +13,8 @@
 KApp::KApp(int argc, char *argv[]) :
         QApplication(argc, argv)
 {
-    setOrganizationName("MindHyve");
-    setApplicationName("Kludgets");
+    setOrganizationName(APP_ORG);
+    setApplicationName(APP_NAME);
     setQuitOnLastWindowClosed(false);
 
     qDebug(qPrintable(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
