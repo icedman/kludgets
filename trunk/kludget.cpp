@@ -652,12 +652,12 @@ void Kludget::messageReceived(QString message, QString id, QString instance)
     case KIPC::ShowHUD:
     {
         window->moveToTop();
-        window->updateMouseIgnore(false);
+        //window->updateMouseIgnore(false);
         break;
     }
     case KIPC::HideHUD:
     {
-		window->applySettings();
+		//window->applySettings();
         window->moveToBottom();
         break;
     }
@@ -683,6 +683,11 @@ void Kludget::messageReceived(QString message, QString id, QString instance)
         onSettingsChanged();
         break;
     }
+	case KIPC::ShowOptions:
+	{
+		onContextMenu();
+		break;
+	}
 	case KIPC::Configure:
     {
         configure();

@@ -88,6 +88,9 @@ Kludget.getAttention = function()
   }
 }
 
+Kludget.addEventListener = function()
+{}
+
 /*
 Kludgets Internal
 */

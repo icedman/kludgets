@@ -16,8 +16,7 @@ input[type="text"],
 input[type="password"],
 input[type="search"],
 input[type="searchfield"],
-select,
-textarea {
+{
 	border: 1px solid #ddd;
 	padding: 2px;
 	background: #fff;
