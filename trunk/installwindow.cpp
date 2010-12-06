@@ -33,7 +33,7 @@ void InstallWindow::createHeader()
         about.setValue("widget/icon", "package.png");
 
     about.transform(":resources/xsl/aboutWidget.xsl");
-    view->setHtml(about.toString(), QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/resources/"));
+	view->setHtml(about.toString(), QUrl::fromLocalFile(QApplication::applicationDirPath() + "/widgets/resources/"));
     layout->addWidget(view);
 
     /*
@@ -165,7 +165,7 @@ void AboutKludgetWindow::createHeader()
     about.setValue("widget/icon", "engine.png");
 
     about.transform(":resources/xsl/aboutKludget.xsl");
-    view->setHtml(about.toString(), QUrl(QString("file:///") + QApplication::applicationDirPath() + "/widgets/resources/"));
+    view->setHtml(about.toString(), QUrl::fromLocalFile(QApplication::applicationDirPath() + "/widgets/resources/"));
     layout->addWidget(view);
 
     QPalette pal = palette();

@@ -12,4 +12,8 @@
 #define ENGINE_WIDGETS_FILE "kludgets.xml"
 #define XML_DECL "<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n"
 
+#define KLUDGET_ENGINE_APP_ID "com.kludgets.kengine"
+#define APP_ORG "MindHyve"
+#define APP_NAME "Kludgets"
+
 #endif

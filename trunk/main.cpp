@@ -8,12 +8,8 @@
 #include <QApplication>
 int main(int argc, char *argv[])
 {
-
-#if 1
-    QApplication::setGraphicsSystem("software");
-#else
-    QApplication::setGraphicsSystem("opengl");
-#endif
+	
+    // QApplication::setGraphicsSystem("software"); // opengl,raster
 
     KApp app(argc, argv);
 
@@ -38,6 +34,5 @@ int main(int argc, char *argv[])
     }
 
     app.exec();
-
     return 0;
 }

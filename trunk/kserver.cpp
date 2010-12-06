@@ -18,8 +18,6 @@
 #include <QDesktopServices>
 #include <QSharedMemory>
 
-#define KLUDGET_ENGINE_APP_ID "com.kludgets.kengine"
-
 KServer* KServer::instance()
 {
     static KServer inst;

@@ -107,6 +107,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
 			.arg(base.path()));
 #endif
 
+#if 0
     if (url.scheme() == "resource")
     {
         QString path = ":resources/" + url.toString(QUrl::RemoveScheme);
@@ -114,6 +115,7 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
         KLog::log(QString("resources:") + path);
 		return createRequestLocalFile(op, path, outgoingData);
     }
+#endif
 
     // hack for AppleClasses
     if (url.path().indexOf("AppleClasses") != -1 || url.path().indexOf("WidgetResources") != -1)
@@ -149,10 +151,8 @@ QNetworkReply* KNetwork::createRequest(Operation op, const QNetworkRequest& requ
 
     if (accessDenied)
     {
-		//todo
-		//QNetworkReply *reply = createRequestLocalFile(op, "", outgoingData);
-        //reply->setError(QNetworkReply::ContentAccessDenied, QString(""));
-        //return reply;
+		// todo: show something meaningful
+		return createRequestLocalFile(op, "", outgoingData);
     }
 
     // check locale
