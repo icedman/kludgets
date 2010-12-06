@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget id="com.kludgets.calendar" version="1.0">
+  <name>Calendar</name>
+  <description>Calendar</description>
+  <icon/>
+  <author href="http://kludgets.com/kludgets/calendar" email="" name="kludgets.com">kludgets.com</author>
+  <license>Copyright (c) 2009 MindHyve Corp.</license>
+  <content src="calendar.html" />
+  <update/>
+  <feature/>
+</widget>

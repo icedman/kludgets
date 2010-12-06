@@ -1,0 +1,4 @@
+330a331,333
+public:
+    bool dashboardRegionContains(const QPoint &pos);
+

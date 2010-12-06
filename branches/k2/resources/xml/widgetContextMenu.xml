@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<menu>
+<item action="Kludget.about()">About</item>
+<separator/>
+<item action="Kludget.createInstance()">Create Instance</item>
+<separator/>
+
+<custom_menu/>
+
+<item action="Kludget.screenshot()">Screenshot</item>
+<item action="Kludget.inspect()">Inspect</item>
+<item action="Kludget.reload()">Reload</item>
+<separator/>
+
+<item action="Kludget.configure()">Widget Preferences</item>
+<separator/>
+<item action="Kludget.hide()">Hide Widget</item>
+<item action="Kludget.close()">Close Widget</item>
+</menu>

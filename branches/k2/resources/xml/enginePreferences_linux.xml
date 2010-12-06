@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<preferences>
+	<preference name="network/enableProxy">
+		<type>checkbox</type>
+		<title>Enable proxy server</title>
+		<description>Check this option enable proxy server access using the credentials below.</description>
+		<category>Network</category>
+		<default>0</default>
+	</preference>
+	<preference name="network/proxyHost">
+		<type>text</type>
+		<title>Http Proxy</title>
+		<category>Network</category>
+		<default>192.168.1.1:8080</default>
+	</preference>
+	<preference name="network/proxyUser" width="200">
+		<type>text</type>
+		<title>Username</title>
+		<category>Network</category>
+	</preference>
+	<preference name="network/proxyPassword" width="200">
+		<type>password</type>
+		<title>Password</title>
+		<category>Network</category>
+	</preference>
+	<preference name="general/hotKey" width="100">
+		<type>hotkey</type>
+		<title>Hot Key</title>
+		<category>General</category>
+		<default>16777274:0</default>
+		<description>Show or hide all widgets with a press of this hotkey.</description>
+	</preference>
+	<!--
+	<preference name="general/runAtStartup">
+		<type>checkbox</type>
+		<title>Run Kludgets Engine at startup.</title>
+		<category>General</category>
+		<default>0</default>
+	</preference>
+	-->
+	<preference name="general/checkForUpdates">
+		<type>checkbox</type>
+		<title>Automatically check for updates.</title>
+		<category>General</category>
+		<default>1</default>
+	</preference>
+	<!--
+	<preference name="general/enableLog">
+		<type>checkbox</type>
+		<title>Enable system logging.</title>
+		<category>General</category>
+		<default>0</default>
+	</preference>
+	-->
+</preferences>

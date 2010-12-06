@@ -1,0 +1,31 @@
+ <!DOCTYPE RCC>
+ <RCC version="1.0">
+ <qresource>
+     <!--<file>resources/images/kludget.png</file>-->
+     <file>resources/images/preference.png</file>
+     <file>resources/images/font.png</file>
+     <file>resources/images/system.png</file>
+     <file>resources/images/windows.png</file>
+     <file>resources/images/colors.png</file>
+     <file>resources/images/package.png</file>
+     <file>resources/images/internet.png</file>
+     <file>resources/scripts/system.js</file>
+     <file>resources/scripts/widget.js</file>
+     <file>resources/scripts/json2.js</file>
+     <file>resources/scripts/debug.js</file>
+     <file>resources/scripts/macoswidgets.js</file>
+     <file>resources/style/widget.css</file>
+     <file>resources/xml/engine.xml</file>
+     <file>resources/xml/widgetPreferences.xml</file>
+     <file>resources/xml/widgetContextMenu.xml</file>
+     <file>resources/xml/enginePreferences.xml</file>
+     <file>resources/xml/accessPreferences.xml</file>
+     <file>resources/xsl/infoPlist.xsl</file>
+     <file>resources/xsl/operaConfig.xsl</file>
+     <file>resources/xsl/aboutWidget.xsl</file>
+     <file>resources/xsl/aboutKludget.xsl</file>
+     <file>resources/xml/widgetPreferences_linux.xml</file>
+     <file>resources/xml/widgetContextMenu_linux.xml</file>
+     <file>resources/xml/enginePreferences_linux.xml</file>
+ </qresource>
+ </RCC>

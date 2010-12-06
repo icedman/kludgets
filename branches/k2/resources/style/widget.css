@@ -1,0 +1,24 @@
+* {
+	cursor:default;
+	-webkit-user-select:text;
+}
+
+button, input, select, textarea, {
+	-webkit-dashboard-region:dashboard-region(control rectangle);
+}
+
+select {
+	font-family:arial;
+	font-size:6pt;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="search"],
+input[type="searchfield"],
+{
+	border: 1px solid #ddd;
+	padding: 2px;
+	background: #fff;
+	-webkit-border-radius: 4px;
+}

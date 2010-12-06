@@ -1,0 +1,25 @@
+2751a2752,2775
+bool QWebPage::dashboardRegionContains(const QPoint &pos)
+{
+#if ENABLE(DASHBOARD_SUPPORT)
+    if (!d->mainFrame || !d->mainFrame->d->frame->view())
+        return false;
+
+    WebCore::Frame* frame = QWebFramePrivate::core(d->mainFrame);
+    
+    Document *document = frame->document();
+    if (!document->hasDashboardRegions())
+        return false;
+    
+    const Vector<DashboardRegionValue>& regions = document->dashboardRegions();
+    Vector<DashboardRegionValue>::const_iterator it = regions.begin();
+    while(it != regions.end())
+    {
+        const DashboardRegionValue &dv = (*it);
+        if (dv.clip.contains(pos.x(), pos.y()))
+            return true;
+        it++;
+    }
+#endif
+    return false;
+}
