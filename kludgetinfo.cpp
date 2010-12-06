@@ -27,7 +27,7 @@ bool KludgetInfo::load()
     if (!QFile(configFile).exists())
     {
         QString infoPlistFile = path + "/Info.plist";
-        QString configXmlFile = path + "/config.xml";
+        QString operaConfigXmlFile = path + "/config.xml";
         if (QFile(infoPlistFile).exists())
         {
             KDocument plist;
@@ -36,10 +36,10 @@ bool KludgetInfo::load()
             plist.setValue("widget/engine", "dashboard");
             plist.saveDocument(configFile);
         }
-        else if (QFile(configXmlFile).exists())
+        else if (QFile(operaConfigXmlFile).exists())
         {
             KDocument cfg;
-            cfg.openDocument(configXmlFile);
+            cfg.openDocument(operaConfigXmlFile);
             cfg.transform(":resources/xsl/operaConfig.xsl");
             cfg.setValue("widget/engine", "opera");
             cfg.saveDocument(configFile);

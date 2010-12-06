@@ -67,6 +67,7 @@ public:
         ShowHUD,
         HideHUD,
 		Configure,
+		ShowOptions,
         SettingsChanged
     };
 

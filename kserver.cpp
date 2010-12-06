@@ -305,7 +305,7 @@ void KServer::configureWidget(const QString &widgetId)
 	if (widget.size() > 1)
 		instance = widget[1];
 	
-	ipcServer.sendMessage(QString("%1").arg(KIPC::Configure), id, instance);
+	ipcServer.sendMessage(QString("%1").arg(KIPC::ShowOptions), id, instance);
 }
 
 void KServer::openPackage()
@@ -355,7 +355,7 @@ void KServer::showMenu()
     addWidgetsMenu.setTitle("Add widget");
 
 	widgetsMenu.clear();
-    widgetsMenu.setTitle("Widget Preferences");
+    widgetsMenu.setTitle("Widget Options");
 
     connect(trayMenu.addAction(QString("Find more widgets...")), SIGNAL(triggered()), this, SLOT(goToWidgetsSite()));
 
