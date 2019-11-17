@@ -57,7 +57,6 @@ private:
     void loadDefaultWidgets();
     void setupMenu();
     void updateSystemSettings();
-
     void updateWidgetList();
     void updateWidgetListPID();
 

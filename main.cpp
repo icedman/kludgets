@@ -24,6 +24,12 @@ int main(int argc, char *argv[])
                 return 0;
         }
 #endif
+        if (QString(argv[1]) == "-p")
+        {
+            app.startServer();
+            app.exec();
+            return 0;
+        }
         if (!app.startClient(argv[argc-1]))
             return 0;
     }
