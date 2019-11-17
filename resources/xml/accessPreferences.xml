@@ -2,7 +2,7 @@
 <preferences>
 	<preference>
 		<type>label</type>
-		<description>This widget requires the access permission to some resources.</description>
+		<description>This widget requires permission to some resources.</description>
 		<category>Package</category>
 	</preference>
 	<preference name="kludget/access/local">
