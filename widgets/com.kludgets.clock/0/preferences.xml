@@ -1,0 +1,11 @@
+<kludget>
+ <clock>
+  <theme>lime</theme>
+ </clock>
+ <grayScaled>0</grayScaled>
+ <ignoreDrag>0</ignoreDrag>
+ <opacity>220</opacity>
+ <snapToScreen>0</snapToScreen>
+ <windowLevel>0</windowLevel>
+ <zoom>1</zoom>
+</kludget>

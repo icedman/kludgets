@@ -15,7 +15,7 @@
 
 #include <QDirIterator>
 #include <QApplication>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QSharedMemory>
 
 KServer* KServer::instance()
@@ -41,7 +41,7 @@ bool KServer::initialize()
 
     KIPC::setProcessId(KLUDGET_ENGINE_APP_ID, (int)QApplication::applicationPid());
 
-    QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    QString enginePreferencesFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     if (!QFile::exists(enginePreferencesFile))
     {
         loadDefaultWidgets();
@@ -217,7 +217,7 @@ void KServer::updateWidgetList()
 {
     widgetList.clear();
 
-    QDir directory(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets/");
+    QDir directory(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/widgets/");
     QStringList dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 
     QStringList::iterator it = dirs.begin();

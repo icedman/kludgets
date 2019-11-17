@@ -2,7 +2,7 @@
 #define KLUDGETSERVER_H
 
 #include <QStringList>
-#include <QtGui>
+#include <QtWidgets>
 #include <QSignalMapper>
 
 #include "kludgetinfo.h"

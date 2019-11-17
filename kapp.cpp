@@ -7,7 +7,7 @@
 #include "klog.h"
 #include "version.h"
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 
 KApp::KApp(int argc, char *argv[]) :
@@ -17,10 +17,10 @@ KApp::KApp(int argc, char *argv[]) :
     setApplicationName(APP_NAME);
     setQuitOnLastWindowClosed(false);
 
-    qDebug(qPrintable(QDesktopServices::storageLocation(QDesktopServices::DataLocation)));
+    qDebug(qPrintable(QStandardPaths::writableLocation(QStandardPaths::DataLocation)));
 
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("widgets");
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).mkdir("temp");
+    QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation)).mkdir("widgets");
+    QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation)).mkdir("temp");
 
     addLibraryPath(applicationDirPath() + "/plugins");
 }
@@ -40,7 +40,7 @@ bool KApp::startHotKeyListener()
 {
     HotKey hotKey;
 
-    QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    QString enginePreferencesFile(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" + ENGINE_CONFIG_FILE);
     KDocument *doc = new KDocument;
     if (doc->openDocument(enginePreferencesFile))
     {
@@ -78,5 +78,5 @@ QString KApp::version()
 
 QString KApp::temporaryDirPath()
 {
-    return QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation)).absolutePath() + "/temp";
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation)).absolutePath() + "/temp";
 }

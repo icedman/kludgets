@@ -1,0 +1,7 @@
+*.o
+.qmake*
+moc_*
+qrc_*
+kludgets
+kludgets.log
+Makefile

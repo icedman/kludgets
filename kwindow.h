@@ -2,7 +2,7 @@
 #define KLUDGETWINDOW_H
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 #include <QTimer>
 
 class KView;

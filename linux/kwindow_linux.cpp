@@ -6,6 +6,7 @@
 
 void KWindow::updateWindowLevel(int l)
 {
+    /*
     if (l == 1)
         setWindowFlags(Qt::FramelessWindowHint | Qt::SplashScreen | Qt::WindowStaysOnTopHint);
     else if (l == 2)
@@ -17,6 +18,7 @@ void KWindow::updateWindowLevel(int l)
         lower();
     else
         raise();
+    */
 }
 
 void KWindow::updateMouseIgnore(bool ignore)
@@ -25,10 +27,10 @@ void KWindow::updateMouseIgnore(bool ignore)
 
 void KWindow::moveToTop()
 {
-    raise();
+    // raise();
 }
 
 void KWindow::moveToBottom()
 {
-    lower();
+    // lower();
 }

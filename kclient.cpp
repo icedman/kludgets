@@ -13,7 +13,7 @@
 #include <QWebSettings>
 #include <QApplication>
 #include <QFontDatabase>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 
 #define MAX_INSTANCES 100
@@ -150,7 +150,7 @@ bool KClient::loadPackage(const QString& path)
     info.load();
 
     // setup storage dir
-    QDir(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets").mkpath(QDir(info.storagePath).dirName());
+    QDir(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/widgets").mkpath(QDir(info.storagePath).dirName());
 
     KDocument doc;
     doc.setValue("kludget/name", info.name);

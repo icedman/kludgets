@@ -6,7 +6,7 @@
 #include "kutil.h"
 
 #include <QAuthenticator>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QNetworkDiskCache>
 #include <QNetworkProxy>
 #include <QApplication>
@@ -38,14 +38,14 @@ void KNetwork::loadSettings()
 #if 1
 
     QNetworkDiskCache *diskCache = new QNetworkDiskCache(this);
-    QString location = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+    QString location = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
     diskCache->setCacheDirectory(location);
     setCache(diskCache);
 #endif
 
     QNetworkProxy proxy;
     KDocument doc;
-    if (doc.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE))
+    if (doc.openDocument(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" + ENGINE_CONFIG_FILE))
     {
         if (doc.getValue("kludget/network/enableProxy", "0").toInt() != 0)
         {

@@ -1,7 +1,7 @@
 #ifndef KLUDGETUTIL_H
 #define KLUDGETUTIL_H
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QDomDocument>
 
 

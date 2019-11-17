@@ -106,7 +106,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
 
     // engine
     KDocument engine;
-    engine.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    engine.openDocument(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" + ENGINE_CONFIG_FILE);
 
     // instance settings
     settings->setPath(info.instancePreferenceFile);
@@ -204,6 +204,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
     {
         window->hide();
         QUrl url = QUrl::fromLocalFile(info.contentSrc);
+
         if (!QFile::exists(info.contentSrc))
         {
             url = QUrl(info.contentSrc);
@@ -218,7 +219,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
                 return false;
             }
         }
-
+        
         if (info.contentHtml != "")
             window->view()->setHtml(info.contentHtml);
         else
@@ -435,7 +436,7 @@ void Kludget::screenshot(QString path)
     {
         path = QFileDialog::getSaveFileName(0,
                                             "Save Image",
-                                            QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                            QStandardPaths::writableLocation(QStandardPaths::HomeLocation),
                                             "Image Files (*.png *.jpg *.bmp)");
         if (path == "")
             return;

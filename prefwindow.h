@@ -4,7 +4,7 @@
 #include "config.h"
 
 #include <QtCore>
-#include <QtGui>
+#include <QtWidgets>
 
 class KSettings;
 class PreferenceWidget;

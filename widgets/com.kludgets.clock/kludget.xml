@@ -1,0 +1,8 @@
+<kludget>
+ <name>Clock</name>
+ <id>com.kludgets.clock</id>
+ <path>/home/iceman/.local/share/MindHyve/Kludgets/temp/com.kludgets.clock/clock</path>
+ <package>/home/iceman/.local/share/MindHyve/Kludgets/widgets/com.kludgets.clock.zip</package>
+ <storage>/home/iceman/.local/share/MindHyve/Kludgets/widgets/com.kludgets.clock</storage>
+ <enabled>1</enabled>
+</kludget>

@@ -3,7 +3,7 @@
 #include "config.h"
 #include "kdocument.h"
 
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QApplication>
 #include <QFile>
 
@@ -61,7 +61,7 @@ bool KLog::enabled()
 void KLog::loadSettings()
 {
     KDocument doc;
-    if (doc.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE))
+    if (doc.openDocument(QStandardPaths::writableLocation(QStandardPaths::DataLocation) + "/" + ENGINE_CONFIG_FILE))
     {
         if (doc.getValue("kludget/general/enableLog", "1").toInt() != 1)
         {

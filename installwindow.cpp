@@ -4,6 +4,7 @@
 #include "kapp.h"
 #include "kutil.h"
 
+#include <QtWidgets>
 #include <QWebView>
 #include <QWebFrame>
 #include <QDesktopWidget>

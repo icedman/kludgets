@@ -10,10 +10,6 @@
 #define KLUDGET_URL "http://www.kludgets.com"
 #define KLUDGET_MOZ_VERSION "Mozilla/5.0"
 
-#if defined(WIN32)
-#define KLUDGET_QT_VERSION "Qt/4.7.1"
-#else
-#define KLUDGET_QT_VERSION "Qt/4.5.1"
-#endif
+#define KLUDGET_QT_VERSION "Qt/5.13.2"
 
 #endif // KLUDGET_VERSION_H

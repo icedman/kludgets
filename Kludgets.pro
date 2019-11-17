@@ -1,9 +1,9 @@
 TEMPLATE = app
-TARGET = 
+TARGET = kludgets
 DEPENDPATH =
 INCLUDEPATH += .
 
-QT += webkit network xml xmlpatterns
+QT += core webkit webkitwidgets widgets network xml xmlpatterns gui x11extras 
 
 win32* {
     LIBS += gdi32.lib user32.lib advapi32.lib
@@ -26,6 +26,8 @@ win32* {
                linux\kwindow_linux.cpp \
                linux\kserver_linux.cpp \
                linux\kpluginview_linux.cpp
+
+    LIBS += -lX11
 }
 
 

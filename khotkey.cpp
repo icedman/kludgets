@@ -14,6 +14,8 @@ HotKey::~HotKey()
 
 void HotKey::registerHotKey(const QString key, int id)
 {
+    // todo
+    /*
     if (registeredKeys.contains(id))
     {
         unregisterHotKey(id);
@@ -25,14 +27,17 @@ void HotKey::registerHotKey(const QString key, int id)
     int hotKey = hotkey.split(":")[0].toInt();
     int hotKeyModifier = hotkey.split(":")[1].toInt();
     registerHotKey((Qt::Key)hotKey, (Qt::KeyboardModifier)hotKeyModifier, id);
+    */
 }
 
 void HotKey::unregisterAll()
 {
+    /*
     while (registeredKeys.size())
     {
         unregisterHotKey(registeredKeys.keys().at(0));
     }
+    */
 }
 
 QString HotKey::keyName(Qt::Key key)
