@@ -34,6 +34,7 @@ void HotKey::unregisterHotKey(int id)
 
 bool HotKey::run()
 {
+    #if 0
     Display *display = QX11Info::display();
 
     QList<int> keys;
@@ -76,7 +77,7 @@ bool HotKey::run()
     
     // wouldn't reach here, probably
     //XUngrabKey(display, keycode, 0, DefaultRootWindow(display));
-
+    #endif
     return true;
 }
 

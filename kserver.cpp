@@ -41,7 +41,7 @@ bool KServer::initialize()
 
     KIPC::setProcessId(KLUDGET_ENGINE_APP_ID, (int)QApplication::applicationPid());
 
-    QString enginePreferencesFile(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    QString enginePreferencesFile(QStandardPaths::locate(QStandardPaths::DataLocation, "", QStandardPaths::LocateDirectory) + "/" + ENGINE_CONFIG_FILE);
     if (!QFile::exists(enginePreferencesFile))
     {
         loadDefaultWidgets();
@@ -217,7 +217,7 @@ void KServer::updateWidgetList()
 {
     widgetList.clear();
 
-    QDir directory(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/widgets/");
+    QDir directory(QStandardPaths::locate(QStandardPaths::DataLocation, "", QStandardPaths::LocateDirectory) + "/widgets/");
     QStringList dirs = directory.entryList(QDir::AllDirs | QDir::NoDotAndDotDot);
 
     QStringList::iterator it = dirs.begin();

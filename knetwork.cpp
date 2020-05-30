@@ -38,14 +38,14 @@ void KNetwork::loadSettings()
 #if 1
 
     QNetworkDiskCache *diskCache = new QNetworkDiskCache(this);
-    QString location = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+    QString location = QStandardPaths::locate(QStandardPaths::CacheLocation, "", QStandardPaths::LocateDirectory);
     diskCache->setCacheDirectory(location);
     setCache(diskCache);
 #endif
 
     QNetworkProxy proxy;
     KDocument doc;
-    if (doc.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE))
+    if (doc.openDocument(QStandardPaths::locate(QStandardPaths::DataLocation, "", QStandardPaths::LocateDirectory) + "/" + ENGINE_CONFIG_FILE))
     {
         if (doc.getValue("kludget/network/enableProxy", "0").toInt() != 0)
         {

@@ -2,6 +2,8 @@
 #include "kutil.h"
 #include "klog.h"
 
+#include <QDesktopWidget>
+
 bool Util::copyDir(const QString &source, const QString &destination, const bool overwrite)
 {
     QDir directory(source);

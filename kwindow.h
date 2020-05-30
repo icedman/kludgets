@@ -1,6 +1,7 @@
 #ifndef KLUDGETWINDOW_H
 #define KLUDGETWINDOW_H
 
+#include <QtWidgets>
 #include <QtCore>
 #include <QtGui>
 #include <QTimer>

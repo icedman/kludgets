@@ -1,9 +1,9 @@
 #ifndef KLUDGETPAGE_H
 #define KLUDGETPAGE_H
 
-#include <QtWebKit/QWebView>
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
+#include <QWebView>
+#include <QWebPage>
+#include <QWebFrame>
 #include <QNetworkRequest>
 
 class KPage : public QWebPage

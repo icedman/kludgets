@@ -3,6 +3,7 @@
 
 #include "config.h"
 
+#include <QtWidgets>
 #include <QtCore>
 #include <QtGui>
 

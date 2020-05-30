@@ -73,7 +73,7 @@ bool KludgetInfo::load()
     height = doc.getValue("widget/height", "0").toInt();
     debug = (doc.getValue("widget/debug", "0").toInt() != 0);
 
-    storagePath = QDesktopServices::storageLocation(QDesktopServices::DataLocation) + QString("/widgets/") + id;
+    storagePath = QStandardPaths::locate(QStandardPaths::DataLocation, "", QStandardPaths::LocateDirectory) + QString("/widgets/") + id;
     instancePreferenceFile = storagePath + "/" + instance + "/" + QString(PREFERENCE_FILE);
 
     QString pluginName = doc.getValue("widget/plugins/plugin", "");

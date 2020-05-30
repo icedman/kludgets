@@ -106,7 +106,7 @@ bool Kludget::loadSettings(const KludgetInfo &i, bool loadPage)
 
     // engine
     KDocument engine;
-    engine.openDocument(QDesktopServices::storageLocation(QDesktopServices::DataLocation) + "/" + ENGINE_CONFIG_FILE);
+    engine.openDocument(QStandardPaths::locate(QStandardPaths::DataLocation, "", QStandardPaths::LocateDirectory) + "/" + ENGINE_CONFIG_FILE);
 
     // instance settings
     settings->setPath(info.instancePreferenceFile);
@@ -435,7 +435,7 @@ void Kludget::screenshot(QString path)
     {
         path = QFileDialog::getSaveFileName(0,
                                             "Save Image",
-                                            QDesktopServices::storageLocation(QDesktopServices::HomeLocation),
+                                            QStandardPaths::locate(QStandardPaths::HomeLocation, "", QStandardPaths::LocateDirectory),
                                             "Image Files (*.png *.jpg *.bmp)");
         if (path == "")
             return;

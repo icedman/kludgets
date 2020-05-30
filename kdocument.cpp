@@ -115,27 +115,27 @@ QString KDocument::getValue(const QString &nodePath, const QString &defaultValue
     QString ret = defaultValue;
 
     QStringList nodeNames = nodePath.split("/");
-    QDomNode *n = &documentElement();
+    QDomNode n = documentElement();
 
-    while (nodeNames.length() && n)
+    while (nodeNames.length()) //  && n)
     {
         QString targetNodeName = nodeNames.front();
-        QString nodeName = n->nodeName();
+        QString nodeName = n.nodeName();
 
         if (nodeName != targetNodeName)
         {
             // check attribute
-            if (n->toElement().hasAttribute(targetNodeName))
+            if (n.toElement().hasAttribute(targetNodeName))
             {
-                ret = n->toElement().attribute(targetNodeName);
+                ret = n.toElement().attribute(targetNodeName);
             }
 
-            QDomNodeList nl = n->toElement().elementsByTagName(targetNodeName);
+            QDomNodeList nl = n.toElement().elementsByTagName(targetNodeName);
             if (!nl.size())
                 break;
 
-            n = &nl.item(0);
-            nodeName = n->nodeName();
+            n = nl.item(0);
+            nodeName = n.nodeName();
         }
 
         nodeNames.pop_front();
@@ -144,7 +144,7 @@ QString KDocument::getValue(const QString &nodePath, const QString &defaultValue
         {
             if (nodeName == targetNodeName)
             {
-                ret = n->firstChild().nodeValue();
+                ret = n.firstChild().nodeValue();
             }
             break;
         }

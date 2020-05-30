@@ -4,6 +4,8 @@
 #include <QStringList>
 #include <QtGui>
 #include <QSignalMapper>
+#include <QSystemTrayIcon>
+#include <QMenu>
 
 #include "kludgetinfo.h"
 #include "kipc.h"
