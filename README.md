@@ -29,4 +29,6 @@ The Kludget Engine steals the best features from all the widget engines.
 
 ![screenshot](https://raw.githubusercontent.com/icedman/kludgets/master/screenshots/desktop090518.jpg)
 
+![screenshot](https://raw.githubusercontent.com/icedman/kludgets/master/screenshots/shot091108.jpg)
+
 
