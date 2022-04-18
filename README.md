@@ -1,5 +1,3 @@
-![screenshot](https://raw.githubusercontent.com/icedman/kludgets/master/screenshots/kludgets-preview.jpg)
-
 # Features
 
 The Kludget Engine steals the best features from all the widget engines.
@@ -22,4 +20,13 @@ The Kludget Engine steals the best features from all the widget engines.
 # Platforms
 - Windows
 - Linux
+
+# screenshots
+
+![screenshot](https://raw.githubusercontent.com/icedman/kludgets/master/screenshots/kludgets-preview.jpg)
+
+![screenshot](https://raw.githubusercontent.com/icedman/kludgets/master/screenshots/netvibes.jpg)
+
+![screenshot](https://raw.githubusercontent.com/icedman/kludgets/master/screenshots/desktop090518.jpg)
+
 
